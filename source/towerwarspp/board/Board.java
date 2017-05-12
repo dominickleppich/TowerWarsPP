@@ -42,9 +42,13 @@ public class Board {
         grid = new HexGrid<>();
 
         // Add grid coordinates
-        for (int x = 0; x < size; x++)
-            for (int y = 0; y < size; y++)
-                grid.add(new GridCoordinate(x, y));
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                GridCoordinate c = new GridCoordinate(x, y);
+                grid.add(c);
+                grid.setData(c, 0);
+            }
+        }
 
         this.size = size;
         this.maxTowerSize = maxTowerSize;
