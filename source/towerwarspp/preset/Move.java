@@ -30,7 +30,7 @@ public class Move {
         return end;
     }
 
-    private void setEnd(Position start) {
+    private void setEnd(Position end) {
         this.end = end;
     }
 
