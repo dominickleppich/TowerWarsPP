@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="FrozenCube">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../FrozenCube/build" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="file://$PROJECT_DIR$/../FrozenCube/documentation" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../FrozenCube/source" />
+    </SOURCES>
+  </library>
+</component>

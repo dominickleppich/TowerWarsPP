@@ -8,8 +8,13 @@ import java.rmi.RemoteException;
  * @author dominick
  */
 public interface Player {
+    enum PlayerColor {
+        RED,
+        BLUE
+    }
+
     Move request() throws Exception;
     void confirm(Status boardStatus) throws Exception;
     void update(Move opponentMove, Status boardStatus) throws Exception;
-    void init(int dimension, int color) throws Exception;
+    void init(int size, PlayerColor color) throws Exception;
 }
