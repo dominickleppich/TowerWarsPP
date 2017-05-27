@@ -39,6 +39,8 @@ public class Board {
     private int maxTowerSize;
     // Who's players turn is it?
     private int turn;
+    // Possible moves for current player
+    private Set<Move> possibleMoves;
     // Status
     private Status status;
 
@@ -92,9 +94,52 @@ public class Board {
 
         grid.setData(redBaseCoordinate, RED_BASE);
         grid.setData(blueBaseCoordinate, BLUE_BASE);
+
+        // Calculate possible moves
+        possibleMoves = calculatePossibleMoves();
     }
 
     // ------------------------------------------------------------
+
+    /**
+     * Determine the current player
+     *
+     * @return {@code RED} or {@code BLUE}
+     */
+    private int getTurn() {
+        return turn;
+    }
+
+    /**
+     * Get the boards status.
+     *
+     * @return {@link Status}
+     */
+    public Status getStatus() {
+        return status;
+    }
+
+    /**
+     * Get the calculated set of possible moves for the current player.
+     *
+     * @return Set of possible {@link Move}'s
+     */
+    public Set<Move> getPossibleMoves() {
+        return possibleMoves;
+    }
+
+    /**
+     * Checks if a given {@link Move} is valid in the current situation.
+     *
+     * @param move
+     *         Move
+     *
+     * @return true, if the move is valid
+     */
+    public boolean checkMove(Move move) {
+        // TODO can be improved
+        return getPossibleMoves().contains(move);
+    }
 
     /**
      * Make a move on the board.
@@ -133,21 +178,13 @@ public class Board {
         // switch player
         switchTurn();
 
+        // Calculate possible moves
+        possibleMoves = calculatePossibleMoves();
+
         return true;
     }
 
-    /**
-     * Checks if a given {@link Move} is valid in the current situation.
-     *
-     * @param move
-     *         Move
-     *
-     * @return true, if the move is valid
-     */
-    public boolean checkMove(Move move) {
-        // TODO can be improved
-        return getPossibleMoves().contains(move);
-    }
+    // ------------------------------------------------------------
 
     /**
      * Apply the move on the board
@@ -164,28 +201,15 @@ public class Board {
         grid.setData(positionToGridCoordinate(move.getEnd()), oldEndData + getTurn());
     }
 
+    // ------------------------------------------------------------
+
+    // Helper functions
+
     /**
      * Switch player at the end of his turn.
      */
     private void switchTurn() {
         turn *= -1;
-    }
-
-    /**
-     * Calculate a set of all possible moves for the current player.
-     *
-     * @return Set of possible {@link Move}'s
-     */
-    public Set<Move> getPossibleMoves() {
-        Set<Move> moves = new HashSet<>();
-
-        for (GridCoordinate c : gridCoordinates)
-            if (grid.getData(c) == getTurn())
-                moves.addAll(getPossibleMovesForToken(c));
-
-        moves.add(null);
-
-        return moves;
     }
 
     /**
@@ -197,30 +221,20 @@ public class Board {
      * @return Position
      */
     private GridCoordinate positionToGridCoordinate(Position position) {
-        return new GridCoordinate(position.getX(), position.getY());
+        return new GridCoordinate(position.getLetter(), position.getNumber());
     }
 
     /**
-     * Determine the current player
+     * Converts {@link GridCoordinate} to {@link Position}
      *
-     * @return {@code RED} or {@code BLUE}
-     */
-    private int getTurn() {
-        return turn;
-    }
-
-    /**
-     * Get the boards status.
+     * @param coordinate
+     *         Coordinate
      *
-     * @return {@link Status}
+     * @return Position
      */
-    public Status getStatus() {
-        return status;
+    private Position gridCoordinateToPosition(GridCoordinate coordinate) {
+        return new Position(coordinate.getX(), coordinate.getY());
     }
-
-    // ------------------------------------------------------------
-
-    // Helper functions
 
     /**
      * Calculate the set of all possible moves for a given token.
@@ -241,15 +255,21 @@ public class Board {
     }
 
     /**
-     * Converts {@link GridCoordinate} to {@link Position}
+     * Calculate a set of all possible moves for the current player.
      *
-     * @param coordinate
-     *         Coordinate
-     *
-     * @return Position
+     * @return Set of possible {@link Move}'s
      */
-    private Position gridCoordinateToPosition(GridCoordinate coordinate) {
-        return new Position(coordinate.getX(), coordinate.getY());
+    private Set<Move> calculatePossibleMoves() {
+        Set<Move> moves = new HashSet<>();
+
+        // TODO fails if only towers exist
+        for (GridCoordinate c : gridCoordinates)
+            if (grid.getData(c) == getTurn())
+                moves.addAll(getPossibleMovesForToken(c));
+
+        //moves.add(null);
+
+        return moves;
     }
 
     // ------------------------------------------------------------
