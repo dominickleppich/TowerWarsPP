@@ -13,7 +13,7 @@ public interface Requestable {
      *
      * @return {@link Move}
      *
-     * @throws Exception,
+     * @throws Exception
      *         if something unexpected fails
      */
     Move request() throws Exception;
