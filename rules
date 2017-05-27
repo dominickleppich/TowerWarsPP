@@ -1,0 +1,8 @@
+TowerWarsPP
+-----------
+
+- es wird auf einem parallelogrammförmigen Brett mit gleichen Seitenlängen n gespielt
+- die Felder des Bretts sind Hexagone
+- die beiden am weitesten voneinander entfernten Felder haben die Koordinate A1 und ?N und sind die Basen der
+jeweiligen Spieler (Rot hat seine Basis bei A1)
+- Um die Basen herum hat jeder Spieler Spielsteine
