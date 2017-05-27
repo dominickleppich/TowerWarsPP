@@ -18,6 +18,7 @@ jeweiligen Spieler (Rot hat seine Basis bei A1)
  * Zug auf gegnerischen Turm -> Turm schlagen (Sonderregel blockieren über Entfernung)
  * Zug auf eigene Basis -> NICHT ERLAUBT!!!
  * Zug auf gegnerische Basis -> SIEG!!!
+- Natürlich ist es jedem Spieler frei aufzugeben...
 
  TÜRME
  * Haben eine Maximalhöhe

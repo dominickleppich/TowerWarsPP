@@ -8,5 +8,13 @@ import towerwarspp.preset.Move;
  * @author dominick
  */
 public interface Requestable {
+    /**
+     * Request a {@link Move} from a player
+     *
+     * @return {@link Move}
+     *
+     * @throws Exception,
+     *         if something unexpected fails
+     */
     Move request() throws Exception;
 }
