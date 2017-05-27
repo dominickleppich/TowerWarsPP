@@ -1,11 +1,13 @@
 package towerwarspp.preset;
 
+import java.io.Serializable;
+
 /**
  * Created on 05.05.2017.
  *
  * @author dominick
  */
-public class Move {
+public class Move implements Serializable {
     private Position start;
     private Position end;
 

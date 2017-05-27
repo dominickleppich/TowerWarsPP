@@ -1,11 +1,13 @@
 package towerwarspp.preset;
 
+import java.io.Serializable;
+
 /**
  * Created on 05.05.2017.
  *
  * @author dominick
  */
-public class Status {
+public class Status implements Serializable {
     private static final int VALUE_OK = 0;
     public static final Status OK = new Status(VALUE_OK);
     private static final int VALUE_RED_WIN = 1;
