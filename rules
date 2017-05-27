@@ -1,23 +1,37 @@
 TowerWarsPP
 -----------
-
+ AUFBAU
 - Es wird auf einem parallelogrammförmigen Brett mit gleichen Seitenlängen n gespielt
 - Die Felder des Bretts sind Hexagone
 - Die beiden am weitesten voneinander entfernten Felder haben die Koordinate A1 und ?N und sind die Basen der
 jeweiligen Spieler (Rot hat seine Basis bei A1)
 - Um die Basen herum hat jeder Spieler Spielsteine
+
+ ZÜGE
 - Nur Spielsteine sind bewegbar
 - Jeder Spielstein hat erst einmal die Zugreichweite 1
-- Ein Stein darf prinzipiell auf jedes Feld ziehen, je nach Situation hat dies unterschiedliche Effekte:
+- Ein Stein darf prinzipiell auf fast jedes Feld ziehen, je nach Situation hat dies unterschiedliche Effekte:
  * Zug auf ein freies Feld -> "normaler" Zug
  * Zug auf ein Feld mit einem gegnerischen Stein -> Stein geschlagen
  * Zug auf einen eigenen Stein -> bauen eines Turmes
  * Zug auf einen eigenen Turm -> erhöhen des Turmes (außer Maximalhöhe wurde erreicht)
  * Zug auf gegnerischen Turm -> Turm schlagen (Sonderregel blockieren über Entfernung)
-- TÜRME
+ * Zug auf eigene Basis -> NICHT ERLAUBT!!!
+ * Zug auf gegnerische Basis -> SIEG!!!
+
+ TÜRME
  * Haben eine Maximalhöhe
+ * Können nicht im Ganzen bewegt werden. Ein Zug vom Turm aus bewirkt, dass der oberste Stein vom Turm
+ heruntergezogen wird. Steine die vom Turm gezogen werden, dürfen nicht schlagen.
  * Ein Turm erhöht die Zugreichweite aller direkt anliegenden eigenen Steine um die Höhe des Turmes
  * Der Bonus wird bei einem Stein mit mehrfach angrenzenden Türmen addiert
  * Der Bonus bezieht sich auf jegliche Zugart (Ziehen, Schlagen, Turm bauen)
  * Wird durch einen Turmbonus ein Stein auf einen gegnerischen Turm gezogen ist dieser nicht gänzlich zerstört
- sondern blockiert
+ sondern blockiert. Der eigene Stein kommt aus dem Spiel. Blockierte Türme müssen wieder aktiviert werden, indem ein
+ eigener Stein auf den Turm zieht. Dieser löst die Blockade, erhöht nicht die Höhe und kommt auch sofort aus dem Spiel.
+
+ SIEG
+- Zerstören der gegnerischen Basis durch Zug darauf
+- Schlagen aller gegnerischen Steine
+- Bewegungsunfähigkeit des Gegners (nur noch ein gegnerischer Turm mit eigenen Einheiten umzingelt). Da Türme nicht
+schlagen dürfen ist dieser nicht mehr nutzbar
