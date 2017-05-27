@@ -12,9 +12,9 @@ public class Position implements Serializable {
 
     // ------------------------------------------------------------
 
-    public Position(int x, int y) {
-        setLetter(x);
-        setNumber(y);
+    public Position(int letter, int number) {
+        setLetter(letter);
+        setNumber(number);
     }
 
     public Position(Position p) {
