@@ -8,48 +8,48 @@ import java.io.Serializable;
  * @author dominick
  */
 public class Position implements Serializable {
-    private int x, y;
+    private int letter, number;
 
     // ------------------------------------------------------------
 
     public Position(int x, int y) {
-        setX(x);
-        setY(y);
+        setLetter(x);
+        setNumber(y);
     }
 
     public Position(Position p) {
-        setX(p.x);
-        setY(p.y);
+        setLetter(p.letter);
+        setNumber(p.number);
     }
 
     // ------------------------------------------------------------
 
-    public int getX() {
-        return x;
+    public int getLetter() {
+        return letter;
     }
 
-    private void setX(int x) {
-        this.x = x;
+    private void setLetter(int letter) {
+        this.letter = letter;
     }
 
-    public int getY() {
-        return y;
+    public int getNumber() {
+        return number;
     }
 
-    private void setY(int y) {
-        this.y = y;
+    private void setNumber(int number) {
+        this.number = number;
     }
 
     // ------------------------------------------------------------
 
     @Override
     public String toString() {
-        return "(" + getX() + "," + getY() + ")";
+        return "(" + (char) (getLetter() + 'A' - 1) + getNumber() + ")";
     }
 
     @Override
     public int hashCode() {
-        return Integer.hashCode(getX()) ^ Integer.hashCode(getY());
+        return Integer.hashCode(getLetter()) ^ Integer.hashCode(getNumber());
     }
 
     @Override
@@ -59,6 +59,6 @@ public class Position implements Serializable {
         if (!(o instanceof Position))
             return false;
         Position p = (Position) o;
-        return p.getX() == getX() && p.getY() == getY();
+        return p.getLetter() == getLetter() && p.getNumber() == getNumber();
     }
 }
