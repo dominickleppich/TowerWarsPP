@@ -51,6 +51,8 @@ public class Board {
      *
      * @param size
      *         Size
+     * @param maxTowerSize
+     *         max tower size
      */
     public Board(int size, int maxTowerSize) {
         grid = new HexGrid<>();
