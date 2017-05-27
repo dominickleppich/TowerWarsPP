@@ -38,6 +38,42 @@ public class Move implements Serializable {
 
     // ------------------------------------------------------------
 
+    /**
+     * Exception for wrong {@link Move} parse format
+     */
+    public static class MoveFormatException extends IllegalArgumentException {
+        public MoveFormatException(String msg) {
+            super(msg);
+        }
+    }
+
+    /**
+     * Parse a string to a {@link Move}
+     *
+     * @param str
+     *         String to parse
+     *
+     * @return Parsed {@link Move}
+     *
+     * @throws MoveFormatException
+     *         if parsing fails
+     */
+    public static Move parseMove(String str) throws MoveFormatException {
+        // Surrender move
+        if (str == null || str.equals(""))
+            return null;
+
+        Position start, end;
+        try {
+            String[] params = str.split("->");
+            start = Position.parsePosition(params[0]);
+            end = Position.parsePosition(params[1]);
+        } catch (NullPointerException | IndexOutOfBoundsException | Position.PositionFormatException e) {
+            throw new MoveFormatException("Unable to parse move: " + str);
+        }
+        return new Move(start, end);
+    }
+
     @Override
     public String toString() {
         return getStart() + "->" + getEnd();

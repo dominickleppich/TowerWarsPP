@@ -42,6 +42,37 @@ public class Position implements Serializable {
 
     // ------------------------------------------------------------
 
+    /**
+     * Exception for wrong {@link Position} parse format
+     */
+    public static class PositionFormatException extends IllegalArgumentException {
+        public PositionFormatException(String msg) {
+            super(msg);
+        }
+    }
+
+    /**
+     * Parse a string to a {@link Position}
+     *
+     * @param str
+     *         String to parse
+     *
+     * @return Parsed {@link Position}
+     *
+     * @throws PositionFormatException
+     *         if parsing fails
+     */
+    public static Position parsePosition(String str) throws PositionFormatException {
+        int letter, number;
+        try {
+            letter = Character.toUpperCase(str.charAt(0)) - 'A' + 1;
+            number = Integer.parseInt(str.substring(1));
+        } catch (NullPointerException | IndexOutOfBoundsException | NumberFormatException e) {
+            throw new PositionFormatException("Unable to parse position: " + str);
+        }
+        return new Position(letter, number);
+    }
+
     @Override
     public String toString() {
         return "(" + (char) (getLetter() + 'A' - 1) + getNumber() + ")";
