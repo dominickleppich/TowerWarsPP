@@ -59,9 +59,9 @@ public class Board {
         gridCoordinates = new HashSet<>();
 
         // Add grid coordinates
-        for (int x = 0; x < size; x++) {
-            for (int y = 0; y < size; y++) {
-                GridCoordinate c = new GridCoordinate(x, y);
+        for (int l = 1; l <= size; l++) {
+            for (int n = 1; n <= size; n++) {
+                GridCoordinate c = new GridCoordinate(l, n);
                 gridCoordinates.add(c);
                 grid.add(c);
                 grid.setData(c, 0);
@@ -74,8 +74,8 @@ public class Board {
 
         this.status = Status.OK;
 
-        redBaseCoordinate = new GridCoordinate(0, 0);
-        blueBaseCoordinate = new GridCoordinate(size - 1, size - 1);
+        redBaseCoordinate = new GridCoordinate(1, 1);
+        blueBaseCoordinate = new GridCoordinate(size, size);
 
         initBoard();
     }
@@ -86,10 +86,10 @@ public class Board {
      * Initialize the board with all player tokens and their bases.
      */
     private void initBoard() {
-        for (GridCoordinate c : gridLogic.getRange(redBaseCoordinate, size - 3))
+        for (GridCoordinate c : gridLogic.getRange(redBaseCoordinate, size / 3))
             grid.setData(c, RED);
 
-        for (GridCoordinate c : gridLogic.getRange(blueBaseCoordinate, size - 3))
+        for (GridCoordinate c : gridLogic.getRange(blueBaseCoordinate, size / 3))
             grid.setData(c, BLUE);
 
         grid.setData(redBaseCoordinate, RED_BASE);
@@ -278,9 +278,9 @@ public class Board {
     public String toString() {
         //return grid.toString();
         StringBuilder s = new StringBuilder();
-        for (int y = 0; y < size; y++) {
-            for (int x = 0; x < size; x++) {
-                Integer value = grid.getData(new GridCoordinate(x, y));
+        for (int n = 1; n <= size; n++) {
+            for (int l = 1; l <= size; l++) {
+                Integer value = grid.getData(new GridCoordinate(l, n));
                 s.append(value);
                 s.append("\t");
                 if (value != null && value.toString().length() < 4)
