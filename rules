@@ -1,8 +1,23 @@
 TowerWarsPP
 -----------
 
-- es wird auf einem parallelogrammförmigen Brett mit gleichen Seitenlängen n gespielt
-- die Felder des Bretts sind Hexagone
-- die beiden am weitesten voneinander entfernten Felder haben die Koordinate A1 und ?N und sind die Basen der
+- Es wird auf einem parallelogrammförmigen Brett mit gleichen Seitenlängen n gespielt
+- Die Felder des Bretts sind Hexagone
+- Die beiden am weitesten voneinander entfernten Felder haben die Koordinate A1 und ?N und sind die Basen der
 jeweiligen Spieler (Rot hat seine Basis bei A1)
 - Um die Basen herum hat jeder Spieler Spielsteine
+- Nur Spielsteine sind bewegbar
+- Jeder Spielstein hat erst einmal die Zugreichweite 1
+- Ein Stein darf prinzipiell auf jedes Feld ziehen, je nach Situation hat dies unterschiedliche Effekte:
+ * Zug auf ein freies Feld -> "normaler" Zug
+ * Zug auf ein Feld mit einem gegnerischen Stein -> Stein geschlagen
+ * Zug auf einen eigenen Stein -> bauen eines Turmes
+ * Zug auf einen eigenen Turm -> erhöhen des Turmes (außer Maximalhöhe wurde erreicht)
+ * Zug auf gegnerischen Turm -> Turm schlagen (Sonderregel blockieren über Entfernung)
+- TÜRME
+ * Haben eine Maximalhöhe
+ * Ein Turm erhöht die Zugreichweite aller direkt anliegenden eigenen Steine um die Höhe des Turmes
+ * Der Bonus wird bei einem Stein mit mehrfach angrenzenden Türmen addiert
+ * Der Bonus bezieht sich auf jegliche Zugart (Ziehen, Schlagen, Turm bauen)
+ * Wird durch einen Turmbonus ein Stein auf einen gegnerischen Turm gezogen ist dieser nicht gänzlich zerstört
+ sondern blockiert
