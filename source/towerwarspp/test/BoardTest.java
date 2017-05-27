@@ -1,6 +1,8 @@
 package towerwarspp.test;
 
 import towerwarspp.board.Board;
+import towerwarspp.input.Requestable;
+import towerwarspp.input.TextIO;
 import towerwarspp.preset.Move;
 
 import java.io.BufferedReader;
@@ -26,9 +28,8 @@ public class BoardTest {
     // ------------------------------------------------------------
 
     public static void main(String[] args) throws InterruptedException {
-        BufferedReader rd = new BufferedReader(new InputStreamReader(System.in));
-
         Board b = new Board(5, 5);
+        Requestable input = new TextIO(b);
 
         System.out.println(b);
         int index = 0;
@@ -42,8 +43,8 @@ public class BoardTest {
 
             Move m = null;
             try {
-                m = Move.parseMove(rd.readLine());
-            } catch (IOException | Move.MoveFormatException e) {
+                m = input.request();
+            } catch (Exception e) {
                 m = getRandomMoveFromSet(b.getPossibleMoves());
             }
 
