@@ -44,7 +44,7 @@ public class BoardTest {
 
         // Init player array
         //players[0] = new HumanPlayer(textIO);
-        players[0] = new RandomAI();
+        players[1] = new RandomAI();
         players[1] = new RandomAI();
 
         // Init players
