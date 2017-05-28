@@ -12,14 +12,14 @@ import towerwarspp.preset.Status;
  * @author dominick
  */
 public abstract class AbstractPlayer implements Player {
+    /**
+     * Player Board
+     */
     protected Board board;
+    /**
+     * Player method call order state
+     */
     private State state;
-
-    private enum State {
-        REQUEST,
-        CONFIRM,
-        UPDATE
-    }
 
     // ------------------------------------------------------------
 
@@ -69,7 +69,16 @@ public abstract class AbstractPlayer implements Player {
             state = State.UPDATE;
     }
 
+    public abstract Move deliver() throws Exception;
+
     // ------------------------------------------------------------
 
-    public abstract Move deliver() throws Exception;
+    /**
+     * Method call order state
+     */
+    private enum State {
+        REQUEST,
+        CONFIRM,
+        UPDATE
+    }
 }
