@@ -24,7 +24,8 @@ jeweiligen Spieler (Rot hat seine Basis bei A1)
  * Haben eine Maximalhöhe
  * Können nicht im Ganzen bewegt werden. Ein Zug vom Turm aus bewirkt, dass der oberste Stein vom Turm
  heruntergezogen wird. Steine die vom Turm gezogen werden, dürfen nicht schlagen.
- * Ein Turm erhöht die Zugreichweite aller direkt anliegenden eigenen Steine um die Höhe des Turmes
+ * Ein Turm erhöht die Zugreichweite aller direkt anliegenden eigenen Steine um die Höhe des Turmes. Türme erhalten
+ beim Zug keinen Bonus durch angrenzende Türme.
  * Der Bonus wird bei einem Stein mit mehrfach angrenzenden Türmen addiert
  * Der Bonus bezieht sich auf jegliche Zugart (Ziehen, Schlagen, Turm bauen)
  * Wird durch einen Turmbonus ein Stein auf einen gegnerischen Turm gezogen ist dieser nicht gänzlich zerstört
