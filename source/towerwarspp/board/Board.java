@@ -4,6 +4,7 @@ import eu.nepster.frozencube.game.grid.Grid;
 import eu.nepster.frozencube.game.grid.GridCoordinate;
 import eu.nepster.frozencube.game.grid.GridLogic;
 import eu.nepster.frozencube.game.grid.hex.HexGrid;
+import towerwarspp.output.Viewer;
 import towerwarspp.preset.Move;
 import towerwarspp.preset.PlayerColor;
 import towerwarspp.preset.Position;
@@ -90,10 +91,10 @@ public class Board extends Observable {
      * Initialize the board with all player tokens and their bases.
      */
     private void initBoard() {
-        for (GridCoordinate c : gridLogic.getRange(redBaseCoordinate, size / 3))
+        for (GridCoordinate c : gridLogic.getRange(redBaseCoordinate, size / 2))
             grid.setData(c, RED);
 
-        for (GridCoordinate c : gridLogic.getRange(blueBaseCoordinate, size / 3))
+        for (GridCoordinate c : gridLogic.getRange(blueBaseCoordinate, size / 2))
             grid.setData(c, BLUE);
 
         grid.setData(redBaseCoordinate, RED_BASE);
@@ -181,9 +182,9 @@ public class Board extends Observable {
         else if (positionToGridCoordinate(move.getEnd()).equals(blueBaseCoordinate))
             status = Status.RED_WIN;
 
-        // 2. if player cannot move, game is over
-        // TODO change size() == 0 to size() == 1 (cause of always possible null move)
-        // remember! players turn already switched!!
+            // 2. if player cannot move, game is over
+            // TODO change size() == 0 to size() == 1 (cause of always possible null move)
+            // remember! players turn already switched!!
         else if (possibleMoves.size() == 0) {
             if (turn == RED)
                 status = Status.BLUE_WIN;
@@ -201,15 +202,31 @@ public class Board extends Observable {
 
     // ------------------------------------------------------------
 
-    // Viewer functions
-
     /**
-     * get the size of the board
+     * Return a board viewer
      *
-     * @return size
+     * @return Board viewer
      */
-    public int getSize() {
-        return size;
+    public Viewer viewer() {
+        // TODO don't create viewer each time
+        return new Viewer() {
+
+            @Override
+            public int getSize() {
+                return size;
+            }
+
+            @Override
+            public int getField(int letter, int number) {
+                return grid.getData(new GridCoordinate(letter, number));
+            }
+
+            @Override
+            public boolean checkMove(Move move) {
+                return getPossibleMoves().contains(move);
+            }
+
+        };
     }
 
     public PlayerColor getTurn() {
@@ -278,8 +295,54 @@ public class Board extends Observable {
         Set<Move> moves = new HashSet<>();
 
         // TODO tower range increasing missing
-        for (GridCoordinate c : gridLogic.getBorderNeighbors(coordinate))
+        // Calculate tower bonus, towers must be direct neighbors
+        int range = 1;
+        for (GridCoordinate c : gridLogic.getBorderNeighbors(coordinate)) {
+            int v = grid.getData(c);
+
+            // Check for tower
+            if (Math.abs(v) > 1 && v / Math.abs(v) == turn)
+                range += Math.abs(v) - 1;
+        }
+
+        // Calculate moves
+        for (GridCoordinate c : gridLogic.getRange(coordinate, range)) {
+            // Skip the "no move"
+            if (c.equals(coordinate))
+                continue;
+
+            int v = grid.getData(c);
+
+            // Tokens cannot move on own base
+            if (v != 0 && v / turn == BASE)
+                continue;
+
             moves.add(new Move(gridCoordinateToPosition(coordinate), gridCoordinateToPosition(c)));
+        }
+
+        return moves;
+    }
+
+    /**
+     * Calculate the set of all possible moves for a given tower
+     *
+     * @param coordinate
+     *         Coordinate
+     *
+     * @return Set of possible {@link Move}'s
+     */
+    private Set<Move> getPossibleMovesForTower(GridCoordinate coordinate) {
+        Set<Move> moves = new HashSet<>();
+
+        // Towers can only move to direct neighbors
+        for (GridCoordinate c : gridLogic.getBorderNeighbors(coordinate)) {
+            int v = grid.getData(c);
+
+            // Towers cannot kick other tokens
+            // check if v and current player differ in color
+            if (v * turn < 0)
+            moves.add(new Move(gridCoordinateToPosition(coordinate), gridCoordinateToPosition(c)));
+        }
 
         return moves;
     }
@@ -293,9 +356,20 @@ public class Board extends Observable {
         Set<Move> moves = new HashSet<>();
 
         // TODO fails if only towers exist
-        for (GridCoordinate c : gridCoordinates)
-            if (grid.getData(c) == turn)
+        for (GridCoordinate c : gridCoordinates) {
+            // Grid value
+            int v = grid.getData(c);
+
+            // Empty -> nothing to do
+            if (v == 0)
+                continue;
+            // Tokens
+            if (v == turn)
                 moves.addAll(getPossibleMovesForToken(c));
+            // Tower
+            else if (v / Math.abs(v) == turn && Math.abs(v) != BASE)
+                moves.addAll(getPossibleMovesForTower(c));
+        }
 
         //moves.add(null);
 
