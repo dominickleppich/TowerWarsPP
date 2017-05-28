@@ -72,7 +72,8 @@ public class Board extends Observable {
         }
 
         this.size = size;
-        this.maxTowerSize = maxTowerSize;
+        // TODO better strategy
+        this.maxTowerSize = size / 4;
         this.turn = RED;
 
         this.status = Status.OK;
