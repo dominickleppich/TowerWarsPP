@@ -54,10 +54,8 @@ public class Board extends Observable {
      *
      * @param size
      *         Size
-     * @param maxTowerSize
-     *         max tower size
      */
-    public Board(int size, int maxTowerSize) {
+    public Board(int size) {
         grid = new HexGrid<>();
         gridLogic = grid.getLogic();
 

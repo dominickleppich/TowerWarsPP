@@ -62,8 +62,7 @@ public abstract class AbstractPlayer implements Player {
 
     @Override
     public void init(int size, PlayerColor color) throws Exception {
-        // TODO const maxTowerSize..
-        board = new Board(size, 5);
+        board = new Board(size);
         if (color == PlayerColor.RED)
             state = State.REQUEST;
         else

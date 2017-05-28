@@ -36,8 +36,7 @@ public class BoardTest {
     }
 
     private static void startGame(int size) throws Exception {
-        // TODO const maxTowerSize
-        Board b = new Board(size, 5);
+        Board b = new Board(size);
         TextIO textIO = new TextIO(b);
         b.addObserver(textIO);
 
