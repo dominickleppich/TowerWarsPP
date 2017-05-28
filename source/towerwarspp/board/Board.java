@@ -204,9 +204,9 @@ public class Board extends Observable {
     // Viewer functions
 
     /**
-     * Get the size of the board
+     * get the size of the board
      *
-     * @return Size
+     * @return size
      */
     public int getSize() {
         return size;
