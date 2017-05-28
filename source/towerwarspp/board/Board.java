@@ -5,6 +5,7 @@ import eu.nepster.frozencube.game.grid.GridCoordinate;
 import eu.nepster.frozencube.game.grid.GridLogic;
 import eu.nepster.frozencube.game.grid.hex.HexGrid;
 import towerwarspp.preset.Move;
+import towerwarspp.preset.PlayerColor;
 import towerwarspp.preset.Position;
 import towerwarspp.preset.Status;
 
@@ -106,15 +107,6 @@ public class Board extends Observable {
     // ------------------------------------------------------------
 
     /**
-     * Determine the current player
-     *
-     * @return {@code RED} or {@code BLUE}
-     */
-    private int getTurn() {
-        return turn;
-    }
-
-    /**
      * Get the boards status.
      *
      * @return {@link Status}
@@ -167,14 +159,12 @@ public class Board extends Observable {
         // check for null move, player surrender
         if (move == null) {
             // other player wins
-            if (getTurn() == RED)
+            if (turn == RED)
                 status = Status.BLUE_WIN;
             else
                 status = Status.RED_WIN;
             return true;
         }
-
-        // TODO check win situation
 
         // apply move
         applyMove(move);
@@ -184,6 +174,23 @@ public class Board extends Observable {
 
         // Calculate possible moves
         possibleMoves = calculatePossibleMoves();
+
+        // Check win condition ...
+        // 1. if base was destroyed, player won
+        if (positionToGridCoordinate(move.getEnd()).equals(redBaseCoordinate))
+            status = Status.BLUE_WIN;
+        else if (positionToGridCoordinate(move.getEnd()).equals(blueBaseCoordinate))
+            status = Status.RED_WIN;
+
+        // 2. if player cannot move, game is over
+        // TODO change size() == 0 to size() == 1 (cause of always possible null move)
+        // remember! players turn already switched!!
+        else if (possibleMoves.size() == 0) {
+            if (turn == RED)
+                status = Status.BLUE_WIN;
+            else
+                status = Status.RED_WIN;
+        }
 
         // Notify observers
         setChanged();
@@ -206,6 +213,10 @@ public class Board extends Observable {
         return size;
     }
 
+    public PlayerColor getTurn() {
+        return turn == RED ? PlayerColor.RED : PlayerColor.BLUE;
+    }
+
     // ------------------------------------------------------------
 
     // Helper functions
@@ -221,8 +232,8 @@ public class Board extends Observable {
         int oldEndData = grid.getData(positionToGridCoordinate(move.getEnd()));
 
         // TODO extra rule for tower attacks missing
-        grid.setData(positionToGridCoordinate(move.getStart()), oldStartData - getTurn());
-        grid.setData(positionToGridCoordinate(move.getEnd()), oldEndData + getTurn());
+        grid.setData(positionToGridCoordinate(move.getStart()), oldStartData - turn);
+        grid.setData(positionToGridCoordinate(move.getEnd()), oldEndData + turn);
     }
 
     /**
@@ -284,7 +295,7 @@ public class Board extends Observable {
 
         // TODO fails if only towers exist
         for (GridCoordinate c : gridCoordinates)
-            if (grid.getData(c) == getTurn())
+            if (grid.getData(c) == turn)
                 moves.addAll(getPossibleMovesForToken(c));
 
         //moves.add(null);

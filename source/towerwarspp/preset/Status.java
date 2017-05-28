@@ -59,4 +59,14 @@ public class Status implements Serializable {
     public String toString() {
         return statusString[status];
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null)
+            return false;
+        if (!(o instanceof Status))
+            return false;
+        Status s = (Status) o;
+        return s.status == status;
+    }
 }

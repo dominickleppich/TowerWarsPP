@@ -3,7 +3,11 @@ package towerwarspp.test;
 import towerwarspp.board.Board;
 import towerwarspp.input.Requestable;
 import towerwarspp.input.TextIO;
+import towerwarspp.player.HumanPlayer;
+import towerwarspp.player.ai.RandomAI;
 import towerwarspp.preset.Move;
+import towerwarspp.preset.Player;
+import towerwarspp.preset.PlayerColor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,47 +31,51 @@ public class BoardTest {
 
     // ------------------------------------------------------------
 
-    public static void main(String[] args) throws InterruptedException {
-        Board b = new Board(5, 5);
-        TextIO input = new TextIO(b);
-        b.addObserver(input);
+    public static void main(String[] args) throws Exception {
+        startGame(5);
+    }
 
+    private static void startGame(int size) throws Exception {
+        // TODO const maxTowerSize
+        Board b = new Board(size, 5);
+        TextIO textIO = new TextIO(b);
+        b.addObserver(textIO);
+
+        Player[] players = new Player[2];
+
+        // Init player array
+        //players[0] = new HumanPlayer(textIO);
+        players[0] = new RandomAI();
+        players[1] = new RandomAI();
+
+        // Init players
+        players[0].init(size, PlayerColor.RED);
+        players[1].init(size, PlayerColor.BLUE);
+
+        // Print board first time
         System.out.println(b);
         int index = 0;
-        boolean red = true;
 
         while (b.getStatus().isOK()) {
             //Thread.sleep(50);
 
             System.out.println("------------------------------------------------------------");
-            System.out.println("It's " + (red ? "reds" : "blues") + " turn...");
+            System.out.println("It's " + b.getTurn() + " turn...");
 
-            Move m = null;
-            try {
-                m = input.request();
-            } catch (Exception e) {
-                m = getRandomMoveFromSet(b.getPossibleMoves());
-            }
+            Move m = players[index % 2].request();
+            System.out.println("Do move No " + (index + 1) + ": " + m + " " + (b.makeMove(m) ? "succeeded" : "failed"));
 
-
-            System.out.println("Do move No " + ++index + ": " + m + " " + (b.makeMove(m) ? "succeeded" : "failed"));
+            // Confirm and update players
+            players[index % 2].confirm(b.getStatus());
+            players[(index + 1) % 2].update(m, b.getStatus());
 
             //System.out.println(b);
 
-            red = !red;
+            // Next move
+            index++;
         }
 
         System.out.println("\n\nGame ended with status: " + b.getStatus());
     }
-
-    private static Move getRandomMoveFromSet(Set<Move> moves) {
-        int i = rnd.nextInt(moves.size()) + 1;
-
-        Move m = null;
-
-        Iterator<Move> it = moves.iterator();
-        while (i-- > 0) m = it.next();
-
-        return m;
-    }
 }
+
