@@ -21,6 +21,8 @@ import java.util.Set;
  * @author dominick
  */
 public class Board extends Observable {
+    private static final int TO_STRING_SPACE = 6;
+
     private static final int RED = 1;
     private static final int BLUE = -1;
 
@@ -124,6 +126,8 @@ public class Board extends Observable {
         return possibleMoves;
     }
 
+    // ------------------------------------------------------------
+
     /**
      * Checks if a given {@link Move} is valid in the current situation.
      *
@@ -202,6 +206,8 @@ public class Board extends Observable {
 
     // ------------------------------------------------------------
 
+    // Helper functions
+
     /**
      * Return a board viewer
      *
@@ -232,10 +238,6 @@ public class Board extends Observable {
     public PlayerColor getTurn() {
         return turn == RED ? PlayerColor.RED : PlayerColor.BLUE;
     }
-
-    // ------------------------------------------------------------
-
-    // Helper functions
 
     /**
      * Apply the move on the board
@@ -323,6 +325,8 @@ public class Board extends Observable {
         return moves;
     }
 
+    // ------------------------------------------------------------
+
     /**
      * Calculate the set of all possible moves for a given tower
      *
@@ -341,7 +345,7 @@ public class Board extends Observable {
             // Towers cannot kick other tokens
             // check if v and current player differ in color
             if (v * turn < 0)
-            moves.add(new Move(gridCoordinateToPosition(coordinate), gridCoordinateToPosition(c)));
+                moves.add(new Move(gridCoordinateToPosition(coordinate), gridCoordinateToPosition(c)));
         }
 
         return moves;
@@ -355,7 +359,6 @@ public class Board extends Observable {
     private Set<Move> calculatePossibleMoves() {
         Set<Move> moves = new HashSet<>();
 
-        // TODO fails if only towers exist
         for (GridCoordinate c : gridCoordinates) {
             // Grid value
             int v = grid.getData(c);
@@ -366,7 +369,7 @@ public class Board extends Observable {
             // Tokens
             if (v == turn)
                 moves.addAll(getPossibleMovesForToken(c));
-            // Tower
+                // Tower
             else if (v / Math.abs(v) == turn && Math.abs(v) != BASE)
                 moves.addAll(getPossibleMovesForTower(c));
         }
@@ -378,19 +381,30 @@ public class Board extends Observable {
 
     // ------------------------------------------------------------
 
+    private static String fixedString(String s) {
+        if (s.length() > TO_STRING_SPACE)
+            return s.substring(0, TO_STRING_SPACE);
+        return s + fillSpaces(TO_STRING_SPACE - s.length());
+    }
+
+    private static String fillSpaces(int n) {
+        StringBuilder sb = new StringBuilder();
+        while (n-- > 0)
+            sb.append(" ");
+        return sb.toString();
+    }
+
     @Override
     public String toString() {
         //return grid.toString();
         StringBuilder s = new StringBuilder();
         for (int n = 1; n <= size; n++) {
+            s.append(fillSpaces(TO_STRING_SPACE / 2 * n));
             for (int l = 1; l <= size; l++) {
                 Integer value = grid.getData(new GridCoordinate(l, n));
-                s.append(value);
-                s.append("\t");
-                if (value != null && value.toString().length() < 4)
-                    s.append("\t");
+                s.append(fixedString(value.toString()));
             }
-            s.append("\n");
+            s.append("\n\n");
         }
         return s.toString();
     }
