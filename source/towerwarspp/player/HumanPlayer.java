@@ -12,11 +12,13 @@ import towerwarspp.preset.Move;
  */
 public class HumanPlayer extends AbstractPlayer {
     private Requestable requestable;
+    private String name;
 
     // ------------------------------------------------------------
 
-    public HumanPlayer(Requestable requestable) {
+    public HumanPlayer(Requestable requestable, String name) {
         this.requestable = requestable;
+        this.name = name;
     }
 
     // ------------------------------------------------------------
@@ -24,5 +26,10 @@ public class HumanPlayer extends AbstractPlayer {
     @Override
     public Move deliver() throws Exception {
         return requestable.request();
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 }

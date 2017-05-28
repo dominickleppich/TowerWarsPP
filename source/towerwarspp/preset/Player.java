@@ -12,4 +12,5 @@ public interface Player {
     void confirm(Status boardStatus) throws Exception;
     void update(Move opponentMove, Status boardStatus) throws Exception;
     void init(int size, PlayerColor color) throws Exception;
+    String getName();
 }
