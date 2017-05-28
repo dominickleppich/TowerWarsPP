@@ -29,7 +29,8 @@ public class BoardTest {
 
     public static void main(String[] args) throws InterruptedException {
         Board b = new Board(5, 5);
-        Requestable input = new TextIO(b);
+        TextIO input = new TextIO(b);
+        b.addObserver(input);
 
         System.out.println(b);
         int index = 0;
@@ -51,7 +52,7 @@ public class BoardTest {
 
             System.out.println("Do move No " + ++index + ": " + m + " " + (b.makeMove(m) ? "succeeded" : "failed"));
 
-            System.out.println(b);
+            //System.out.println(b);
 
             red = !red;
         }

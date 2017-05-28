@@ -5,13 +5,15 @@ import towerwarspp.preset.Move;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created on 27.05.2017.
  *
  * @author dominick
  */
-public class TextIO implements Requestable {
+public class TextIO implements Requestable, Observer {
     private BufferedReader rd;
 
     // TODO replace by viewer
@@ -69,5 +71,12 @@ public class TextIO implements Requestable {
         } while (!correctFormat || !board.checkMove(m));
 
         return m;
+    }
+
+    // ------------------------------------------------------------
+
+    @Override
+    public void update(Observable observable, Object o) {
+        System.out.println("Move: " + o + "\n" + observable);
     }
 }
