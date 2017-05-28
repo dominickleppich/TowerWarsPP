@@ -9,6 +9,7 @@ import towerwarspp.preset.Position;
 import towerwarspp.preset.Status;
 
 import java.util.HashSet;
+import java.util.Observable;
 import java.util.Set;
 
 /**
@@ -17,12 +18,13 @@ import java.util.Set;
  *
  * @author dominick
  */
-public class Board {
+public class Board extends Observable {
     private static final int RED = 1;
     private static final int BLUE = -1;
 
-    private static final int RED_BASE = RED * 10000;
-    private static final int BLUE_BASE = BLUE * 10000;
+    private static final int BASE = 100;
+    private static final int RED_BASE = RED * BASE;
+    private static final int BLUE_BASE = BLUE * BASE;
 
     // ------------------------------------------------------------
     // Bases
@@ -183,10 +185,30 @@ public class Board {
         // Calculate possible moves
         possibleMoves = calculatePossibleMoves();
 
+        // Notify observers
+        setChanged();
+        notifyObservers(move);
+        clearChanged();
+
         return true;
     }
 
     // ------------------------------------------------------------
+
+    // Viewer functions
+
+    /**
+     * Get the size of the board
+     *
+     * @return Size
+     */
+    public int getSize() {
+        return size;
+    }
+
+    // ------------------------------------------------------------
+
+    // Helper functions
 
     /**
      * Apply the move on the board
@@ -202,10 +224,6 @@ public class Board {
         grid.setData(positionToGridCoordinate(move.getStart()), oldStartData - getTurn());
         grid.setData(positionToGridCoordinate(move.getEnd()), oldEndData + getTurn());
     }
-
-    // ------------------------------------------------------------
-
-    // Helper functions
 
     /**
      * Switch player at the end of his turn.
