@@ -37,7 +37,7 @@ public class BoardTest {
 
     private static void startGame(int size) throws Exception {
         Board b = new Board(size);
-        TextIO textIO = new TextIO(b);
+        TextIO textIO = new TextIO();
         b.addObserver(textIO);
 
         Player[] players = new Player[2];
@@ -62,7 +62,8 @@ public class BoardTest {
             System.out.println("It's " + b.getTurn() + " turn...");
 
             Move m = players[index % 2].request();
-            System.out.println("Do move No " + (index + 1) + ": " + m + " " + (b.makeMove(m) ? "succeeded" : "failed"));
+            System.out.println("[LOG] Move No " + (index + 1) + ": " + m + " " + (b.makeMove(m) ? "succeeded" :
+                                                                                        "failed"));
 
             // Confirm and update players
             players[index % 2].confirm(b.getStatus());

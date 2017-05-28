@@ -12,7 +12,9 @@ import towerwarspp.player.ai.RandomAI;
  */
 public class MatchTest {
     public static void main(String[] args) throws Exception {
-        Match match = new Match(new RandomAI(), new RandomAI(), 5);
+        TextIO t = new TextIO();
+        Match match = new Match(new HumanPlayer(t, "Gert"), new RandomAI(), 3, t);
+        //Match match = new Match(new RandomAI(), new RandomAI(), 4, t);
         match.init();
         match.start();
         match.waitMatch();
