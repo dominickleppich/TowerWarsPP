@@ -76,7 +76,7 @@ public class Board extends Observable {
 
         this.size = size;
         // TODO better strategy
-        this.maxTowerSize = size / 4;
+        this.maxTowerSize = 3;
         this.turn = RED;
 
         this.status = Status.OK;
@@ -285,6 +285,9 @@ public class Board extends Observable {
         return new Position(coordinate.getX(), coordinate.getY());
     }
 
+
+    // ------------------------------------------------------------
+
     /**
      * Calculate the set of all possible moves for a given token.
      *
@@ -296,14 +299,13 @@ public class Board extends Observable {
     private Set<Move> getPossibleMovesForToken(GridCoordinate coordinate) {
         Set<Move> moves = new HashSet<>();
 
-        // TODO tower range increasing missing
         // Calculate tower bonus, towers must be direct neighbors
         int range = 1;
         for (GridCoordinate c : gridLogic.getBorderNeighbors(coordinate)) {
             int v = grid.getData(c);
 
             // Check for tower
-            if (Math.abs(v) > 1 && v / Math.abs(v) == turn)
+            if (Math.abs(v) > 1 && Math.abs(v) != BASE && v / Math.abs(v) == turn)
                 range += Math.abs(v) - 1;
         }
 
@@ -316,7 +318,11 @@ public class Board extends Observable {
             int v = grid.getData(c);
 
             // Tokens cannot move on own base
-            if (v != 0 && v / turn == BASE)
+            if (v / turn == BASE)
+                continue;
+
+            // Max tower size cannot be exceed
+            if (Math.abs(v) != BASE && Math.abs(v + turn) > maxTowerSize)
                 continue;
 
             moves.add(new Move(gridCoordinateToPosition(coordinate), gridCoordinateToPosition(c)));
@@ -324,8 +330,6 @@ public class Board extends Observable {
 
         return moves;
     }
-
-    // ------------------------------------------------------------
 
     /**
      * Calculate the set of all possible moves for a given tower
@@ -342,9 +346,18 @@ public class Board extends Observable {
         for (GridCoordinate c : gridLogic.getBorderNeighbors(coordinate)) {
             int v = grid.getData(c);
 
+            // TODO second check on base
+            // Towers cannot move on own base
+            if (v / turn == BASE)
+                continue;
+
+            // Max tower size cannot be exceed (but players can move on enemy base)
+            if (Math.abs(v) != BASE && Math.abs(v + turn) > maxTowerSize)
+                continue;
+
             // Towers cannot kick other tokens
             // check if v and current player differ in color
-            if (v * turn < 0)
+            if (v * turn >= 0)
                 moves.add(new Move(gridCoordinateToPosition(coordinate), gridCoordinateToPosition(c)));
         }
 
@@ -398,14 +411,41 @@ public class Board extends Observable {
     public String toString() {
         //return grid.toString();
         StringBuilder s = new StringBuilder();
+        s.append(fillSpaces(TO_STRING_SPACE / 2));
+        for (int l = 0; l < size; l++)
+            s.append(fixedString(Character.toString((char) (l + 'A'))));
+        s.append("\n\n");
         for (int n = 1; n <= size; n++) {
-            s.append(fillSpaces(TO_STRING_SPACE / 2 * n));
+            s.append(fillSpaces(TO_STRING_SPACE / 2 * (n - 1)) + fixedString(Integer.toString(n)));
             for (int l = 1; l <= size; l++) {
                 Integer value = grid.getData(new GridCoordinate(l, n));
-                s.append(fixedString(value.toString()));
+                String ss;
+                switch(value) {
+                    case 0:
+                        ss = ".";
+                        break;
+                    case RED:
+                        ss = "R";
+                        break;
+                    case BLUE:
+                        ss = "B";
+                        break;
+                    case RED_BASE:
+                        ss = "RB";
+                        break;
+                    case BLUE_BASE:
+                        ss = "BB";
+                        break;
+                    default:
+                        ss = (value > 0 ? "R" : "B") + "T" + Math.abs(value);
+                }
+                s.append(fixedString(ss));
             }
-            s.append("\n\n");
+            s.append(fixedString(Integer.toString(n)) + "\n\n");
         }
+        s.append(fillSpaces(TO_STRING_SPACE / 2 * (size + 2)));
+        for (int l = 0; l < size; l++)
+            s.append(fixedString(Character.toString((char) (l + 'A'))));
         return s.toString();
     }
 }
