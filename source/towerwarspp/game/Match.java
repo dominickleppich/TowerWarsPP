@@ -134,6 +134,9 @@ public class Match implements Runnable {
             System.out.println("------------------------------------------------------------");
             System.out.println("It's " + board.getTurn() + " turn...");
 
+            // TODO
+            for (Move m : board.getPossibleMoves())
+                System.out.println("\t" + m);
 
             // Request move
             Move m = null;
