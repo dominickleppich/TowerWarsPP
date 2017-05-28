@@ -1,5 +1,6 @@
 package towerwarspp.input;
 
+import towerwarspp.output.Viewer;
 import towerwarspp.preset.Move;
 
 /**
@@ -11,10 +12,13 @@ public interface Requestable {
     /**
      * Request a {@link Move} from a player
      *
+     * @param viewer
+     *         Board viewer (to validate move)
+     *
      * @return {@link Move}
      *
      * @throws Exception
      *         if something unexpected fails
      */
-    Move request() throws Exception;
+    Move request(Viewer viewer) throws Exception;
 }

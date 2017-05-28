@@ -1,6 +1,7 @@
 package towerwarspp.input;
 
 import towerwarspp.board.Board;
+import towerwarspp.output.Viewer;
 import towerwarspp.preset.Move;
 
 import java.io.BufferedReader;
@@ -16,28 +17,19 @@ import java.util.Observer;
 public class TextIO implements Requestable, Observer {
     private BufferedReader rd;
 
-    // TODO replace by viewer
-    // To check if move is valid
-    private Board board;
-
     // ------------------------------------------------------------
 
     /**
      * Default ctr
-     *
-     * @param board
-     *         Board
      */
-    public TextIO(Board board) {
-        this.board = board;
-
+    public TextIO() {
         rd = new BufferedReader(new InputStreamReader(System.in));
     }
 
     // ------------------------------------------------------------
 
     @Override
-    public Move request() throws Exception {
+    public Move request(Viewer viewer) throws Exception {
         Move m = null;
         boolean valid = true;
         boolean correctFormat = true;
@@ -68,7 +60,7 @@ public class TextIO implements Requestable, Observer {
                 valid = true;
             }
 
-        } while (!correctFormat || !board.checkMove(m));
+        } while (!correctFormat || !viewer.checkMove(m));
 
         return m;
     }

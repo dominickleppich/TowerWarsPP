@@ -9,6 +9,8 @@ import towerwarspp.preset.Player;
 import towerwarspp.preset.PlayerColor;
 import towerwarspp.preset.Status;
 
+import java.util.Observer;
+
 /**
  * This class handles a single match. It requests, confirms and updates moves of both players, initializes them
  * correctly and terminates after the game has finished.
@@ -38,6 +40,10 @@ public class Match implements Runnable {
      * Flag for checking of the match was initialized
      */
     private boolean initialized = false;
+    /**
+     * Board observer
+     */
+    private Observer observer;
 
     // ------------------------------------------------------------
 
@@ -51,10 +57,13 @@ public class Match implements Runnable {
      * @param size
      *         Board size
      */
-    public Match(Player red, Player blue, int size) {
+    public Match(Player red, Player blue, int size, Observer observer) {
         player = new Player[] {red, blue};
         this.size = size;
         board = new Board(size);
+        this.observer = observer;
+        if (observer != null)
+            board.addObserver(observer);
     }
 
     // ------------------------------------------------------------
@@ -135,7 +144,7 @@ public class Match implements Runnable {
                 matchStatus = (moveCounter % 2 == 0 ? Status.BLUE_WIN : Status.RED_WIN);
                 continue;
             }
-            System.out.println("Do move No " + (moveCounter + 1) + ": " + m + " " + (board.makeMove(m) ?
+            System.out.println("LOG Move No " + (moveCounter + 1) + ": " + m + " " + (board.makeMove(m) ?
                                                                                              "succeeded" : "failed"));
 
             // Confirm move
@@ -156,8 +165,6 @@ public class Match implements Runnable {
                 continue;
             }
 
-            System.out.println(board);
-
             // Next move
             moveCounter++;
 
@@ -176,6 +183,10 @@ public class Match implements Runnable {
      */
     private synchronized void end(Status status) {
         System.out.println("\n\nGame ended with status: " + status);
+
+        // Remove observer
+        board.deleteObserver(observer);
+
         notify();
     }
 
