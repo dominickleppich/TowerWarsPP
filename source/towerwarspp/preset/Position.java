@@ -2,11 +2,6 @@ package towerwarspp.preset;
 
 import java.io.Serializable;
 
-/**
- * Created on 05.05.2017.
- *
- * @author dominick
- */
 public class Position implements Serializable {
     private int letter, number;
 
@@ -17,9 +12,12 @@ public class Position implements Serializable {
         setNumber(number);
     }
 
-    public Position(Position p) {
-        setLetter(p.letter);
-        setNumber(p.number);
+    public Position(Position position) {
+        if (position == null)
+            throw new IllegalArgumentException("position == null");
+
+        setLetter(position.getLetter());
+        setNumber(position.getNumber());
     }
 
     // ------------------------------------------------------------
@@ -29,6 +27,9 @@ public class Position implements Serializable {
     }
 
     private void setLetter(int letter) {
+        if (letter <= 0 || letter > 26)
+            throw new IllegalArgumentException("letter out of range!");
+
         this.letter = letter;
     }
 
@@ -37,40 +38,26 @@ public class Position implements Serializable {
     }
 
     private void setNumber(int number) {
+        if (number <= 0 || number > 26)
+            throw new IllegalArgumentException("number out of range!");
+
         this.number = number;
     }
 
     // ------------------------------------------------------------
 
-    /**
-     * Exception for wrong {@link Position} parse format
-     */
-    public static class PositionFormatException extends IllegalArgumentException {
-        public PositionFormatException(String msg) {
-            super(msg);
-        }
-    }
+    public static Position parsePosition(String str)
+            throws IllegalArgumentException, PositionFormatException {
+        if (str == null)
+            throw new IllegalArgumentException("str == null");
 
-    /**
-     * Parse a string to a {@link Position}
-     *
-     * @param str
-     *         String to parse
-     *
-     * @return Parsed {@link Position}
-     *
-     * @throws PositionFormatException
-     *         if parsing fails
-     */
-    public static Position parsePosition(String str) throws PositionFormatException {
-        int letter, number;
         try {
-            letter = Character.toUpperCase(str.charAt(0)) - 'A' + 1;
-            number = Integer.parseInt(str.substring(1));
-        } catch (NullPointerException | IndexOutOfBoundsException | NumberFormatException e) {
-            throw new PositionFormatException("Unable to parse position: " + str);
+            return new Position(Character.toUpperCase(str.charAt(0)) - 'A' + 1,
+                    Integer.parseInt(str.substring(1)));
+        } catch (IndexOutOfBoundsException | NumberFormatException e) {
+            throw new PositionFormatException(
+                    "Error parsing: \"" + str + "\"", e);
         }
-        return new Position(letter, number);
     }
 
     @Override

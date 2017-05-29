@@ -2,11 +2,6 @@ package towerwarspp.preset;
 
 import java.io.Serializable;
 
-/**
- * Created on 05.05.2017.
- *
- * @author dominick
- */
 public class Move implements Serializable {
     private Position start;
     private Position end;
@@ -18,6 +13,14 @@ public class Move implements Serializable {
         setEnd(end);
     }
 
+    public Move(Move move) {
+        if (move == null)
+            throw new IllegalArgumentException("move == null");
+
+        setStart(move.getStart());
+        setEnd(move.getEnd());
+    }
+
     // ------------------------------------------------------------
 
     public Position getStart() {
@@ -25,6 +28,9 @@ public class Move implements Serializable {
     }
 
     private void setStart(Position start) {
+        if (start == null)
+            throw new IllegalArgumentException("start == null");
+
         this.start = start;
     }
 
@@ -33,45 +39,30 @@ public class Move implements Serializable {
     }
 
     private void setEnd(Position end) {
+        if (end == null)
+            throw new IllegalArgumentException("end == null");
+
         this.end = end;
     }
 
     // ------------------------------------------------------------
 
-    /**
-     * Exception for wrong {@link Move} parse format
-     */
-    public static class MoveFormatException extends IllegalArgumentException {
-        public MoveFormatException(String msg) {
-            super(msg);
-        }
-    }
+    public static Move parseMove(String str)
+            throws IllegalArgumentException, MoveFormatException {
+        if (str == null)
+            throw new IllegalArgumentException("str == null");
 
-    /**
-     * Parse a string to a {@link Move}
-     *
-     * @param str
-     *         String to parse
-     *
-     * @return Parsed {@link Move}
-     *
-     * @throws MoveFormatException
-     *         if parsing fails
-     */
-    public static Move parseMove(String str) throws MoveFormatException {
         // Surrender move
-        if (str == null || str.equals(""))
+        if (str.isEmpty())
             return null;
 
-        Position start, end;
         try {
             String[] params = str.split("->");
-            start = Position.parsePosition(params[0]);
-            end = Position.parsePosition(params[1]);
-        } catch (NullPointerException | IndexOutOfBoundsException | Position.PositionFormatException e) {
-            throw new MoveFormatException("Unable to parse move: " + str);
+            return new Move(Position.parsePosition(params[0]),
+                    Position.parsePosition(params[1]));
+        } catch (IndexOutOfBoundsException | PositionFormatException e) {
+            throw new MoveFormatException("Error parsing: \"" + str + "\"", e);
         }
-        return new Move(start, end);
     }
 
     @Override
