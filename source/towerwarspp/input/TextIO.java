@@ -1,8 +1,8 @@
 package towerwarspp.input;
 
-import towerwarspp.board.Board;
 import towerwarspp.output.Viewer;
 import towerwarspp.preset.Move;
+import towerwarspp.preset.MoveFormatException;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -53,7 +53,7 @@ public class TextIO implements Requestable, Observer {
 
                 // If this loop runs again, the move was not valid
                 valid = false;
-            } catch (Move.MoveFormatException e) {
+            } catch (MoveFormatException e) {
                 correctFormat = false;
 
                 // If this exception occurs, the move couldn't be checked, thus no valid message needed
