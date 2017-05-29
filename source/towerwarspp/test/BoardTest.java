@@ -8,6 +8,7 @@ import towerwarspp.player.ai.RandomAI;
 import towerwarspp.preset.Move;
 import towerwarspp.preset.Player;
 import towerwarspp.preset.PlayerColor;
+import towerwarspp.preset.Status;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -55,7 +56,7 @@ public class BoardTest {
         System.out.println(b);
         int index = 0;
 
-        while (b.getStatus().isOK()) {
+        while (b.getStatus() == Status.OK) {
             //Thread.sleep(50);
 
             System.out.println("------------------------------------------------------------");

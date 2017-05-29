@@ -128,7 +128,7 @@ public class Match implements Runnable {
 
         Status matchStatus = Status.OK;
 
-        while (matchStatus.isOK()) {
+        while (matchStatus == Status.OK) {
             //Thread.sleep(50);
 
             System.out.println("------------------------------------------------------------");
