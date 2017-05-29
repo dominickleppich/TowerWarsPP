@@ -49,9 +49,4 @@ public class RandomAI extends AbstractPlayer {
     public Move deliver() throws Exception {
         return getRandomMoveFromSet(board.getPossibleMoves());
     }
-
-    @Override
-    public String getName() {
-        return "RandomAI";
-    }
 }

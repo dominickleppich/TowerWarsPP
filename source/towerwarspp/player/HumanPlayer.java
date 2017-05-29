@@ -27,9 +27,4 @@ public class HumanPlayer extends AbstractPlayer {
     public Move deliver() throws Exception {
         return requestable.request(board.viewer());
     }
-
-    @Override
-    public String getName() {
-        return name;
-    }
 }
