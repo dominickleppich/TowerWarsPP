@@ -40,7 +40,9 @@
 		<delete dir="${lib.dir}" />
 		<mkdir dir="${lib.dir}" />
 		<copy todir="${lib.dir}">
-			<fileset dir="../FrozenCube/release" />
+			<fileset dir="../FrozenCube/release">
+                <exclude name="**/*.zip" />
+            </fileset>
 		</copy>
 	</target>
 
@@ -77,15 +79,15 @@
 		<delete dir="${release.dir}" />
 		<mkdir dir="${release.dir}" />
 		<!-- Copy needed libraries -->
-		<copy todir="${release.dir}/lib">
-			<fileset dir="${lib.dir}">
-				<!-- exclude unneeded jar files -->
-				<exclude name="*-javadoc.jar" />
-				<exclude name="*-source*.jar" />
-				<exclude name="*-junit.jar" />
-				<exclude name="*-contrib.jar" />
-			</fileset>
-		</copy>
+        <copy todir="${release.dir}/lib">
+            <fileset dir="${lib.dir}">
+                <!-- exclude unneeded jar files -->
+                <exclude name="*-javadoc.jar" />
+                <exclude name="*-source*.jar" />
+                <exclude name="*-junit.jar" />
+                <exclude name="*-contrib.jar" />
+            </fileset>
+        </copy>
 		<!-- Copy compiled game -->
 		<copy todir="${release.dir}">
 			<fileset dir="${jar.dir}" />
@@ -95,7 +97,7 @@
 		<!-- Copy documentation and pack into jar archive -->
 		<jar compress="true" destfile="${release.dir}/${project.name}-javadoc.jar" basedir="${javadoc.dir}" />
 		<!-- Copy resources -->
-		<copy todir="${release.dir}/${resource.dir}">
+		<copy todir="${release.dir}/resource">
 			<fileset dir="${resource.dir}" />
 		</copy>
 	</target>
