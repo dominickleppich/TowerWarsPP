@@ -25,6 +25,6 @@ public class HumanPlayer extends AbstractPlayer {
 
     @Override
     public Move deliver() throws Exception {
-        return requestable.request();
+        return requestable.request(board.getPossibleMoves());
     }
 }

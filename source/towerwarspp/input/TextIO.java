@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
 /**
  * Created on 27.05.2017.
@@ -17,7 +18,6 @@ import java.util.Observer;
  */
 public class TextIO implements Requestable, Observer {
     private BufferedReader rd;
-    private Viewer viewer;
 
     // ------------------------------------------------------------
 
@@ -30,23 +30,8 @@ public class TextIO implements Requestable, Observer {
 
     // ------------------------------------------------------------
 
-    /**
-     * Set the viewer.
-     *
-     * @param viewer
-     *         Viewer
-     */
-    public void setViewer(Viewer viewer) {
-        this.viewer = viewer;
-    }
-
-    // ------------------------------------------------------------
-
     @Override
-    public Move request() throws Exception {
-        if (viewer == null)
-            throw new IllegalStateException("viewer == null");
-
+    public Move request(Set<Move> possibleMoves) throws Exception {
         Move m = null;
         boolean valid = true;
         boolean correctFormat = true;
@@ -54,7 +39,7 @@ public class TextIO implements Requestable, Observer {
         do {
             if (!valid) {
                 System.out.println("\tThe move you entered was not valid! Please try again...\n\tA possible move is: " +
-                                           "" + RandomAI.getRandomMoveFromSet(viewer.getPossibleMoves()));
+                                           "" + RandomAI.getRandomMoveFromSet(possibleMoves));
             }
             // TODO IO class
             if (!correctFormat) {
@@ -78,7 +63,7 @@ public class TextIO implements Requestable, Observer {
                 valid = true;
             }
 
-        } while (!correctFormat || !viewer.getPossibleMoves().contains(m));
+        } while (!correctFormat || !possibleMoves.contains(m));
 
         return m;
     }
