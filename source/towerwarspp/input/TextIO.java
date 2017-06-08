@@ -1,6 +1,7 @@
 package towerwarspp.input;
 
 import towerwarspp.output.Viewer;
+import towerwarspp.player.ai.RandomAI;
 import towerwarspp.preset.Move;
 import towerwarspp.preset.MoveFormatException;
 
@@ -16,6 +17,7 @@ import java.util.Observer;
  */
 public class TextIO implements Requestable, Observer {
     private BufferedReader rd;
+    private Viewer viewer;
 
     // ------------------------------------------------------------
 
@@ -28,15 +30,31 @@ public class TextIO implements Requestable, Observer {
 
     // ------------------------------------------------------------
 
+    /**
+     * Set the viewer.
+     *
+     * @param viewer
+     *         Viewer
+     */
+    public void setViewer(Viewer viewer) {
+        this.viewer = viewer;
+    }
+
+    // ------------------------------------------------------------
+
     @Override
-    public Move request(Viewer viewer) throws Exception {
+    public Move request() throws Exception {
+        if (viewer == null)
+            throw new IllegalStateException("viewer == null");
+
         Move m = null;
         boolean valid = true;
         boolean correctFormat = true;
 
         do {
             if (!valid) {
-                System.out.println("\tThe move you entered was not valid! Please try again...");
+                System.out.println("\tThe move you entered was not valid! Please try again...\n\tA possible move is: " +
+                                           "" + RandomAI.getRandomMoveFromSet(viewer.getPossibleMoves()));
             }
             // TODO IO class
             if (!correctFormat) {
@@ -60,7 +78,7 @@ public class TextIO implements Requestable, Observer {
                 valid = true;
             }
 
-        } while (!correctFormat || !viewer.checkMove(m));
+        } while (!correctFormat || !viewer.getPossibleMoves().contains(m));
 
         return m;
     }
