@@ -1,6 +1,12 @@
 package towerwarspp.output;
 
+import towerwarspp.board.Cell;
 import towerwarspp.preset.Move;
+import towerwarspp.preset.PlayerColor;
+import towerwarspp.preset.Position;
+import towerwarspp.preset.Status;
+
+import java.util.Set;
 
 /**
  * Viewer interface to show the board.
@@ -10,31 +16,40 @@ import towerwarspp.preset.Move;
  */
 public interface Viewer {
     /**
-     * Get the size of the board
+     * Get the size of the board.
      *
      * @return Size
      */
     int getSize();
 
     /**
-     * Get the field value at the given position
+     * Get the current board status.
      *
-     * @param letter
-     *         Letter
-     * @param number
-     *         Number
-     *
-     * @return Field value
+     * @return Status
      */
-    int getField(int letter, int number);
+    Status getStatus();
 
     /**
-     * Check if a given move is valid at the moment
+     * Get active player.
      *
-     * @param move
-     *         Move
-     *
-     * @return true, if the move is valid
+     * @return Active player
      */
-    boolean checkMove(Move move);
+    PlayerColor getTurn();
+
+    /**
+     * Get the cell at the given position.
+     *
+     * @param position
+     *         Position
+     *
+     * @return Cell
+     */
+    Cell getCell(Position position);
+
+    /**
+     * Get a set of all possible moves.
+     *
+     * @return Set of possible moves
+     */
+    Set<Move> getPossibleMoves();
 }
