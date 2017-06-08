@@ -27,6 +27,9 @@ public class RandomAI extends AbstractPlayer {
      *         Set of moves
      *
      * @return Randomly selected move from the set
+     *
+     * @throws Exception
+     *         if the set of moves is empty
      */
     public static Move getRandomMoveFromSet(Set<Move> moves) throws Exception {
         try {

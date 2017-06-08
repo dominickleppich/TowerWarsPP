@@ -53,6 +53,8 @@ public class Match implements Runnable {
      *         Blue player
      * @param size
      *         Board size
+     * @param observer
+     *         Observer of this game to be updated after each move
      */
     public Match(Player red, Player blue, int size, Observer observer) {
         player = new Player[] {red, blue};
@@ -70,6 +72,8 @@ public class Match implements Runnable {
      *
      * @throws RuntimeException
      *         if the game is already running
+     * @throws Exception
+     *         if the game is not initialized
      */
     public void start() throws Exception {
         if (matchThread != null)
@@ -104,6 +108,9 @@ public class Match implements Runnable {
 
     /**
      * Initialize the match (and the players)
+     *
+     * @throws Exception
+     *         if the game was not initialized
      */
     public void init() throws Exception {
         if (initialized)
@@ -133,8 +140,8 @@ public class Match implements Runnable {
             System.out.println("It's " + board.getTurn() + " turn...");
 
             // TODO
-//            for (Move m : board.getPossibleMoves())
-//                System.out.println("\t" + m);
+            //            for (Move m : board.getPossibleMoves())
+            //                System.out.println("\t" + m);
 
             // Request move
             Move m = null;
@@ -147,7 +154,7 @@ public class Match implements Runnable {
                 continue;
             }
             System.out.println("LOG Move No " + (moveCounter + 1) + ": " + m + " " + (board.makeMove(m) ?
-                                                                                             "succeeded" : "failed"));
+                                                                                              "succeeded" : "failed"));
 
             // Confirm move
             try {
@@ -163,8 +170,9 @@ public class Match implements Runnable {
             try {
                 player[(moveCounter + 1) % 2].update(m, board.getStatus());
             } catch (Exception e) {
-                System.out.println(((moveCounter + 1) % 2 == 0 ? "Red" : "Blue") + " failed to update! (" + e.getMessage()
-                                           + ")");
+                System.out
+                        .println(((moveCounter + 1) % 2 == 0 ? "Red" : "Blue") + " failed to update! (" + e.getMessage()
+                                         + ")");
                 matchStatus = ((moveCounter + 1) % 2 == 0 ? Status.BLUE_WIN : Status.RED_WIN);
                 continue;
             }
