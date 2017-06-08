@@ -5,6 +5,7 @@
 
 # Package Files #
 *.jar
+!/lib/FrozenCube.jar
 *.war
 *.ear
 
@@ -21,3 +22,4 @@ hs_err_pid*
 
 # ignore yguardlog
 yguardlog.xml
+/lib/FrozenCube.zip
