@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project name="TowerWarsPP" default="all" basedir=".">
 	<!-- Settings -->
-
-
 	<property name="target.jre" value="1.8" />
 	<property name="source.jre" value="1.8" />
 
@@ -113,7 +111,7 @@
 		<jar compress="true" destfile="${jar.dir}/${project.name}.jar" basedir="${build.dir}" excludes="**/blackbox,**/blackbox/**/*.class">
 			<manifest>
 				<attribute name="Main-Class" value="${main.class}" />
-				<attribute name="Class-Path" value=". ${lib.dir}/FrozenCube.jar" />
+				<attribute name="Class-Path" value=". lib/FrozenCube.jar" />
 			</manifest>
 		</jar>
 	</target>
