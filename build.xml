@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="TowerWarsPP" default="all" basedir=".">
+	<!-- Settings -->
+
+
+	<property name="target.jre" value="1.8" />
+	<property name="source.jre" value="1.8" />
+
+    <property name="project.name" value="TowerWarsPP" />
+    <property name="main.class" value="towerwarspp.test.MatchTest" />
+    <property name="test.source.dir" value="towerwarspp/test" />
+
+    <property name="source.dir" location="source" />
+	<property name="build.dir" location="build" />
+	<property name="javadoc.dir" location="documentation" />
+    <property name="jar.dir" value="jar" />
+	<property name="release.dir" location="release" />
+	<property name="resource.dir" location="resource" />
+	<property name="lib.dir" location="lib" />
+
+    <property name="blackbox.name" value="TowerWarsPP-blackbox" />
+    <property name="blackbox.dir" value="blackbox" />
+    <property name="blackbox.main.class" value="towerwarspp.blackbox.Start" />
+    <property name="blackbox.keep.preset" value="towerwarspp.preset.*" />
+
+    <property name="yguard.path" value="tools/yguard-2.5.5/lib/yguard.jar" />
+
+	<path id="userclasspath">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<!-- Do everything -->
+	<target depends="javadoc,build,release,blackbox" name="all" />
+
+	<!-- ************************ Init stuff ************************ -->
+	<!-- Get newest needed libraries -->
+	<target name="update-libs">
+		<delete dir="${lib.dir}" />
+		<mkdir dir="${lib.dir}" />
+		<copy todir="${lib.dir}">
+			<fileset dir="../FrozenCube/release" />
+		</copy>
+	</target>
+
+	<!-- Clean -->
+	<target name="clean">
+		<delete dir="${build.dir}" />
+        <delete dir="${jar.dir}" />
+        <delete dir="${blackbox.dir}" />
+        <delete dir="${javadoc.dir}" />
+		<delete dir="${release.dir}" />
+	</target>
+
+	<!-- ************************ Create JavaDoc documentation ************************ -->
+	<target description="create javadoc documentation" name="javadoc">
+		<mkdir dir="${javadoc.dir}" />
+		<javadoc access="private" author="true" destdir="${javadoc.dir}" source="${source.jre}"
+                 sourcepath="${source.dir}" version="true">
+			<classpath refid="userclasspath" />
+			<fileset dir="${source.dir}" defaultexcludes="yes">
+				<include name="**/*.java" />
+				<exclude name="${test.source.dir}/**" />
+			</fileset>
+		</javadoc>
+	</target>
+
+	<!-- ************************ Release ************************ -->
+	<!-- Pack all release files into a zip archive -->
+	<target description="create zip archive" name="zip">
+		<zip destfile="${release.dir}/${project.name}.zip" basedir="${release.dir}" />
+	</target>
+
+	<!-- Prepare for release (create jar archive and documentation) -->
+	<target description="init release" depends="jar, javadoc" name="release_init">
+		<delete dir="${release.dir}" />
+		<mkdir dir="${release.dir}" />
+		<!-- Copy needed libraries -->
+		<copy todir="${release.dir}/${lib.dir}">
+			<fileset dir="${lib.dir}">
+				<!-- exclude unneeded jar files -->
+				<exclude name="*-javadoc.jar" />
+				<exclude name="*-source*.jar" />
+				<exclude name="*-junit.jar" />
+				<exclude name="*-contrib.jar" />
+			</fileset>
+		</copy>
+		<!-- Copy compiled game -->
+		<copy todir="${release.dir}">
+			<fileset dir="${jar.dir}" />
+		</copy>
+		<!-- Create source code jar archive -->
+		<jar compress="true" destfile="${release.dir}/${project.name}-source.jar" basedir="${source.dir}" />
+		<!-- Copy documentation and pack into jar archive -->
+		<jar compress="true" destfile="${release.dir}/${project.name}-javadoc.jar" basedir="${javadoc.dir}" />
+		<!-- Copy resources -->
+		<copy todir="${release.dir}/${resource.dir}">
+			<fileset dir="${resource.dir}" />
+		</copy>
+	</target>
+	
+	<!-- Create full release -->
+	<target depends="release_init" name="release">
+		<antcall target="zip" />
+	</target>
+
+	<!-- ************************ Create jar archive ************************ -->
+	<target description="create jar files" depends="build" name="jar">
+		<mkdir dir="${jar.dir}" />
+		<jar compress="true" destfile="${jar.dir}/${project.name}.jar" basedir="${build.dir}" excludes="**/blackbox,**/blackbox/**/*.class">
+			<manifest>
+				<attribute name="Main-Class" value="${main.class}" />
+				<attribute name="Class-Path" value=". ${lib.dir}/FrozenCube.jar" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="blackbox">
+        <echo>Creating blackbox jar...</echo>
+        <mkdir dir="${blackbox.dir}" />
+        <jar compress="true" destfile="${blackbox.dir}/${blackbox.name}-tmp.jar" basedir="${build.dir}"
+             includes="**/preset/**/*.class,**/blackbox/**/*.class">
+            <manifest>
+                <attribute name="Main-Class" value="${blackbox.main.class}" />
+            </manifest>
+        </jar>
+
+		<echo>Obfuscating blackbox code...</echo>
+		<taskdef name="yguard" classname="com.yworks.yguard.YGuardTask" classpath="${yguard.path}" />
+		<yguard>
+			<inoutpair in="${blackbox.dir}/${blackbox.name}-tmp.jar" out="${blackbox.dir}/${blackbox.name}.jar"/>
+
+            <obfuscate mainclass="${blackbox.main.class}" replaceclassnamestrings="true">
+                <property name="error-checking" value="pedantic"/>
+                <property name="naming-scheme" value="bestWill"/>
+                <property name="language-conformity" value="illegalWill"/>
+                <property name="overload-enabled" value="true"/>
+                <property name="digest" value="SHA-1"/>
+                <keep>
+                    <class name="${blackbox.keep.preset}" classes="private" methods="private" fields="private"/>
+                </keep>
+            </obfuscate>
+        </yguard>
+
+        <echo>Remove unobfuscated blackbox jar file...</echo>
+        <delete file="${blackbox.dir}/${blackbox.name}-tmp.jar" />
+	</target>
+
+	<!-- ************************ Compile ************************ -->
+	<target description="build the project" name="build">
+		<mkdir dir="${build.dir}" />
+		<javac debug="true" destdir="${build.dir}" srcdir="${source.dir}" includeantruntime="false" source="${source.jre}" target="${target.jre}">
+			<include name="**/*.java" />
+			<!-- Exclude test packages -->
+			<exclude name="${test.source.dir}" />
+			<classpath refid="userclasspath" />
+		</javac>
+	</target>
+
+</project>
