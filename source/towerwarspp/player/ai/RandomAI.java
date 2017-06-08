@@ -28,7 +28,7 @@ public class RandomAI extends AbstractPlayer {
      *
      * @return Randomly selected move from the set
      */
-    private static Move getRandomMoveFromSet(Set<Move> moves) throws Exception {
+    public static Move getRandomMoveFromSet(Set<Move> moves) throws Exception {
         try {
             int i = rnd.nextInt(moves.size()) + 1;
 
