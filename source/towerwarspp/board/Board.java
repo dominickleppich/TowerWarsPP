@@ -1,9 +1,5 @@
 package towerwarspp.board;
 
-import eu.nepster.frozencube.game.grid.Grid;
-import eu.nepster.frozencube.game.grid.GridCoordinate;
-import eu.nepster.frozencube.game.grid.GridLogic;
-import eu.nepster.frozencube.game.grid.hex.HexGrid;
 import towerwarspp.output.Viewer;
 import towerwarspp.preset.Move;
 import towerwarspp.preset.PlayerColor;
@@ -14,6 +10,8 @@ import java.util.HashSet;
 import java.util.Observable;
 import java.util.Set;
 
+import static towerwarspp.preset.PlayerColor.*;
+
 /**
  * TowerWarsPP board class containing all game logic.
  * Created on 12.05.2017.
@@ -23,32 +21,35 @@ import java.util.Set;
 public class Board extends Observable {
     private static final int TO_STRING_SPACE = 6;
 
-    private static final int RED = 1;
-    private static final int BLUE = -1;
-
-    private static final int BASE = 100;
-    private static final int RED_BASE = RED * BASE;
-    private static final int BLUE_BASE = BLUE * BASE;
-
     // ------------------------------------------------------------
-    // Bases
-    private final GridCoordinate redBaseCoordinate, blueBaseCoordinate;
-    // All grid coordinates
-    private Set<GridCoordinate> gridCoordinates;
-    // Game grid
-    private Grid<Integer> grid;
-    // Grid logic
-    private GridLogic<Integer> gridLogic;
-    // Board size
-    private int size;
-    // Tower size
+    /**
+     * Board grid
+     */
+    private AppGrid grid;
+    /**
+     * Maximum Tower size
+     */
     private int maxTowerSize;
-    // Who's players turn is it?
-    private int turn;
-    // Possible moves for current player
+    /**
+     * Who's players turn is it?
+     */
+    private PlayerColor turn;
+    /**
+     * Base positions
+     */
+    private final Position redBasePosition, blueBasePosition;
+    /**
+     * Possible moves for current player
+     */
     private Set<Move> possibleMoves;
-    // Status
+    /**
+     * Status
+     */
     private Status status;
+    /**
+     * Board viewer
+     */
+    private Viewer viewer;
 
     // ------------------------------------------------------------
 
@@ -59,32 +60,34 @@ public class Board extends Observable {
      *         Size
      */
     public Board(int size) {
-        grid = new HexGrid<>();
-        gridLogic = grid.getLogic();
+        grid = new AppGrid(size);
 
-        gridCoordinates = new HashSet<>();
-
-        // Add grid coordinates
-        for (int l = 1; l <= size; l++) {
-            for (int n = 1; n <= size; n++) {
-                GridCoordinate c = new GridCoordinate(l, n);
-                gridCoordinates.add(c);
-                grid.add(c);
-                grid.setData(c, 0);
-            }
-        }
-
-        this.size = size;
         // TODO better strategy
         this.maxTowerSize = 3;
+
         this.turn = RED;
 
         this.status = Status.OK;
 
-        redBaseCoordinate = new GridCoordinate(1, 1);
-        blueBaseCoordinate = new GridCoordinate(size, size);
+        redBasePosition = new Position(1, 1);
+        blueBasePosition = new Position(grid.getSize(), grid.getSize());
 
         initBoard();
+    }
+
+    // ------------------------------------------------------------
+
+    private static String fixedString(String s) {
+        if (s.length() > TO_STRING_SPACE)
+            return s.substring(0, TO_STRING_SPACE);
+        return s + fillSpaces(TO_STRING_SPACE - s.length());
+    }
+
+    private static String fillSpaces(int n) {
+        StringBuilder sb = new StringBuilder();
+        while (n-- > 0)
+            sb.append(" ");
+        return sb.toString();
     }
 
     // ------------------------------------------------------------
@@ -93,14 +96,20 @@ public class Board extends Observable {
      * Initialize the board with all player tokens and their bases.
      */
     private void initBoard() {
-        for (GridCoordinate c : gridLogic.getRange(redBaseCoordinate, size / 2))
-            grid.setData(c, RED);
+        // Empty all fields
+        for (Position p : grid)
+            grid.setCell(p, null);
 
-        for (GridCoordinate c : gridLogic.getRange(blueBaseCoordinate, size / 2))
-            grid.setData(c, BLUE);
+        // Set player tokens
+        for (Position p : grid.getRangePositions(redBasePosition, grid.getSize() / 2))
+            grid.setCell(p, new Token(RED));
 
-        grid.setData(redBaseCoordinate, RED_BASE);
-        grid.setData(blueBaseCoordinate, BLUE_BASE);
+        for (Position p : grid.getRangePositions(blueBasePosition, grid.getSize() / 2))
+            grid.setCell(p, new Token(BLUE));
+
+        // Set bases
+        grid.setCell(redBasePosition, new Base(RED));
+        grid.setCell(blueBasePosition, new Base(BLUE));
 
         // Calculate possible moves
         possibleMoves = calculatePossibleMoves();
@@ -109,12 +118,30 @@ public class Board extends Observable {
     // ------------------------------------------------------------
 
     /**
+     * Get the size of the board.
+     *
+     * @return Size
+     */
+    public int getSize() {
+        return grid.getSize();
+    }
+
+    /**
      * Get the boards status.
      *
      * @return {@link Status}
      */
     public Status getStatus() {
         return status;
+    }
+
+    /**
+     * Get players turn
+     *
+     * @return Active player
+     */
+    public PlayerColor getTurn() {
+        return turn;
     }
 
     /**
@@ -127,6 +154,50 @@ public class Board extends Observable {
     }
 
     // ------------------------------------------------------------
+
+    /**
+     * Return a board viewer
+     *
+     * @return Board viewer
+     */
+    public Viewer viewer() {
+        final Board board = this;
+        // If viewer doesn't exist, create it
+        if (viewer == null)
+            viewer = new Viewer() {
+                @Override
+                public int getSize() {
+                    return board.getSize();
+                }
+
+                @Override
+                public Status getStatus() {
+                    return board.getStatus();
+                }
+
+                @Override
+                public PlayerColor getTurn() {
+                    return board.getTurn();
+                }
+
+                @Override
+                public Cell getCell(Position position) {
+                    return board.grid.getCell(position).clone();
+                }
+
+                @Override
+                public Set<Move> getPossibleMoves() {
+                    return board.getPossibleMoves();
+                }
+            };
+
+        // Return viewer
+        return viewer;
+    }
+
+    // ------------------------------------------------------------
+
+    // Helper functions
 
     /**
      * Checks if a given {@link Move} is valid in the current situation.
@@ -151,7 +222,7 @@ public class Board extends Observable {
      */
     public boolean makeMove(Move move) {
         // Moves can be made if and only if the status is ok!
-        if (!status.isOK())
+        if (status != Status.OK)
             return false;
 
         // check if move is valid
@@ -180,15 +251,15 @@ public class Board extends Observable {
         possibleMoves = calculatePossibleMoves();
 
         // Check win condition ...
-        // 1. if base was destroyed, player won
-        if (positionToGridCoordinate(move.getEnd()).equals(redBaseCoordinate))
+        // 1. if red base was destroyed, blue player won
+        if (!(grid.getCell(redBasePosition) instanceof Base))
             status = Status.BLUE_WIN;
-        else if (positionToGridCoordinate(move.getEnd()).equals(blueBaseCoordinate))
+        else if (!(grid.getCell(blueBasePosition) instanceof Base))
             status = Status.RED_WIN;
 
-            // 2. if player cannot move, game is over
-            // TODO change size() == 0 to size() == 1 (cause of always possible null move)
-            // remember! players turn already switched!!
+        // 2. if player cannot move, game is over
+        // TODO change size() == 0 to size() == 1 (cause of always possible null move)
+        // remember! players turn already switched!!
         else if (possibleMoves.size() == 0) {
             if (turn == RED)
                 status = Status.BLUE_WIN;
@@ -204,41 +275,6 @@ public class Board extends Observable {
         return true;
     }
 
-    // ------------------------------------------------------------
-
-    // Helper functions
-
-    /**
-     * Return a board viewer
-     *
-     * @return Board viewer
-     */
-    public Viewer viewer() {
-        // TODO don't create viewer each time
-        return new Viewer() {
-
-            @Override
-            public int getSize() {
-                return size;
-            }
-
-            @Override
-            public int getField(int letter, int number) {
-                return grid.getData(new GridCoordinate(letter, number));
-            }
-
-            @Override
-            public boolean checkMove(Move move) {
-                return getPossibleMoves().contains(move);
-            }
-
-        };
-    }
-
-    public PlayerColor getTurn() {
-        return turn == RED ? PlayerColor.RED : PlayerColor.BLUE;
-    }
-
     /**
      * Apply the move on the board
      *
@@ -246,86 +282,159 @@ public class Board extends Observable {
      *         Move
      */
     private void applyMove(Move move) {
-        int oldStartData = grid.getData(positionToGridCoordinate(move.getStart()));
-        int oldEndData = grid.getData(positionToGridCoordinate(move.getEnd()));
+        Cell startCell = grid.getCell(move.getStart()), endCell = grid.getCell(move.getEnd());
+        System.out.println("applying move: " + move);
 
-        // TODO extra rule for tower attacks missing
-        grid.setData(positionToGridCoordinate(move.getStart()), oldStartData - turn);
-        grid.setData(positionToGridCoordinate(move.getEnd()), oldEndData + turn);
+        if (move.getStart().equals(move.getEnd()))
+            throw new IllegalMoveException("start == end");
+
+        // Empty cells and bases cannot be moved
+        if (startCell == null)
+            throw new IllegalMoveException("empty cell moved");
+        if (startCell instanceof Base)
+            throw new IllegalMoveException("base moved");
+
+        // Check whether the move is a token or tower move
+        if (startCell instanceof Token) {
+            // Remove token from start cell
+            grid.setCell(move.getStart(), null);
+
+            // Tokens simply move on empty cells
+            if (endCell == null)
+                grid.setCell(move.getEnd(), startCell);
+
+                // difference between colors
+                // own color
+            else if (startCell.getColor() == endCell.getColor()) {
+                // Cannot move on own base
+                if (endCell instanceof Base)
+                    throw new IllegalMoveException("moved on own base");
+                // Token on token is a new tower
+                else if (endCell instanceof Token)
+                    grid.setCell(move.getEnd(), new Tower(endCell.getColor()));
+                // Token on tower increase its size
+                else if (endCell instanceof Tower) {
+                    if (((Tower) endCell).getHeight() < maxTowerSize)
+                        ((Tower) endCell).increase();
+                    else
+                        throw new IllegalMoveException("tower max height exceed");
+                } else
+                    throw new IllegalMoveException("unknown end cell type");
+            }
+            // opponent
+            else {
+                // move on opponent base is win (=> allowed)
+                if (endCell instanceof Base)
+                    // base is kicked (win situation)
+                    grid.setCell(move.getEnd(), startCell);
+                    // Token on enemy token kicks it
+                else if (endCell instanceof Token)
+                    // simply move the token there
+                    grid.setCell(move.getEnd(), startCell);
+                    // Token on tower kicks or blocks it
+                else if (endCell instanceof Tower) {
+                    // if move is melee, kick tower completely
+                    if (grid.distance(move.getStart(), move.getEnd()) == 1)
+                        grid.setCell(move.getEnd(), startCell);
+                    // if move is ranged, block the tower
+                    else
+                        ((Tower) endCell).block();
+                } else
+                    throw new IllegalMoveException("unknown end cell type");
+            }
+        } else if (startCell instanceof Tower) {
+            // Decrease tower if possible. Towers of height 1 become tokens
+            if (((Tower) startCell).getHeight() == 1)
+                grid.setCell(move.getStart(), new Token(startCell.getColor()));
+            else
+                ((Tower) startCell).decrease();
+
+            // Towers cannot range move
+            if (grid.distance(move.getStart(), move.getEnd()) > 1)
+                throw new IllegalMoveException("tower cannot range move");
+
+            // Towers simply move on empty cells
+            if (endCell == null)
+                grid.setCell(move.getEnd(), new Token(startCell.getColor()));
+
+            // Towers cannot move on enemy cells
+            else if (startCell.getColor() != endCell.getColor())
+                throw new IllegalMoveException("tower move on opponent cell");
+
+            // Tower on base is not allowed (neither own, nor enemy -> cause towers cannot kick)
+            else if (endCell instanceof Base)
+                throw new IllegalMoveException("tower move on base");
+
+            // Tower on token is new tower
+            else if (endCell instanceof Token)
+                grid.setCell(move.getEnd(), new Tower(startCell.getColor()));
+
+            // Tower on tower increase its height, if size not exceeded
+            else if (endCell instanceof Tower) {
+                if (((Tower) endCell).getHeight() < maxTowerSize)
+                    ((Tower) endCell).increase();
+                else
+                    throw new IllegalMoveException("tower max height exceed");
+            } else
+                throw new IllegalMoveException("unknown end cell type");
+        }
+        else throw new IllegalMoveException("unknown start cell type");
     }
 
     /**
-     * Switch player at the end of his turn.
+     * Switch player.
      */
     private void switchTurn() {
-        turn *= -1;
+        turn = turn == RED ? BLUE : RED;
     }
-
-    /**
-     * Converts {@link Position} to {@link GridCoordinate}
-     *
-     * @param position
-     *         Position
-     *
-     * @return Position
-     */
-    private GridCoordinate positionToGridCoordinate(Position position) {
-        return new GridCoordinate(position.getLetter(), position.getNumber());
-    }
-
-    /**
-     * Converts {@link GridCoordinate} to {@link Position}
-     *
-     * @param coordinate
-     *         Coordinate
-     *
-     * @return Position
-     */
-    private Position gridCoordinateToPosition(GridCoordinate coordinate) {
-        return new Position(coordinate.getX(), coordinate.getY());
-    }
-
 
     // ------------------------------------------------------------
 
     /**
      * Calculate the set of all possible moves for a given token.
      *
-     * @param coordinate
-     *         Coordinate
+     * @param position
+     *         Position
      *
      * @return Set of possible {@link Move}'s
      */
-    private Set<Move> getPossibleMovesForToken(GridCoordinate coordinate) {
+    private Set<Move> getPossibleMovesForToken(Position position) {
         Set<Move> moves = new HashSet<>();
 
         // Calculate tower bonus, towers must be direct neighbors
         int range = 1;
-        for (GridCoordinate c : gridLogic.getBorderNeighbors(coordinate)) {
-            int v = grid.getData(c);
+        for (Position p : grid.getRangePositions(position, 1)) {
+            Cell cell = grid.getCell(p);
 
-            // Check for tower
-            if (Math.abs(v) > 1 && Math.abs(v) != BASE && v / Math.abs(v) == turn)
-                range += Math.abs(v) - 1;
+            // If cell is a tower, add its size to own range
+            if (cell instanceof Tower)
+                range += ((Tower) cell).getHeight();
         }
 
-        // Calculate moves
-        for (GridCoordinate c : gridLogic.getRange(coordinate, range)) {
-            // Skip the "no move"
-            if (c.equals(coordinate))
+        // Tokens can move to all cells within its range (except the own base)
+        for (Position p : grid.getRangePositions(position, range)) {
+            // Skip moves to start position
+            if (p.equals(position))
                 continue;
 
-            int v = grid.getData(c);
+            // Determine cell
+            Cell cell = grid.getCell(p);
 
-            // Tokens cannot move on own base
-            if (v / turn == BASE)
+            // Tokens can always move on empty fields
+            if (cell == null)
+                moves.add(new Move(position, p));
+
+                // Tokens cannot move on own base
+            else if (cell.getColor() == getTurn() && cell instanceof Base)
                 continue;
 
-            // Max tower size cannot be exceed
-            if (Math.abs(v) != BASE && Math.abs(v + turn) > maxTowerSize)
+                // Tokens cannot move on own towers, if max height is exceeded
+            else if (cell.getColor() == getTurn() && cell instanceof Tower && ((Tower) cell)
+                                                                                      .getHeight() + 1 > maxTowerSize)
                 continue;
 
-            moves.add(new Move(gridCoordinateToPosition(coordinate), gridCoordinateToPosition(c)));
+            // All other cells are valid
+            moves.add(new Move(position, p));
         }
 
         return moves;
@@ -334,31 +443,34 @@ public class Board extends Observable {
     /**
      * Calculate the set of all possible moves for a given tower
      *
-     * @param coordinate
-     *         Coordinate
+     * @param position
+     *         Position
      *
      * @return Set of possible {@link Move}'s
      */
-    private Set<Move> getPossibleMovesForTower(GridCoordinate coordinate) {
+    private Set<Move> getPossibleMovesForTower(Position position) {
         Set<Move> moves = new HashSet<>();
 
         // Towers can only move to direct neighbors
-        for (GridCoordinate c : gridLogic.getBorderNeighbors(coordinate)) {
-            int v = grid.getData(c);
+        for (Position p : grid.getRangePositions(position, 1)) {
+            // Determine cell
+            Cell cell = grid.getCell(p);
 
-            // TODO second check on base
-            // Towers cannot move on own base
-            if (v / turn == BASE)
+            // Towers can always move on empty fields
+            if (cell == null)
+                moves.add(new Move(position, p));
+
+                // Towers can never move on ememy cells
+            else if (cell.getColor() != getTurn())
                 continue;
 
-            // Max tower size cannot be exceed (but players can move on enemy base)
-            if (Math.abs(v) != BASE && Math.abs(v + turn) > maxTowerSize)
-                continue;
+                // Towers can always move on own tokens and create a tower
+            else if (cell instanceof Token)
+                moves.add(new Move(position, p));
 
-            // Towers cannot kick other tokens
-            // check if v and current player differ in color
-            if (v * turn >= 0)
-                moves.add(new Move(gridCoordinateToPosition(coordinate), gridCoordinateToPosition(c)));
+                // Towers can move on own tower, if max tower size is not exceeded
+            else if (cell instanceof Tower && ((Tower) cell).getHeight() + 1 <= maxTowerSize)
+                moves.add(new Move(position, p));
         }
 
         return moves;
@@ -372,79 +484,57 @@ public class Board extends Observable {
     private Set<Move> calculatePossibleMoves() {
         Set<Move> moves = new HashSet<>();
 
-        for (GridCoordinate c : gridCoordinates) {
-            // Grid value
-            int v = grid.getData(c);
+        // Iterate over the whole grid
+        for (Position pos : grid) {
+            // Get each cell and check which type of move to calculate
+            Cell cell = grid.getCell(pos);
 
-            // Empty -> nothing to do
-            if (v == 0)
+            // Only add moves for current player
+            if (cell == null || cell.getColor() != getTurn())
                 continue;
-            // Tokens
-            if (v == turn)
-                moves.addAll(getPossibleMovesForToken(c));
-                // Tower
-            else if (v / Math.abs(v) == turn && Math.abs(v) != BASE)
-                moves.addAll(getPossibleMovesForTower(c));
+
+            if (cell instanceof Token)
+                moves.addAll(getPossibleMovesForToken(pos));
+            else if (cell instanceof Tower)
+                moves.addAll(getPossibleMovesForTower(pos));
         }
 
-        //moves.add(null);
+        // Add the surrender move
+        // TODO add it again
+        //        moves.add(null);
 
         return moves;
     }
 
     // ------------------------------------------------------------
 
-    private static String fixedString(String s) {
-        if (s.length() > TO_STRING_SPACE)
-            return s.substring(0, TO_STRING_SPACE);
-        return s + fillSpaces(TO_STRING_SPACE - s.length());
-    }
-
-    private static String fillSpaces(int n) {
-        StringBuilder sb = new StringBuilder();
-        while (n-- > 0)
-            sb.append(" ");
-        return sb.toString();
-    }
-
     @Override
     public String toString() {
-        //return grid.toString();
         StringBuilder s = new StringBuilder();
         s.append(fillSpaces(TO_STRING_SPACE / 2));
-        for (int l = 0; l < size; l++)
+        for (int l = 0; l < getSize(); l++)
             s.append(fixedString(Character.toString((char) (l + 'A'))));
         s.append("\n\n");
-        for (int n = 1; n <= size; n++) {
+        for (int n = 1; n <= getSize(); n++) {
             s.append(fillSpaces(TO_STRING_SPACE / 2 * (n - 1)) + fixedString(Integer.toString(n)));
-            for (int l = 1; l <= size; l++) {
-                Integer value = grid.getData(new GridCoordinate(l, n));
+            for (int l = 1; l <= getSize(); l++) {
+                Cell cell = grid.getCell(new Position(l, n));
                 String ss;
-                switch(value) {
-                    case 0:
-                        ss = ".";
-                        break;
-                    case RED:
-                        ss = "R";
-                        break;
-                    case BLUE:
-                        ss = "B";
-                        break;
-                    case RED_BASE:
-                        ss = "RB";
-                        break;
-                    case BLUE_BASE:
-                        ss = "BB";
-                        break;
-                    default:
-                        ss = (value > 0 ? "R" : "B") + "T" + Math.abs(value);
-                }
+                if (cell instanceof Base)
+                    ss = (cell.getColor() == RED ? "R" : "B") + "B";
+                else if (cell instanceof Token)
+                    ss = cell.getColor() == RED ? "R" : "B";
+                else if (cell instanceof Tower) {
+                    int size = Math.abs(((Tower) cell).getHeight());
+                    ss = (cell.getColor() == RED ? "R" : "B") + "T" + size;
+                } else
+                    ss = ".";
                 s.append(fixedString(ss));
             }
             s.append(fixedString(Integer.toString(n)) + "\n\n");
         }
-        s.append(fillSpaces(TO_STRING_SPACE / 2 * (size + 2)));
-        for (int l = 0; l < size; l++)
+        s.append(fillSpaces(TO_STRING_SPACE / 2 * (getSize() + 2)));
+        for (int l = 0; l < getSize(); l++)
             s.append(fixedString(Character.toString((char) (l + 'A'))));
         return s.toString();
     }
