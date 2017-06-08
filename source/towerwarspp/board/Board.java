@@ -260,7 +260,7 @@ public class Board extends Observable {
         // 2. if player cannot move, game is over
         // TODO change size() == 0 to size() == 1 (cause of always possible null move)
         // remember! players turn already switched!!
-        else if (possibleMoves.size() == 0) {
+        else if (possibleMoves.size() == 1) {
             if (turn == RED)
                 status = Status.BLUE_WIN;
             else
@@ -501,7 +501,7 @@ public class Board extends Observable {
 
         // Add the surrender move
         // TODO add it again
-        //        moves.add(null);
+        moves.add(null);
 
         return moves;
     }
