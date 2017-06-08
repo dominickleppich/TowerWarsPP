@@ -51,7 +51,11 @@ public class TextIO implements Requestable, Observer {
             System.out.print("Please enter a move: ");
 
             try {
-                m = Move.parseMove(rd.readLine());
+                String line = rd.readLine();
+                if (line.equals("surrender"))
+                    m = null;
+                else
+                    m = Move.parseMove(line);
                 correctFormat = true;
 
                 // If this loop runs again, the move was not valid
