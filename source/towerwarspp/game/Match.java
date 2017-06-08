@@ -1,9 +1,6 @@
 package towerwarspp.game;
 
-import com.sun.xml.internal.ws.api.message.ExceptionHasMessage;
 import towerwarspp.board.Board;
-import towerwarspp.input.TextIO;
-import towerwarspp.player.ai.RandomAI;
 import towerwarspp.preset.Move;
 import towerwarspp.preset.Player;
 import towerwarspp.preset.PlayerColor;
