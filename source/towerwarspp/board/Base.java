@@ -9,4 +9,9 @@ public class Base extends Cell {
     public Base(PlayerColor color) {
         super(color);
     }
+
+    @Override
+    public Cell clone() {
+        return new Base(getColor());
+    }
 }

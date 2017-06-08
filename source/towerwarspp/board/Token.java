@@ -9,4 +9,9 @@ public class Token extends Cell {
     public Token(PlayerColor color) {
         super(color);
     }
+
+    @Override
+    public Cell clone() {
+        return new Token(getColor());
+    }
 }

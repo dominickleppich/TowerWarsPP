@@ -13,7 +13,15 @@ public class Tower extends Cell {
         super(color);
     }
 
-    // --
+    @Override
+    public Cell clone() {
+        Tower t = new Tower(getColor());
+        t.height = this.height;
+        t.blocked = this.blocked;
+        return t;
+    }
+
+    // ------------------------------------------------------------
 
     public int getHeight() {
         return height;
@@ -30,7 +38,7 @@ public class Tower extends Cell {
         height--;
     }
 
-    // --
+    // ------------------------------------------------------------
 
     public boolean isBlocked() {
         return blocked;

@@ -9,13 +9,13 @@ import towerwarspp.preset.PlayerColor;
 public abstract class Cell {
     private PlayerColor color;
 
-    // --
+    // ------------------------------------------------------------
 
     public Cell(PlayerColor color) {
         this.color = color;
     }
 
-    // --
+    // ------------------------------------------------------------
 
     /**
      * Get the color of the cell.
@@ -25,4 +25,13 @@ public abstract class Cell {
     PlayerColor getColor() {
         return color;
     }
+
+    // ------------------------------------------------------------
+
+    /**
+     * Clone this cell instance.
+     *
+     * @return Clone of this cell
+     */
+    public abstract Cell clone();
 }
