@@ -84,6 +84,7 @@ public class Match implements Runnable {
     /**
      * Stop the game
      */
+    @SuppressWarnings("deprecation")
     public void stop() {
         matchThread.stop();
     }
@@ -132,15 +133,16 @@ public class Match implements Runnable {
             System.out.println("It's " + board.getTurn() + " turn...");
 
             // TODO
-            for (Move m : board.getPossibleMoves())
-                System.out.println("\t" + m);
+//            for (Move m : board.getPossibleMoves())
+//                System.out.println("\t" + m);
 
             // Request move
             Move m = null;
             try {
                 m = player[moveCounter % 2].request();
             } catch (Exception e) {
-                System.out.println((moveCounter % 2 == 0 ? "Red" : "Blue") + " failed to request!");
+                System.out.println((moveCounter % 2 == 0 ? "Red" : "Blue") + " failed to request! (" + e.getMessage()
+                                           + ")");
                 matchStatus = (moveCounter % 2 == 0 ? Status.BLUE_WIN : Status.RED_WIN);
                 continue;
             }
@@ -151,7 +153,8 @@ public class Match implements Runnable {
             try {
                 player[moveCounter % 2].confirm(board.getStatus());
             } catch (Exception e) {
-                System.out.println((moveCounter % 2 == 0 ? "Red" : "Blue") + " failed to confirm!");
+                System.out.println((moveCounter % 2 == 0 ? "Red" : "Blue") + " failed to confirm! (" + e.getMessage()
+                                           + ")");
                 matchStatus = (moveCounter % 2 == 0 ? Status.BLUE_WIN : Status.RED_WIN);
                 continue;
             }
@@ -160,7 +163,8 @@ public class Match implements Runnable {
             try {
                 player[(moveCounter + 1) % 2].update(m, board.getStatus());
             } catch (Exception e) {
-                System.out.println(((moveCounter + 1) % 2 == 0 ? "Red" : "Blue") + " failed to update!");
+                System.out.println(((moveCounter + 1) % 2 == 0 ? "Red" : "Blue") + " failed to update! (" + e.getMessage()
+                                           + ")");
                 matchStatus = ((moveCounter + 1) % 2 == 0 ? Status.BLUE_WIN : Status.RED_WIN);
                 continue;
             }
