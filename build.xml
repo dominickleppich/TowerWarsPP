@@ -77,7 +77,7 @@
 		<delete dir="${release.dir}" />
 		<mkdir dir="${release.dir}" />
 		<!-- Copy needed libraries -->
-		<copy todir="${release.dir}/${lib.dir}">
+		<copy todir="${release.dir}/lib">
 			<fileset dir="${lib.dir}">
 				<!-- exclude unneeded jar files -->
 				<exclude name="*-javadoc.jar" />
