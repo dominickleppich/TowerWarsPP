@@ -47,7 +47,8 @@ public class Move implements Serializable {
 
     // ------------------------------------------------------------
 
-    public static Move parseMove(String str) throws IllegalArgumentException, MoveFormatException {
+    public static Move parseMove(String str) throws IllegalArgumentException,
+                                                            MoveFormatException {
         if (str == null)
             throw new IllegalArgumentException("str == null");
 
@@ -57,7 +58,8 @@ public class Move implements Serializable {
 
         try {
             String[] params = str.split("->");
-            return new Move(Position.parsePosition(params[0]), Position.parsePosition(params[1]));
+            return new Move(Position.parsePosition(params[0]),
+                                   Position.parsePosition(params[1]));
         } catch (IndexOutOfBoundsException | PositionFormatException e) {
             throw new MoveFormatException("Error parsing: \"" + str + "\"", e);
         }
