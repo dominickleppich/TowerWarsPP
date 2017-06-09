@@ -192,6 +192,17 @@ public class ArgumentParser {
                 return PlayerType.RANDOM_AI;
             case "simple":
                 return PlayerType.SIMPLE_AI;
+            case "adv1":
+                return PlayerType.ADVANCED_AI_1;
+            case "adv2":
+                return PlayerType.ADVANCED_AI_2;
+            case "adv3":
+                return PlayerType.ADVANCED_AI_3;
+            case "adv4":
+                return PlayerType.ADVANCED_AI_4;
+            case "adv5":
+                return PlayerType.ADVANCED_AI_5;
+
             default:
                 throw new ArgumentParserException("Unknown player type: " + type);
         }
