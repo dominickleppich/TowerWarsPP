@@ -1,11 +1,7 @@
-package towerwarspp.output;
+package towerwarspp.preset;
 
 import towerwarspp.board.Cell;
 import towerwarspp.board.MoveAnalyzer;
-import towerwarspp.preset.Move;
-import towerwarspp.preset.PlayerColor;
-import towerwarspp.preset.Position;
-import towerwarspp.preset.Status;
 
 import java.util.Set;
 

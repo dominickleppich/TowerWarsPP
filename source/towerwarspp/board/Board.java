@@ -1,10 +1,6 @@
 package towerwarspp.board;
 
-import towerwarspp.output.Viewer;
-import towerwarspp.preset.Move;
-import towerwarspp.preset.PlayerColor;
-import towerwarspp.preset.Position;
-import towerwarspp.preset.Status;
+import towerwarspp.preset.*;
 
 import java.util.HashSet;
 import java.util.Observable;
@@ -19,7 +15,7 @@ import static towerwarspp.preset.PlayerColor.RED;
  *
  * @author dominick
  */
-public class Board extends Observable {
+public class Board extends Observable implements Viewable {
     private static final int TO_STRING_SPACE = 6;
 
     // ------------------------------------------------------------
