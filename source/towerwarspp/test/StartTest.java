@@ -17,27 +17,31 @@ import java.util.Observer;
  * @author dominick
  */
 public class StartTest {
-    public static void main(String[] args) throws Exception {
-        // Parse arguments
-        ArgumentParser ap = new ArgumentParser(args);
+    public static void main(String[] args) {
+        try {
+            // Parse arguments
+            ArgumentParser ap = new ArgumentParser(args);
 
-        // Create requestable and observer
-        TextIO t = new TextIO();
-        Requestable requestable = t;
-        Observer observer = t;
+            // Create requestable and observer
+            TextIO t = new TextIO();
+            Requestable requestable = t;
+            Observer observer = t;
 
-        // Create players
-        Player red, blue;
-        red = createPlayer(ap.getRed(), requestable);
-        blue = createPlayer(ap.getBlue(), requestable);
+            // Create players
+            Player red, blue;
+            red = createPlayer(ap.getRed(), requestable);
+            blue = createPlayer(ap.getBlue(), requestable);
 
-        // Create match
-        Match match = new Match(red, blue, ap.getSize(), observer);
-        match.init();
+            // Create match
+            Match match = new Match(red, blue, ap.getSize(), observer);
+            match.init();
 
-        // Start match
-        match.start();
-        match.waitMatch();
+            // Start match
+            match.start();
+            match.waitMatch();
+        } catch (Exception e) {
+            System.err.println("Failed to start game: " + e.getMessage());
+        }
     }
 
     // ------------------------------------------------------------
