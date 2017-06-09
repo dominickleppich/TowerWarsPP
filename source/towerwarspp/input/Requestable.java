@@ -1,5 +1,6 @@
 package towerwarspp.input;
 
+import towerwarspp.board.MoveAnalyzer;
 import towerwarspp.output.Viewer;
 import towerwarspp.preset.Move;
 
@@ -22,5 +23,5 @@ public interface Requestable {
      * @throws Exception
      *         if something unexpected fails
      */
-    Move request(Set<Move> possibleMoves) throws Exception;
+    Move request(Set<Move> possibleMoves, MoveAnalyzer analyzer) throws Exception;
 }

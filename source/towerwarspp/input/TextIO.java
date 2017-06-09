@@ -1,5 +1,6 @@
 package towerwarspp.input;
 
+import towerwarspp.board.MoveAnalyzer;
 import towerwarspp.output.Viewer;
 import towerwarspp.player.ai.RandomAI;
 import towerwarspp.preset.Move;
@@ -31,15 +32,16 @@ public class TextIO implements Requestable, Observer {
     // ------------------------------------------------------------
 
     @Override
-    public Move request(Set<Move> possibleMoves) throws Exception {
+    public Move request(Set<Move> possibleMoves, MoveAnalyzer analyzer) throws Exception {
         Move m = null;
         boolean valid = true;
         boolean correctFormat = true;
 
         do {
             if (!valid) {
-                System.out.println("\tThe move you entered was not valid! Please try again...\n\tA possible move is: " +
-                                           "" + RandomAI.getRandomMoveFromSet(possibleMoves));
+                System.out.println("\t" + analyzer.analyzeMove(m) +
+                                           "\n\tPlease try again...\n\tA possible move is: " +
+                                           RandomAI.getRandomMoveFromSet(possibleMoves));
             }
             // TODO IO class
             if (!correctFormat) {

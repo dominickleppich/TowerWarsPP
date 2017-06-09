@@ -23,6 +23,10 @@ public class Board extends Observable {
 
     // ------------------------------------------------------------
     /**
+     * Base positions
+     */
+    private final Position redBasePosition, blueBasePosition;
+    /**
      * Board grid
      */
     private AppGrid grid;
@@ -34,10 +38,6 @@ public class Board extends Observable {
      * Who's players turn is it?
      */
     private PlayerColor turn;
-    /**
-     * Base positions
-     */
-    private final Position redBasePosition, blueBasePosition;
     /**
      * Possible moves for current player
      */
@@ -153,6 +153,15 @@ public class Board extends Observable {
         return possibleMoves;
     }
 
+    /**
+     * Get a move analyzer instance.
+     *
+     * @return {@link MoveAnalyzer}
+     */
+    public MoveAnalyzer getMoveAnalyzer() {
+        return new MoveAnalyzer(this);
+    }
+
     // ------------------------------------------------------------
 
     /**
@@ -213,6 +222,107 @@ public class Board extends Observable {
     }
 
     /**
+     * Analyze if a move is valid or not. In case of illegal moves, give a detailed description of the error.
+     *
+     * @param move
+     *         Move
+     *
+     * @return Analyze result of this move
+     */
+    public String analyzeMove(Move move) {
+        if (move == null)
+            return "Valid (null): Surrender move";
+
+        // TODO less copy&pasting :(
+        Cell startCell = grid.getCell(move.getStart()), endCell = grid.getCell(move.getEnd());
+
+        if (move.getStart().equals(move.getEnd()))
+            return "Invalid (" + move + "): Start and end position are equal";
+
+        // Empty cells and bases cannot be moved
+        if (startCell == null)
+            return "Invalid (" + move + "): Start position is empty";
+        if (startCell instanceof Base)
+            return "Invalid (" + move + "): Base cannot be moved";
+
+        // Check whether the move is a token or tower move
+        if (startCell instanceof Token) {
+            // Tokens simply move on empty cells
+            if (endCell == null)
+                return "Valid (" + move + "): Token moved on empty cell";
+
+                // difference between colors
+                // own color
+            else if (startCell.getColor() == endCell.getColor()) {
+                // Cannot move on own base
+                if (endCell instanceof Base)
+                    return "Invalid (" + move + "): Token cannot move on own base";
+                    // Token on token is a new tower
+                else if (endCell instanceof Token)
+                    return "Valid (" + move + "): Token moved on own token and created new tower";
+                    // Token on tower increase its size
+                else if (endCell instanceof Tower) {
+                    if (((Tower) endCell).getHeight() < maxTowerSize)
+                        return "Valid (" + move + "): Token moved on tower and increased size";
+                    else
+                        return "Invalid (" + move + "): Token tried to increase tower with max height";
+                } else
+                    return "Invalid (" + move + "): Token moved on unknown cell type";
+            }
+            // opponent
+            else {
+                // move on opponent base is win (=> allowed)
+                if (endCell instanceof Base)
+                    // base is kicked (win situation)
+                    return "Valid (" + move + "): Token moved on opponent base -> WIN";
+                    // Token on enemy token kicks it
+                else if (endCell instanceof Token)
+                    // simply move the token there
+                    return "Valid (" + move + "): Token kicked opponent token";
+                    // Token on tower kicks or blocks it
+                else if (endCell instanceof Tower) {
+                    // if move is melee, kick tower completely
+                    if (grid.distance(move.getStart(), move.getEnd()) == 1)
+                        return "Valid (" + move + "): Token kicked opponent tower with a melee move";
+                        // if move is ranged, block the tower
+                    else
+                        return "Valid (" + move + "): Token blocked opponent tower with a ranged move";
+                } else
+                    return "Invalid (" + move + "): Token moved on unknown cell type";
+            }
+        } else if (startCell instanceof Tower) {
+            // Towers cannot range move
+            if (grid.distance(move.getStart(), move.getEnd()) > 1)
+                return "Invalid (" + move + "): Towers cannot range move";
+
+            // Towers simply move on empty cells
+            if (endCell == null)
+                return "Valid (" + move + "): Tower moved on empty cell";
+
+                // Towers cannot move on enemy cells
+            else if (startCell.getColor() != endCell.getColor())
+                return "Invalid (" + move + "): Towers cannot kick opponent tokens or towers";
+
+                // Tower on base is not allowed (neither own, nor enemy -> cause towers cannot kick)
+            else if (endCell instanceof Base)
+                return "Invalid (" + move + "): Towers cannot move on bases";
+
+                // Tower on token is new tower
+            else if (endCell instanceof Token)
+                return "Valid (" + move + "): Tower moved on own token and created new tower";
+
+                // Tower on tower increase its height, if size not exceeded
+            else if (endCell instanceof Tower) {
+                if (((Tower) endCell).getHeight() < maxTowerSize)
+                    return "Valid (" + move + "): Tower moved on another own tower and increased its height";
+                else
+                    return "Invalid (" + move + "): Tower tried to increase tower with max height";
+            } else
+                return "Invalid (" + move + "): Tower moved on unknown cell type";
+        } else return "Invalid (" + move + "): Unknown start cell type";
+    }
+
+    /**
      * Make a move on the board.
      *
      * @param move
@@ -257,9 +367,9 @@ public class Board extends Observable {
         else if (!(grid.getCell(blueBasePosition) instanceof Base))
             status = Status.RED_WIN;
 
-        // 2. if player cannot move, game is over
-        // TODO change size() == 0 to size() == 1 (cause of always possible null move)
-        // remember! players turn already switched!!
+            // 2. if player cannot move, game is over
+            // TODO change size() == 0 to size() == 1 (cause of always possible null move)
+            // remember! players turn already switched!!
         else if (possibleMoves.size() == 1) {
             if (turn == RED)
                 status = Status.BLUE_WIN;
@@ -283,7 +393,6 @@ public class Board extends Observable {
      */
     private void applyMove(Move move) {
         Cell startCell = grid.getCell(move.getStart()), endCell = grid.getCell(move.getEnd());
-        System.out.println("applying move: " + move);
 
         if (move.getStart().equals(move.getEnd()))
             throw new IllegalMoveException("start == end");
@@ -309,10 +418,10 @@ public class Board extends Observable {
                 // Cannot move on own base
                 if (endCell instanceof Base)
                     throw new IllegalMoveException("moved on own base");
-                // Token on token is a new tower
+                    // Token on token is a new tower
                 else if (endCell instanceof Token)
                     grid.setCell(move.getEnd(), new Tower(endCell.getColor()));
-                // Token on tower increase its size
+                    // Token on tower increase its size
                 else if (endCell instanceof Tower) {
                     if (((Tower) endCell).getHeight() < maxTowerSize)
                         ((Tower) endCell).increase();
@@ -336,7 +445,7 @@ public class Board extends Observable {
                     // if move is melee, kick tower completely
                     if (grid.distance(move.getStart(), move.getEnd()) == 1)
                         grid.setCell(move.getEnd(), startCell);
-                    // if move is ranged, block the tower
+                        // if move is ranged, block the tower
                     else
                         ((Tower) endCell).block();
                 } else
@@ -357,19 +466,19 @@ public class Board extends Observable {
             if (endCell == null)
                 grid.setCell(move.getEnd(), new Token(startCell.getColor()));
 
-            // Towers cannot move on enemy cells
+                // Towers cannot move on enemy cells
             else if (startCell.getColor() != endCell.getColor())
                 throw new IllegalMoveException("tower move on opponent cell");
 
-            // Tower on base is not allowed (neither own, nor enemy -> cause towers cannot kick)
+                // Tower on base is not allowed (neither own, nor enemy -> cause towers cannot kick)
             else if (endCell instanceof Base)
                 throw new IllegalMoveException("tower move on base");
 
-            // Tower on token is new tower
+                // Tower on token is new tower
             else if (endCell instanceof Token)
                 grid.setCell(move.getEnd(), new Tower(startCell.getColor()));
 
-            // Tower on tower increase its height, if size not exceeded
+                // Tower on tower increase its height, if size not exceeded
             else if (endCell instanceof Tower) {
                 if (((Tower) endCell).getHeight() < maxTowerSize)
                     ((Tower) endCell).increase();
@@ -377,8 +486,7 @@ public class Board extends Observable {
                     throw new IllegalMoveException("tower max height exceed");
             } else
                 throw new IllegalMoveException("unknown end cell type");
-        }
-        else throw new IllegalMoveException("unknown start cell type");
+        } else throw new IllegalMoveException("unknown start cell type");
     }
 
     /**
