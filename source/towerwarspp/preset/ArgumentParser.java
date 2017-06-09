@@ -159,6 +159,21 @@ public class ArgumentParser {
 
     // ------------------------------------------------------------
 
+    private PlayerType parsePlayerType(String type) throws ArgumentParserException {
+        switch (type) {
+            case "human":
+                return PlayerType.HUMAN;
+            case "random":
+                return PlayerType.RANDOM_AI;
+            case "simple":
+                return PlayerType.SIMPLE_AI;
+            default:
+                throw new ArgumentParserException("Unknown player type: " + type);
+        }
+    }
+
+    // ------------------------------------------------------------
+
     public boolean isLocal() throws ArgumentParserException {
         return getFlag("local");
     }
@@ -169,6 +184,14 @@ public class ArgumentParser {
 
     public int getSize() throws ArgumentParserException {
         return Integer.parseInt((String) getSetting("size"));
+    }
+
+    public PlayerType getRed() throws ArgumentParserException {
+        return parsePlayerType((String) getSetting("red"));
+    }
+
+    public PlayerType getBlue() throws ArgumentParserException {
+        return parsePlayerType((String) getSetting("blue"));
     }
 
     // ********************************************************************
