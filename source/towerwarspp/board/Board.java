@@ -69,10 +69,12 @@ public class Board extends Observable implements Viewable {
             grid.setCell(p, null);
 
         // Set player tokens
-        for (Position p : grid.getRangePositions(redBasePosition, grid.getSize() / 2))
+        for (Position p : grid.getRangePositions(redBasePosition,
+                grid.getSize() / 2))
             grid.setCell(p, new Token(RED));
 
-        for (Position p : grid.getRangePositions(blueBasePosition, grid.getSize() / 2))
+        for (Position p : grid.getRangePositions(blueBasePosition,
+                grid.getSize() / 2))
             grid.setCell(p, new Token(BLUE));
 
         // Set bases
@@ -83,37 +85,25 @@ public class Board extends Observable implements Viewable {
         possibleMoves = calculatePossibleMoves();
     }
 
+    // ------------------------------------------------------------
+
     /**
-     * Calculate a set of all possible moves for the current player.
+     * Get the size of the board.
      *
-     * @return Set of possible {@link Move}'s
+     * @return Size
      */
-    private Set<Move> calculatePossibleMoves() {
-        Set<Move> moves = new HashSet<>();
-
-        // Iterate over the whole grid
-        for (Position pos : grid) {
-            // Get each cell and check which type of move to calculate
-            Cell cell = grid.getCell(pos);
-
-            // Only add moves for current player
-            if (cell == null || cell.getColor() != getTurn())
-                continue;
-
-            if (cell instanceof Token)
-                moves.addAll(getPossibleMovesForToken(pos));
-            else if (cell instanceof Tower)
-                moves.addAll(getPossibleMovesForTower(pos));
-        }
-
-        // Add the surrender move
-        // TODO add it again
-        moves.add(null);
-
-        return moves;
+    public int getSize() {
+        return grid.getSize();
     }
 
-    // ------------------------------------------------------------
+    /**
+     * Get the boards status.
+     *
+     * @return {@link Status}
+     */
+    public Status getStatus() {
+        return status;
+    }
 
     /**
      * Get players turn
@@ -124,93 +114,13 @@ public class Board extends Observable implements Viewable {
         return turn;
     }
 
-    // ------------------------------------------------------------
-
     /**
-     * Calculate the set of all possible moves for a given token.
-     *
-     * @param position
-     *         Position
+     * Get the calculated set of possible moves for the current player.
      *
      * @return Set of possible {@link Move}'s
      */
-    private Set<Move> getPossibleMovesForToken(Position position) {
-        Set<Move> moves = new HashSet<>();
-
-        // Calculate tower bonus, towers must be direct neighbors
-        int range = 1;
-        for (Position p : grid.getRangePositions(position, 1)) {
-            Cell cell = grid.getCell(p);
-
-            // If cell is a tower, add its size to own range
-            if (cell instanceof Tower)
-                range += ((Tower) cell).getHeight();
-        }
-
-        // Tokens can move to all cells within its range (except the own base)
-        for (Position p : grid.getRangePositions(position, range)) {
-            // Skip moves to start position
-            if (p.equals(position))
-                continue;
-
-            // Determine cell
-            Cell cell = grid.getCell(p);
-
-            // Tokens can always move on empty fields
-            if (cell == null)
-                moves.add(new Move(position, p));
-
-                // Tokens cannot move on own base
-            else if (cell.getColor() == getTurn() && cell instanceof Base)
-                continue;
-
-                // Tokens cannot move on own towers, if max height is exceeded
-            else if (cell.getColor() == getTurn() && cell instanceof Tower
-                             && ((Tower) cell).getHeight() + 1 > maxTowerSize)
-                continue;
-
-            // All other cells are valid
-            moves.add(new Move(position, p));
-        }
-
-        return moves;
-    }
-
-    /**
-     * Calculate the set of all possible moves for a given tower
-     *
-     * @param position
-     *         Position
-     *
-     * @return Set of possible {@link Move}'s
-     */
-    private Set<Move> getPossibleMovesForTower(Position position) {
-        Set<Move> moves = new HashSet<>();
-
-        // Towers can only move to direct neighbors
-        for (Position p : grid.getRangePositions(position, 1)) {
-            // Determine cell
-            Cell cell = grid.getCell(p);
-
-            // Towers can always move on empty fields
-            if (cell == null)
-                moves.add(new Move(position, p));
-
-                // Towers can never move on ememy cells
-            else if (cell.getColor() != getTurn())
-                continue;
-
-                // Towers can always move on own tokens and create a tower
-            else if (cell instanceof Token)
-                moves.add(new Move(position, p));
-
-                // Towers can move on own tower, if max tower size is not
-                // exceeded
-            else if (cell instanceof Tower && ((Tower) cell).getHeight() + 1 <= maxTowerSize)
-                moves.add(new Move(position, p));
-        }
-
-        return moves;
+    public Set<Move> getPossibleMoves() {
+        return possibleMoves;
     }
 
     /**
@@ -267,37 +177,20 @@ public class Board extends Observable implements Viewable {
         return viewer;
     }
 
-    /**
-     * Get the size of the board.
-     *
-     * @return Size
-     */
-    public int getSize() {
-        return grid.getSize();
-    }
-
-    // ------------------------------------------------------------
-
-    /**
-     * Get the boards status.
-     *
-     * @return {@link Status}
-     */
-    public Status getStatus() {
-        return status;
-    }
-
     // ------------------------------------------------------------
 
     // Helper functions
 
     /**
-     * Get the calculated set of possible moves for the current player.
+     * Checks if a given {@link Move} is valid in the current situation.
      *
-     * @return Set of possible {@link Move}'s
+     * @param move
+     *         Move
+     *
+     * @return true, if the move is valid
      */
-    public Set<Move> getPossibleMoves() {
-        return possibleMoves;
+    public boolean checkMove(Move move) {
+        return getPossibleMoves().contains(move);
     }
 
     /**
@@ -313,8 +206,15 @@ public class Board extends Observable implements Viewable {
         if (move == null)
             return "Valid (null): Surrender move";
 
+        // TODO tower blocking logic
         // TODO less copy&pasting :(
-        Cell startCell = grid.getCell(move.getStart()), endCell = grid.getCell(move.getEnd());
+        Cell startCell = null, endCell = null;
+        try {
+            startCell = grid.getCell(move.getStart());
+            endCell = grid.getCell(move.getEnd());
+        } catch (IndexOutOfBoundsException e) {
+            return "Invalid (" + move + "): Position out of board range";
+        }
 
         if (move.getStart().equals(move.getEnd()))
             return "Invalid (" + move + "): Start and end position are equal";
@@ -336,29 +236,33 @@ public class Board extends Observable implements Viewable {
             else if (startCell.getColor() == endCell.getColor()) {
                 // Cannot move on own base
                 if (endCell instanceof Base)
-                    return "Invalid (" + move + "): Token cannot move on own " + "" + "" + "" +
-                                   "base";
+                    return "Invalid (" + move + "): Token cannot move on own " +
+                                   "" + "" + "" + "" + "" + "" + "" + "base";
                     // Token on token is a new tower
                 else if (endCell instanceof Token)
-                    return "Valid (" + move + "): Token moved on own token " + "and created new " +
-                                   "tower";
+                    return "Valid (" + move + "): Token moved on own token "
+                                   + "and created new " + "tower";
                     // Token on tower increase its size
                 else if (endCell instanceof Tower) {
-                    if (((Tower) endCell).getHeight() < maxTowerSize)
-                        return "Valid (" + move + "): Token moved on tower " + "and increased size";
+                    if (((Tower) endCell).isBlocked())
+                        return "Valid (" + move + "): Token unblocked tower";
+                    else if (((Tower) endCell).getHeight() < maxTowerSize)
+                        return "Valid (" + move + "): Token moved on tower "
+                                       + "and increased size";
                     else
-                        return "Invalid (" + move + "): Token tried to " + "increase tower with " +
-                                       "max height";
+                        return "Invalid (" + move + "): Token tried to increase tower with max height";
                 }
                 else
-                    return "Invalid (" + move + "): Token moved on unknown " + "cell type";
+                    return "Invalid (" + move + "): Token moved on unknown "
+                                   + "cell type";
             }
             // opponent
             else {
                 // move on opponent base is win (=> allowed)
                 if (endCell instanceof Base)
                     // base is kicked (win situation)
-                    return "Valid (" + move + "): Token moved on opponent " + "base -> WIN";
+                    return "Valid (" + move + "): Token moved on opponent " +
+                                   "base -> WIN";
                     // Token on enemy token kicks it
                 else if (endCell instanceof Token)
                     // simply move the token there
@@ -367,15 +271,19 @@ public class Board extends Observable implements Viewable {
                 else if (endCell instanceof Tower) {
                     // if move is melee, kick tower completely
                     if (grid.distance(move.getStart(), move.getEnd()) == 1)
-                        return "Valid (" + move + "): Token kicked opponent " + "tower with a " +
-                                       "melee move";
+                        return "Valid (" + move + "): Token kicked opponent "
+                                       + "tower with a " + "melee move";
                         // if move is ranged, block the tower
-                    else
-                        return "Valid (" + move + "): Token blocked opponent " + "" + "" + "" +
-                                       "tower with a ranged " + "move";
+                    else {
+                        if (((Tower) endCell).isBlocked())
+                            return "Invalid (" + move + "): Token tried to block already blocked tower";
+                        else
+                            return "Valid (" + move + "): Token blocked opponent tower with a ranged move";
+                    }
                 }
                 else
-                    return "Invalid (" + move + "): Token moved on unknown " + "cell type";
+                    return "Invalid (" + move + "): Token moved on unknown "
+                                   + "cell type";
             }
         }
         else if (startCell instanceof Tower) {
@@ -389,7 +297,8 @@ public class Board extends Observable implements Viewable {
 
                 // Towers cannot move on enemy cells
             else if (startCell.getColor() != endCell.getColor())
-                return "Invalid (" + move + "): Towers cannot kick opponent " + "tokens or towers";
+                return "Invalid (" + move + "): Towers cannot kick opponent "
+                               + "tokens or towers";
 
                 // Tower on base is not allowed (neither own, nor enemy ->
                 // cause towers cannot kick)
@@ -398,99 +307,25 @@ public class Board extends Observable implements Viewable {
 
                 // Tower on token is new tower
             else if (endCell instanceof Token)
-                return "Valid (" + move + "): Tower moved on own token and " + "created new tower";
+                return "Valid (" + move + "): Tower moved on own token and "
+                               + "created new tower";
 
                 // Tower on tower increase its height, if size not exceeded
             else if (endCell instanceof Tower) {
                 if (((Tower) endCell).getHeight() < maxTowerSize)
-                    return "Valid (" + move + "): Tower moved on another own " + "" + "" + "" +
-                                   "tower and increased its " + "height";
+                    return "Valid (" + move + "): Tower moved on another own " +
+                                   "" + "" + "" + "" + "" + "" + "" + "tower " +
+                                   "and " + "increased " + "its " + "height";
                 else
-                    return "Invalid (" + move + "): Tower tried to increase " + "tower with max " +
-                                   "height";
+                    return "Invalid (" + move + "): Tower tried to increase "
+                                   + "tower with max " + "height";
             }
             else
-                return "Invalid (" + move + "): Tower moved on unknown cell " + "type";
+                return "Invalid (" + move + "): Tower moved on unknown cell "
+                               + "type";
         }
         else
             return "Invalid (" + move + "): Unknown start cell type";
-    }
-
-    /**
-     * Make a move on the board.
-     *
-     * @param move
-     *         Move
-     *
-     * @return true, if move was made
-     */
-    public boolean makeMove(Move move) {
-        // Moves can be made if and only if the status is ok!
-        if (status != Status.OK)
-            return false;
-
-        // check if move is valid
-        if (!checkMove(move)) {
-            status = Status.ILLEGAL;
-            return false;
-        }
-
-        // check for null move, player surrender
-        if (move == null) {
-            // other player wins
-            if (turn == RED)
-                status = Status.BLUE_WIN;
-            else
-                status = Status.RED_WIN;
-            return true;
-        }
-
-        // apply move
-        applyMove(move);
-
-        // switch player
-        switchTurn();
-
-        // Calculate possible moves
-        possibleMoves = calculatePossibleMoves();
-
-        // Check win condition ...
-        // 1. if red base was destroyed, blue player won
-        if (!(grid.getCell(redBasePosition) instanceof Base))
-            status = Status.BLUE_WIN;
-        else if (!(grid.getCell(blueBasePosition) instanceof Base))
-            status = Status.RED_WIN;
-
-            // 2. if player cannot move, game is over
-            // TODO change size() == 0 to size() == 1 (cause of always
-            // possible null move)
-            // remember! players turn already switched!!
-        else if (possibleMoves.size() == 1) {
-            if (turn == RED)
-                status = Status.BLUE_WIN;
-            else
-                status = Status.RED_WIN;
-        }
-
-        // Notify observers
-        setChanged();
-        notifyObservers(move);
-        clearChanged();
-
-        return true;
-    }
-
-    /**
-     * Checks if a given {@link Move} is valid in the current situation.
-     *
-     * @param move
-     *         Move
-     *
-     * @return true, if the move is valid
-     */
-    public boolean checkMove(Move move) {
-        // TODO can be improved
-        return getPossibleMoves().contains(move);
     }
 
     /**
@@ -500,7 +335,8 @@ public class Board extends Observable implements Viewable {
      *         Move
      */
     private void applyMove(Move move) {
-        Cell startCell = grid.getCell(move.getStart()), endCell = grid.getCell(move.getEnd());
+        Cell startCell = grid.getCell(move.getStart()), endCell = grid.getCell(
+                move.getEnd());
 
         if (move.getStart().equals(move.getEnd()))
             throw new IllegalMoveException("start == end");
@@ -529,12 +365,19 @@ public class Board extends Observable implements Viewable {
                     // Token on token is a new tower
                 else if (endCell instanceof Token)
                     grid.setCell(move.getEnd(), new Tower(endCell.getColor()));
-                    // Token on tower increase its size
+                    // Token on tower increase its size, if not blocked
                 else if (endCell instanceof Tower) {
-                    if (((Tower) endCell).getHeight() < maxTowerSize)
-                        ((Tower) endCell).increase();
-                    else
-                        throw new IllegalMoveException("tower max height " + "exceed");
+                    if (((Tower) endCell).isBlocked())
+                        ((Tower) endCell).unblock();
+                    else {
+                        if (((Tower) endCell).getHeight() < maxTowerSize)
+                            ((Tower) endCell).increase();
+                        else
+                            throw new IllegalMoveException("tower max height " +
+                                                                   "" + "" +
+                                                                   "" + "" +
+                                                                   "exceed");
+                    }
                 }
                 else
                     throw new IllegalMoveException("unknown end cell type");
@@ -604,7 +447,229 @@ public class Board extends Observable implements Viewable {
             throw new IllegalMoveException("unknown start cell type");
     }
 
+    /**
+     * Make a move on the board.
+     *
+     * @param move
+     *         Move
+     *
+     * @return true, if move was made
+     */
+    public boolean makeMove(Move move) {
+        // Moves can be made if and only if the status is ok!
+        if (status != Status.OK)
+            return false;
+
+        // check if move is valid
+        if (!checkMove(move)) {
+            status = Status.ILLEGAL; return false;
+        }
+
+        // check for null move, player surrender
+        if (move == null) {
+            // other player wins
+            if (turn == RED)
+                status = Status.BLUE_WIN;
+            else
+                status = Status.RED_WIN; return true;
+        }
+
+        // apply move
+        applyMove(move);
+
+        // switch player
+        switchTurn();
+
+        // Calculate possible moves
+        possibleMoves = calculatePossibleMoves();
+
+        // Check win condition ...
+        // 1. if red base was destroyed, blue player won
+        if (!(grid.getCell(redBasePosition) instanceof Base))
+            status = Status.BLUE_WIN;
+        else if (!(grid.getCell(blueBasePosition) instanceof Base))
+            status = Status.RED_WIN;
+
+            // 2. if player cannot move, game is over
+            // TODO change size() == 0 to size() == 1 (cause of always
+            // possible null move)
+            // remember! players turn already switched!!
+        else if (possibleMoves.size() == 1) {
+            if (turn == RED)
+                status = Status.BLUE_WIN;
+            else
+                status = Status.RED_WIN;
+        }
+
+        // Notify observers
+        setChanged(); notifyObservers(move); clearChanged();
+
+        return true;
+    }
+
     // ------------------------------------------------------------
+
+    // ------------------------------------------------------------
+
+    /**
+     * Calculate a set of all possible moves for the current player.
+     *
+     * @return Set of possible {@link Move}'s
+     */
+    private Set<Move> calculatePossibleMoves() {
+        Set<Move> moves = new HashSet<>();
+
+        // Iterate over the whole grid
+        for (Position pos : grid) {
+            // Get each cell and check which type of move to calculate
+            Cell cell = grid.getCell(pos);
+
+            // Only add moves for current player
+            if (cell == null || cell.getColor() != getTurn())
+                continue;
+
+            if (cell instanceof Token)
+                moves.addAll(getPossibleMovesForToken(pos));
+            else if (cell instanceof Tower)
+                moves.addAll(getPossibleMovesForTower(pos));
+        }
+
+        // Add the surrender move
+        // TODO add it again
+        moves.add(null);
+
+        return moves;
+    }
+
+    /**
+     * Calculate the move range of a given position.
+     *
+     * Empty cells and bases cannot move. Towers can move one field. Tokens can
+     * move one field, their move range is increased by each direct non-blocked
+     * own tower height.
+     *
+     * @param position
+     *         Position
+     *
+     * @return Range
+     */
+    private int calculateMoveRange(Position position) {
+        Cell cell = grid.getCell(position);
+        // Empty cells and bases don't move
+        if (cell == null || cell instanceof Base)
+            return 0;
+
+        // Default token range
+        int range = 1;
+
+        // Tokens get bonus range
+        if (cell instanceof Token) {
+            // Calculate tower bonus
+            // Towers must be direct neighbors, owned and non-blocked
+
+            for (Position p : grid.getRangePositions(position, 1)) {
+                Cell neighbor = grid.getCell(p);
+
+                // If cell is a tower, add its size to own range
+                if (neighbor instanceof Tower && neighbor.getColor() == cell.getColor()
+                            && !((Tower) neighbor).isBlocked())
+                    range += ((Tower) neighbor).getHeight();
+            }
+        }
+
+        return range;
+    }
+
+    /**
+     * Calculate the set of all possible moves for a given token.
+     *
+     * @param position
+     *         Position
+     *
+     * @return Set of possible {@link Move}'s
+     */
+    private Set<Move> getPossibleMovesForToken(Position position) {
+        PlayerColor tokenColor = grid.getCell(position).getColor();
+
+        Set<Move> moves = new HashSet<>();
+
+        int range = calculateMoveRange(position);
+
+        // Tokens can move to all cells within its range (except the own base)
+        for (Position p : grid.getRangePositions(position, range)) {
+            // Skip moves to start position
+            if (p.equals(position))
+                continue;
+
+            // Determine cell
+            Cell cell = grid.getCell(p);
+
+            // Tokens can always move on empty fields
+            if (cell == null)
+                moves.add(new Move(position, p));
+
+                // Tokens cannot move on own base
+            else if (cell.getColor() == tokenColor && cell instanceof Base)
+                continue;
+
+                // Tokens cannot move on own towers, if max height is exceeded and tower not blocked
+            else if (cell.getColor() == tokenColor && cell instanceof Tower
+                             && ((Tower) cell).getHeight() + 1 > maxTowerSize
+                         && !((Tower) cell).isBlocked())
+                continue;
+
+                // Tokens cannot block already blocked enemy towers
+            else if (cell.getColor() != tokenColor && cell instanceof Tower
+                         && ((Tower) cell).isBlocked())
+                continue;
+
+            // All other cells are valid
+            moves.add(new Move(position, p));
+        }
+
+        return moves;
+    }
+
+    /**
+     * Calculate the set of all possible moves for a given tower
+     *
+     * @param position
+     *         Position
+     *
+     * @return Set of possible {@link Move}'s
+     */
+    private Set<Move> getPossibleMovesForTower(Position position) {
+        PlayerColor towerColor = grid.getCell(position).getColor();
+
+        Set<Move> moves = new HashSet<>();
+
+        // Towers can only move to direct neighbors
+        for (Position p : grid.getRangePositions(position, 1)) {
+            // Determine cell
+            Cell cell = grid.getCell(p);
+
+            // Towers can always move on empty fields
+            if (cell == null)
+                moves.add(new Move(position, p));
+
+                // Towers can never move on ememy cells
+            else if (cell.getColor() != towerColor)
+                continue;
+
+                // Towers can always move on own tokens and create a tower
+            else if (cell instanceof Token)
+                moves.add(new Move(position, p));
+
+                // Towers can move on own tower, if max tower size is not
+                // exceeded
+            else if (cell instanceof Tower && ((Tower) cell)
+                                                      .getHeight() + 1 <=
+                                                      maxTowerSize)
+                moves.add(new Move(position, p));
+        }
+
+        return moves;
+    }
 
     /**
      * Switch player.
@@ -613,18 +678,32 @@ public class Board extends Observable implements Viewable {
         turn = turn == RED ? BLUE : RED;
     }
 
+    // ------------------------------------------------------------
+
+    private static String fillSpaces(int n) {
+        StringBuilder sb = new StringBuilder(); while (n-- > 0)
+            sb.append(" "); return sb.toString();
+    }
+
+    private static String fixedString(String s) {
+        if (s.length() > TO_STRING_SPACE)
+            return s.substring(0, TO_STRING_SPACE);
+        return s + fillSpaces(TO_STRING_SPACE - s.length());
+    }
+
+    // ------------------------------------------------------------
+
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
         s.append(fillSpaces(TO_STRING_SPACE / 2));
         for (int l = 0; l < getSize(); l++)
             s.append(fixedString(Character.toString((char) (l + 'A'))));
-        s.append("\n\n");
-        for (int n = 1; n <= getSize(); n++) {
-            s.append(fillSpaces(TO_STRING_SPACE / 2 * (n - 1)) + fixedString(Integer.toString(n)));
+        s.append("\n\n"); for (int n = 1; n <= getSize(); n++) {
+            s.append(fillSpaces(TO_STRING_SPACE / 2 * (n - 1)) + fixedString(
+                    Integer.toString(n)));
             for (int l = 1; l <= getSize(); l++) {
-                Cell cell = grid.getCell(new Position(l, n));
-                String ss;
+                Cell cell = grid.getCell(new Position(l, n)); String ss;
                 if (cell instanceof Base)
                     ss = (cell.getColor() == RED ? "R" : "B") + "B";
                 else if (cell instanceof Token)
@@ -634,29 +713,11 @@ public class Board extends Observable implements Viewable {
                     ss = (cell.getColor() == RED ? "R" : "B") + "T" + size;
                 }
                 else
-                    ss = ".";
-                s.append(fixedString(ss));
-            }
-            s.append(fixedString(Integer.toString(n)) + "\n\n");
-        }
-        s.append(fillSpaces(TO_STRING_SPACE / 2 * (getSize() + 2)));
+                    ss = "."; s.append(fixedString(ss));
+            } s.append(fixedString(Integer.toString(n)) + "\n\n");
+        } s.append(fillSpaces(TO_STRING_SPACE / 2 * (getSize() + 2)));
         for (int l = 0; l < getSize(); l++)
             s.append(fixedString(Character.toString((char) (l + 'A'))));
         return s.toString();
-    }
-
-    private static String fillSpaces(int n) {
-        StringBuilder sb = new StringBuilder();
-        while (n-- > 0)
-            sb.append(" ");
-        return sb.toString();
-    }
-
-    // ------------------------------------------------------------
-
-    private static String fixedString(String s) {
-        if (s.length() > TO_STRING_SPACE)
-            return s.substring(0, TO_STRING_SPACE);
-        return s + fillSpaces(TO_STRING_SPACE - s.length());
     }
 }
