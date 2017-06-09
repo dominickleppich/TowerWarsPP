@@ -3,17 +3,28 @@ package towerwarspp.test;
 import towerwarspp.preset.ArgumentParser;
 import towerwarspp.preset.ArgumentParserException;
 
-/**
- * Created on 09.06.2017.
- *
- * @author dominick
- */
 public class ArgumentParserTest {
-    public static void main(String[] args) throws ArgumentParserException {
-        ArgumentParser ap = new ArgumentParser(args);
+    public static void main(String[] args) {
+        try {
+            ArgumentParser ap = new ArgumentParser(args);
 
-        System.out.println("local: " + ap.isLocal());
-        System.out.println("network: " + ap.isNetwork());
-        System.out.println("size: " + ap.getSize());
+            System.out.println("local: " + ap.isLocal());
+            System.out.println("network: " + ap.isNetwork());
+            System.out.println("size: " + ap.getSize());
+
+            switch (ap.getRed()) {
+                case HUMAN:
+                    System.out.println("Red chose human player");
+                    break;
+                case RANDOM_AI:
+                    System.out.println("Red chose random player");
+                    break;
+
+                // and so on..
+            }
+        } catch (ArgumentParserException e) {
+            // Something went wrong...
+            e.printStackTrace();
+        }
     }
 }

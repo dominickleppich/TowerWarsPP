@@ -46,8 +46,9 @@ public class Position implements Serializable {
 
     // ------------------------------------------------------------
 
-    public static Position parsePosition(String str) throws IllegalArgumentException,
-                                                                    PositionFormatException {
+    public static Position parsePosition(String str)
+            throws IllegalArgumentException, PositionFormatException {
+
         if (str == null)
             throw new IllegalArgumentException("str == null");
 

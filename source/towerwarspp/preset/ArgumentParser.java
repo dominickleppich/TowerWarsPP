@@ -3,51 +3,42 @@ package towerwarspp.preset;
 import java.util.HashMap;
 
 /**
- * Ein simpler Parser für Kommandozeilen Parameter.
+ * Ein simpler Parser fuer Kommandozeilen Parameter.
  * <h1>Verwendung</h1>
  * <p>
- * Erzeuge innerhalb deiner ausführbaren Klasse eine Instanz dieser Klasse
- * und &uuml;bergib im Konstruktor die
- * Kommandozeilenargumente.
- * Verwende diesen ArgumentParser um auf Kommandozeilen Parameter zu reagieren.
+ * Erzeuge innerhalb deiner ausfuehrbaren Klasse eine Instanz dieser Klasse
+ * und uebergib im Konstruktor die Kommandozeilenargumente. Verwende diesen
+ * ArgumentParser um auf Kommandozeilen Parameter zu reagieren.
  * </p>
  * <p>
  * Kommandozeilen Parameter sind entweder Schalter oder Einstellungen.
  * </p>
  * <h2>Schalter</h2>
  * <p>
- * Ein Schalter ist entweder ein- oder ausgeschaltet. Dementsprechend kann
- * sein Zustand in einem {@code boolean}
- * abgelegt werden. Schalter sind zu Beginn ausgeschaltet. Ein Schalter wird
- * &uuml;ber den Parameter {@code
- * --SCHALTERNAME} aktiviert. Ein Schalter kann &uuml;ber Kommandozeilen
- * Parameter nicht deaktiviert werden, da
- * er zu Beginn ohnehin deaktiviert ist.
+ * Ein Schalter ist entweder ein- oder ausgeschaltet. Dementsprechend kann sein
+ * Zustand in einem {@code boolean} abgelegt werden. Schalter sind zu Beginn
+ * ausgeschaltet. Ein Schalter wird ueber den Parameter {@code --SCHALTERNAME}
+ * aktiviert. Ein Schalter kann ueber Kommandozeilen Parameter nicht deaktiviert
+ * werden, da er zu Beginn ohnehin deaktiviert ist.
  * </p>
  * <h2>Einstellungen</h2>
  * <p>
- * Eine Einstellung hat einen Namen und einen Wert. Ein gutes Beispiel ist
- * hier die Spielfeldgr&ouml;&szlig;e.
- * Der Name dieser Einstellung ist {@code size} und der Wert kann eine Zahl
- * zwischen {@code 6} und {@code 26}
- * sein. Der Typ einer Einstellung richtet sich nach der Einstellung. Die
- * Einstellung {@code size} zum Beispiel
- * ist ein {@code int}. Einstellungen werden auf der Kommandozeile mit {@code
- * -NAME WERT} gesetzt.
+ * Eine Einstellung hat einen Namen und einen Wert. Ein gutes Beispiel ist hier
+ * die Spielfeldgroesse. Der Name dieser Einstellung ist {@code size}
+ * und der Wert kann eine Zahl zwischen {@code 6} und {@code 26} sein.
+ * Der Typ einer Einstellung richtet sich nach der Einstellung. Die Einstellung
+ * {@code size} zum Beispiel ist ein {@code int}. Einstellungen werden auf der
+ * Kommandozeile mit {@code -NAME WERT} gesetzt.
  * </p>
  * <p>
- * Die Methoden um Zustand von Schaltern und Einstellungen zu erfragen,
- * werdet ihr sicherlich erahnen k&ouml;nnen.
- * Wird ein Schalter oder eine Einstellung abgefragt die nicht eingelesen
- * wurde, wird eine
- * {@link IllegalArgumentException} geworfen, auf die sinnvoll reagiert
+ * Wird ein Schalter oder eine Einstellung abgefragt die nicht eingelesen wurde,
+ * wird eine {@link ArgumentParserException} geworfen, auf die sinnvoll reagiert
  * werden muss.
  * </p>
  * <p>
- * Alle Schalter und Einstellungen in dieser Klasse d&uuml;rfen nicht
- * ge&auml;ndert werden. Es ist jedoch erlaubt
- * weitere Schalter oder Einstellungen hinzuzuf&uuml;gen, dies ist im
- * Quellcode kenntlich gemacht.
+ * Alle Schalter und Einstellungen in dieser Klasse duerfen nicht geaendert
+ * werden. Es ist jedoch erlaubt weitere Schalter oder Einstellungen hinzuzufuegen,
+ * dies ist im Quellcode kenntlich gemacht.
  * </p>
  *
  * @author Dominick Leppich
@@ -66,7 +57,7 @@ public class ArgumentParser {
      *         Argumente
      *
      * @throws ArgumentParserException
-     *         wenn das Parsen der Argumente fehlschl&auml;gt
+     *         wenn das Parsen der Argumente fehlschlaegt
      */
     public ArgumentParser(String[] args) throws ArgumentParserException {
         params = new HashMap<>();
@@ -81,7 +72,7 @@ public class ArgumentParser {
      *         Argumente
      *
      * @throws ArgumentParserException
-     *         wenn das Parsen der Argumente fehlschl&auml;gt
+     *         wenn das Parsen der Argumente fehlschlaegt
      */
     private void parseArgs(String[] args) throws ArgumentParserException {
         // Index to parse
@@ -107,7 +98,7 @@ public class ArgumentParser {
     }
 
     /**
-     * F&uuml;ge einen Schalter hinzu.
+     * Fuege einen Schalter hinzu.
      *
      * @param flag
      *         Schalte
@@ -124,7 +115,7 @@ public class ArgumentParser {
     }
 
     /**
-     * F&uuml;ge eine Einstellung hinzu.
+     * Fuege eine Einstellung hinzu.
      *
      * @param key
      *         Name
@@ -133,7 +124,7 @@ public class ArgumentParser {
      *
      * @throws ArgumentParserException
      *         wenn die Einstellung nicht existiert oder der Wert ein
-     *         ung&uuml;ltiges Format hat
+     *         ungueltiges Format hat
      */
     private void addSetting(String key, String value) throws ArgumentParserException {
         // Check if a param with this name already exists
@@ -149,7 +140,7 @@ public class ArgumentParser {
     // ------------------------------------------------------------
 
     /**
-     * Gib den Wert eines Schalters zur&uuml;ck.
+     * Gib den Wert eines Schalters zurueck.
      *
      * @param flag
      *         Name des Schalters
@@ -172,7 +163,7 @@ public class ArgumentParser {
     }
 
     /**
-     * Gib den Wert einer Einstellung als {@link Object} zur&uuml;ck.
+     * Gib den Wert einer Einstellung als {@link Object} zurueck.
      *
      * @param key
      *         Name der Einstellung
@@ -240,6 +231,10 @@ public class ArgumentParser {
         return Integer.parseInt((String) getSetting("size"));
     }
 
+    public int getDelay() throws ArgumentParserException {
+        return Integer.parseInt((String) getSetting("delay"));
+    }
+
     public PlayerType getRed() throws ArgumentParserException {
         return parsePlayerType((String) getSetting("red"));
     }
@@ -251,6 +246,5 @@ public class ArgumentParser {
     // ********************************************************************
     //  Hier koennen weitere Schalter und Einstellungen ergaenzt werden...
     // ********************************************************************
-
 
 }
