@@ -206,8 +206,6 @@ public class Board extends Observable implements Viewable {
         if (move == null)
             return "Valid (null): Surrender move";
 
-        // TODO tower blocking logic
-        // TODO less copy&pasting :(
         Cell startCell = null, endCell = null;
         try {
             startCell = grid.getCell(move.getStart());
