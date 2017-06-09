@@ -62,7 +62,7 @@ public class Position implements Serializable {
 
     @Override
     public String toString() {
-        return "(" + (char) (getLetter() + 'A' - 1) + getNumber() + ")";
+        return "" + (char) (getLetter() + 'A' - 1) + getNumber();
     }
 
     @Override
