@@ -33,13 +33,17 @@ public class RandomAI extends AbstractPlayer {
      */
     public static Move getRandomMoveFromSet(Set<Move> moves) throws Exception {
         try {
-            int i = rnd.nextInt(moves.size()) + 1;
-
+            int i;
             Move m = null;
 
-            Iterator<Move> it = moves.iterator();
-            while (i-- > 0)
-                m = it.next();
+            // AI never surrenders
+            do {
+                i = rnd.nextInt(moves.size()) + 1;
+
+                Iterator<Move> it = moves.iterator();
+                while (i-- > 0)
+                    m = it.next();
+            } while (m == null);
 
             return m;
         } catch (IllegalArgumentException e) {
