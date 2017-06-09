@@ -1,5 +1,7 @@
 package towerwarspp.board;
 
+import towerwarspp.io.Viewer;
+import towerwarspp.io.Viewable;
 import towerwarspp.preset.*;
 
 import java.util.HashSet;
