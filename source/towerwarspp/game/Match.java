@@ -158,9 +158,11 @@ public class Match implements Runnable {
                 matchStatus = (moveCounter % 2 == 0 ? Status.BLUE_WIN : Status.RED_WIN);
                 continue;
             }
+            String analyzeResult = board.getMoveAnalyzer().analyzeMove(m);
             System.out.println(
                     "LOG Move No " + (moveCounter + 1) + ": " + m + " " + (board.makeMove(
                             m) ? "succeeded" : "failed"));
+            System.out.println("Analyzing result: " + analyzeResult);
 
             // Confirm move
             try {
