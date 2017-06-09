@@ -50,6 +50,9 @@ public class ArgumentParser {
      *
      * @param args
      *         Argumente
+     *
+     * @throws ArgumentParserException
+     *         wenn das Parsen der Argumente fehlschl&auml;gt
      */
     public ArgumentParser(String[] args) throws ArgumentParserException {
         params = new HashMap<>();
@@ -62,6 +65,9 @@ public class ArgumentParser {
      *
      * @param args
      *         Argumente
+     *
+     * @throws ArgumentParserException
+     *         wenn das Parsen der Argumente fehlschl&auml;gt
      */
     private void parseArgs(String[] args) throws ArgumentParserException {
         // Index to parse
@@ -89,6 +95,9 @@ public class ArgumentParser {
      *
      * @param flag
      *         Schalte
+     *
+     * @throws ArgumentParserException
+     *         wenn der Schalter nicht existiert
      */
     private void addFlag(String flag) throws ArgumentParserException {
         // Check if a param with this name already exists
@@ -105,6 +114,9 @@ public class ArgumentParser {
      *         Name
      * @param value
      *         Wert
+     *
+     * @throws ArgumentParserException
+     *         wenn die Einstellung nicht existiert oder der Wert ein ung&uuml;ltiges Format hat
      */
     private void addSetting(String key, String value) throws ArgumentParserException {
         // Check if a param with this name already exists
@@ -128,6 +140,7 @@ public class ArgumentParser {
      * @return Wert
      *
      * @throws ArgumentParserException
+     *         wenn der Schalter den falschen Typ hat (falls eine Einstellung versucht wird als Schalter auszulesen)
      */
     private boolean getFlag(String flag) throws ArgumentParserException {
         if (!params.containsKey(flag))
@@ -135,7 +148,7 @@ public class ArgumentParser {
 
         Object o = params.get(flag);
         if (!(o instanceof Boolean))
-            throw new ArgumentParserException("Flag is not a Boolean");
+            throw new ArgumentParserException("This is not a flag");
 
         return (Boolean) params.get(flag);
     }
@@ -149,6 +162,7 @@ public class ArgumentParser {
      * @return Wert als {@link Object}.
      *
      * @throws ArgumentParserException
+     *         wenn die Einstellung nicht existiert
      */
     private Object getSetting(String key) throws ArgumentParserException {
         if (!params.containsKey(key))
@@ -159,6 +173,17 @@ public class ArgumentParser {
 
     // ------------------------------------------------------------
 
+    /**
+     * Interpretiere einen Spielertypen
+     *
+     * @param type
+     *         Eingelesener Typ
+     *
+     * @return Spielertyp als {@link PlayerType}
+     *
+     * @throws ArgumentParserException
+     *         wenn der eingelese Typ nicht passt
+     */
     private PlayerType parsePlayerType(String type) throws ArgumentParserException {
         switch (type) {
             case "human":

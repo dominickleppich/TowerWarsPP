@@ -17,6 +17,8 @@ public interface Requestable {
      *
      * @param possibleMoves
      *         Set of possible moves
+     * @param analyzer
+     *         {@link MoveAnalyzer} instance
      *
      * @return {@link Move}
      *
