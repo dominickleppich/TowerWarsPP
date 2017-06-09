@@ -1,0 +1,24 @@
+\section*{KI-Wettbewerb}
+Wenn mindestens zwei Gruppen Interesse daran haben ihre Computerspieler gegeneinander antreten zu lassen wird ein KI-Wettbewerb stattfinden.
+
+Zur Teilnahme am KI-Wettbewerb muss ein Netzwerkspieler implementiert sein.
+
+Abhängig von der Anzahl der Teilnehmer wird ein entsprechender Spielplan erstellt. Dieser legt dann fest, welches Team auf einem Brett welcher Größe mit welcher Farbe gegen welches andere Team antritt.
+
+Ein Matchmaking-Programm wird alle im Netzwerk zur Verfügung gestellten Spieler-Objekte verwalten und dann anhand des Spielplans mehrere Spiele starten. Vor jedem Spiel wird bei den Spieler-Objekten die Methode \code{init} mit den entsprechenden Parametern aufgerufen. Stellen Sie daher sicher, dass Ihre Spieler-Klassen beliebig oft mit neuen Werten initialisiert werden können.
+
+Die genaue Erzeugung des Spielplans steht noch nicht fest, aber es kann davon ausgegangen werden, dass zwei konkurrierende Teams mindestens zwei Spiele gegeneinander (je eines mit den roten und blauen Steinen) spielen werden.
+
+Es gewinnt das Team, dessen KI die meisten Spiele gewonnen hat. Im Falle eines Unentschiedens wird am Tage des Wettbewerbs vor Ort eine Lösung ausgehandelt.
+
+Um fair zu bleiben und stundenlanges Rechnen zu unterbinden werden die folgenden Regeln gelten.
+\begin{itemize}
+\item Verursacht ein Spieler eine Exception oder reagiert dieser mit inkorrektem Verhalten (z.B. bei Aufruf der Methoden \code{request}, \code{confirm}, \code{update} und \code{init}) gilt dieses Spiel für den verursachenden Spieler als Niederlage.
+\item Benötigt ein Spieler zu viel Zeit für einen einzelnen Zug, wird das bei mehrfacher Wiederholung als Aufgabe dieses Spielers gewertet und der andere Spieler gewinnt. Ein genaues Zeitlimit wird rechtzeitig bekannt gegeben aber eine Rechenzeit von 5 Sekunden wird auf jeden Fall möglich sein.
+\item Überschreitet ein Spieler ein Limit an Gesamtzeit, wird auch das als Aufgabe gewertet.
+\end{itemize}
+
+Sie können Ihre Implementation gegen eine fertige BreakthroughPP-Implemenation testen, um zu prüfen ob Ihre KI funktioniert und ob Zeitlimits eingehalten werden. Nähere Hinweise dazu werden bekannt gegeben.
+
+Bei Fragen oder Problemen zum KI-Wettbewerb können Sie sich gerne per E-Mail an \\
+\code{dominick.leppich@stud.uni-goettingen.de} wenden.

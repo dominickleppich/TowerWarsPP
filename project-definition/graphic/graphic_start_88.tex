@@ -1,0 +1,22 @@
+\begin{tikzpicture}[scale=0.75]
+	% Cols
+	\foreach \i in {0, ..., 8} {
+		\draw [thin, black] (\i,0) -- (\i,8);
+	}
+	% Rows
+	\foreach \i in {0, ..., 8} {
+		\draw [thin, black] (0,\i) -- (8,\i);
+	}
+	% Red
+	\foreach \r in {1, ..., 3} {
+		\foreach \l in {1, ..., 8} {
+			\draw [color=black, fill=red] (\l-0.5,\r-0.5) circle (0.4); 		
+		}
+	}
+	% Blue
+	\foreach \r in {6, ..., 8} {
+		\foreach \l in {1, ..., 8} {
+			\draw [color=black, fill=blue] (\l-0.5,\r-0.5) circle (0.4); 		
+		}
+	}
+\end{tikzpicture}

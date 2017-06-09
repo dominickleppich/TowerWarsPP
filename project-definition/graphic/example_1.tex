@@ -1,0 +1,29 @@
+\begin{tikzpicture}[scale=1]
+	% Grid
+	\foreach \x/\y in {2/1,3/1,4/1,1/2,2/2,3/2,4/2,5/2,1/3,2/3,3/3,4/3,5/3,1/4,2/4,3/4,4/4,5/4,2/5,3/5,4/5} {
+		\draw [thin, black] (\x-0.5,\y-0.5) -- (\x+0.5,\y-0.5); 
+		\draw [thin, black] (\x+0.5,\y-0.5) -- (\x+0.5,\y+0.5); 
+		\draw [thin, black] (\x+0.5,\y+0.5) -- (\x-0.5,\y+0.5); 
+		\draw [thin, black] (\x-0.5,\y+0.5) -- (\x-0.5,\y-0.5); 
+	}
+	% Arrows
+	\draw [draw=black,solid,line width=0.1em,-triangle 90,fill=black] (2,2) -- (1,3);
+	\draw [draw=black,solid,line width=0.1em,-triangle 90,fill=black] (2,2) -- (2,3);
+	\draw [draw=black,solid,line width=0.1em,-triangle 90,fill=black] (2,2) -- (3,3);
+	
+	\draw [draw=black,solid,line width=0.1em,-triangle 90,fill=black] (4,4) -- (3,3);
+	\draw [draw=black,solid,line width=0.1em,-triangle 90,fill=black] (4,4) -- (4,3);
+	\draw [draw=black,solid,line width=0.1em,-triangle 90,fill=black] (4,4) -- (5,3);
+	
+	% Red
+	\foreach \x/\y in {2/2} {
+		\draw [color=black, fill=red] (\x,\y) circle (0.4); 
+	}
+	% Blue
+	\foreach \x/\y in {4/4} {
+		\draw [color=black, fill=blue] (\x,\y) circle (0.4); 
+	}
+	
+	% Label
+	\draw (3, 0) node {\large{a})};
+\end{tikzpicture}

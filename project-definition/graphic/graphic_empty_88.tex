@@ -1,0 +1,14 @@
+\begin{tikzpicture}
+	\foreach \i in {0, ..., 8} {
+		\draw [thin, black] (\i,0) -- (\i,8);
+	}
+	\foreach \i in {0, ..., 8} {
+		\draw [thin, black] (0,\i) -- (8,\i);
+	}
+	\foreach \l in {1, ..., 8} {
+		\draw node at (\l-0.5, -0.5) {\myAlph\l};
+	}
+	\foreach \n in {1, ..., 8} {
+		\draw node at (-0.5, \n-0.5) {\n};
+	}
+\end{tikzpicture}

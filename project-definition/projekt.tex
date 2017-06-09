@@ -1,0 +1,91 @@
+\documentclass[12pt]{article}
+
+\usepackage[a4paper,top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+\usepackage[utf8]{inputenc} %Eingabecodierung
+\usepackage[ngerman]{babel} %Deutsche Sprache
+\usepackage[T1]{fontenc} %T1 Zeichenkodierung, fuer automatische Zeilenumbrueche nach Umlauten
+
+\usepackage{lmodern} %Moderner Zeichensatz
+\usepackage{textcomp}
+
+\usepackage{graphicx} %Grafiken laden
+
+\usepackage{tikz,pgf} % TikZ Grafiken
+\usepackage{pgffor}
+\usetikzlibrary{arrows}
+\usetikzlibrary{calc}
+
+\usepackage{enumitem} %Manuelle Numerierungsoptionen
+\usepackage{float} % Figuren an der korrekten Quellcode Position anzeigen
+\usepackage{pdflscape} % Querlegen
+
+\usepackage{listings}
+\lstset{
+	basicstyle=\scriptsize\ttfamily,
+	breakatwhitespace=false,
+	commentstyle=\color{darkgray},
+	frame=lines,
+	framexleftmargin=1.5em,
+	language=Java,
+	numbers=left,
+	numbersep=10pt,
+	numberstyle=\tiny,
+	rulecolor=\color{black},
+	showstringspaces=true,
+	tabsize=4,
+	xleftmargin=1.5em
+}
+
+\usepackage{amsthm} %Mathematiksatz-Umgebung
+\usepackage{amssymb} %Mathematische Symbole
+\usepackage{amsmath}
+
+\theoremstyle{plain}
+\newtheorem{theorem}[equation]{Theorem}
+\newtheorem{satz}[equation]{Satz}
+\newtheorem{lemma}[equation]{Lemma}
+\newtheorem{korollar}[equation]{Korollar}
+
+\theoremstyle{definition}
+\newtheorem{definition}[equation]{Definition}
+\newtheorem{aufgabe}{Aufgabe}
+\newtheorem*{behauptung}{Behauptung}
+\newtheorem{uebung}{Übung}
+\newtheorem*{loesung}{Lösung}
+
+\theoremstyle{remark}
+\newtheorem{beispiel}[equation]{Beispiel}
+\newtheorem{hinweis}{Hinweis}
+
+\newcommand{\ggT}{\textrm{ggT}}
+\newcommand{\kgV}{\textrm{kgV}}
+\newcommand{\code}[1]{\texttt{#1}} 
+
+\setlength{\parindent}{0cm}
+\setlength{\parskip}\medskipamount
+
+\begin{document}
+
+\textbf{Allgemeines Programmierpraktikum}\hfill \textbf{Sommersemester 2016} \\
+Dr. Henrik Brosenne\hfill Georg-August-Universität Göttingen \\
+\hspace*{1pt}\hfill Institut für Informatik
+\bigskip
+\hrule
+\bigskip
+\begin{center}
+{\Large \textbf{Projekt} \\ \textbf{Vorankündigung}}
+\end{center}
+\bigskip
+\textbf{Abgabe bis zum xx.xx.xxxx, xx:xx Uhr}. 
+
+\textbf{Prüfungen in der Zeit vom xx.xx bis xx.xx.xxxx}. 
+
+\input{chapter/organisation} \newpage
+\input{chapter/fusionforge} \newpage
+\input{chapter/pruefung}
+\input{chapter/spiel}
+\input{chapter/ki-wettbewerb} \newpage
+\input{chapter/breakthroughpp}
+
+\end{document}
