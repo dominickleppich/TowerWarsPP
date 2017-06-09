@@ -1,8 +1,8 @@
 package towerwarspp.test;
 
 import towerwarspp.game.Match;
-import towerwarspp.input.Requestable;
-import towerwarspp.input.TextIO;
+import towerwarspp.io.Requestable;
+import towerwarspp.io.TextIO;
 import towerwarspp.player.HumanPlayer;
 import towerwarspp.player.ai.RandomAI;
 import towerwarspp.preset.ArgumentParser;

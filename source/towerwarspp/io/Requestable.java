@@ -1,4 +1,4 @@
-package towerwarspp.input;
+package towerwarspp.io;
 
 import towerwarspp.board.MoveAnalyzer;
 import towerwarspp.preset.Move;

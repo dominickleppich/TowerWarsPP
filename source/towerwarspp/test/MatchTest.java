@@ -1,7 +1,7 @@
 package towerwarspp.test;
 
 import towerwarspp.game.Match;
-import towerwarspp.input.TextIO;
+import towerwarspp.io.TextIO;
 import towerwarspp.player.HumanPlayer;
 import towerwarspp.player.ai.RandomAI;
 

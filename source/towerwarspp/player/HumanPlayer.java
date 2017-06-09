@@ -1,6 +1,6 @@
 package towerwarspp.player;
 
-import towerwarspp.input.Requestable;
+import towerwarspp.io.Requestable;
 import towerwarspp.preset.Move;
 
 /**
