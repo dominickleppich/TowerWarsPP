@@ -38,7 +38,8 @@ public class RandomAI extends AbstractPlayer {
             Move m = null;
 
             Iterator<Move> it = moves.iterator();
-            while (i-- > 0) m = it.next();
+            while (i-- > 0)
+                m = it.next();
 
             return m;
         } catch (IllegalArgumentException e) {

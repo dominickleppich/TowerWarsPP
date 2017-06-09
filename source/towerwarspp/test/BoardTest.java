@@ -1,22 +1,14 @@
 package towerwarspp.test;
 
 import towerwarspp.board.Board;
-import towerwarspp.input.Requestable;
 import towerwarspp.input.TextIO;
-import towerwarspp.player.HumanPlayer;
 import towerwarspp.player.ai.RandomAI;
 import towerwarspp.preset.Move;
 import towerwarspp.preset.Player;
 import towerwarspp.preset.PlayerColor;
 import towerwarspp.preset.Status;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.Buffer;
-import java.util.Iterator;
 import java.util.Random;
-import java.util.Set;
 
 /**
  * Created on 12.05.2017.
@@ -63,8 +55,8 @@ public class BoardTest {
             System.out.println("It's " + b.getTurn() + " turn...");
 
             Move m = players[index % 2].request();
-            System.out.println("[LOG] Move No " + (index + 1) + ": " + m + " " + (b.makeMove(m) ? "succeeded" :
-                                                                                        "failed"));
+            System.out.println("[LOG] Move No " + (index + 1) + ": " + m + " " + (b.makeMove(
+                    m) ? "succeeded" : "failed"));
 
             // Confirm and update players
             players[index % 2].confirm(b.getStatus());

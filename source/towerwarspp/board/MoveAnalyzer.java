@@ -3,7 +3,8 @@ package towerwarspp.board;
 import towerwarspp.preset.Move;
 
 /**
- * A MoveAnalyzer is able to give a detailed description of what a move is about to do in a fixed Board scenario. The
+ * A MoveAnalyzer is able to give a detailed description of what a move is
+ * about to do in a fixed Board scenario. The
  * description is returned as a displayable string.
  * Moves are either "Valid" or "Invalid", followed by a reason.
  *

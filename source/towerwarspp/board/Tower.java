@@ -33,7 +33,7 @@ public class Tower extends Cell {
 
     public void decrease() {
         if (height == 1)
-            throw new UnsupportedOperationException("Cannot decrease: height == 1");
+            throw new UnsupportedOperationException("Cannot decrease: height " + "== 1");
 
         height--;
     }

@@ -16,21 +16,13 @@ import java.util.Set;
  * @author dominick
  */
 public class AppGrid implements Iterable<Position> {
-    /**
-     * Grid
-     */
+    /** Grid */
     private Grid<Cell> grid;
-    /**
-     * Grid logic
-     */
+    /** Grid logic */
     private GridLogic<Cell> gridLogic;
-    /**
-     * All grid coordinates
-     */
+    /** All grid coordinates */
     private Set<GridCoordinate> gridCoordinates;
-    /**
-     * Size
-     */
+    /** Size */
     private int size;
 
     // ------------------------------------------------------------
@@ -105,7 +97,8 @@ public class AppGrid implements Iterable<Position> {
     // ------------------------------------------------------------
 
     /**
-     * Get all {@link Position}'s in a given range from a given starting position.
+     * Get all {@link Position}'s in a given range from a given starting
+     * position.
      *
      * @param position
      *         Start position
@@ -115,8 +108,8 @@ public class AppGrid implements Iterable<Position> {
      * @return Set of reachable positions on the grid
      */
     public Set<Position> getRangePositions(Position position, int range) {
-        Set<GridCoordinate> coords = gridLogic.getRange(new GridCoordinate(position.getLetter(), position.getNumber()),
-                range);
+        Set<GridCoordinate> coords = gridLogic.getRange(
+                new GridCoordinate(position.getLetter(), position.getNumber()), range);
         Set<Position> pos = new HashSet<>();
         for (GridCoordinate c : coords) {
             Position p = new Position(c.getX(), c.getY());

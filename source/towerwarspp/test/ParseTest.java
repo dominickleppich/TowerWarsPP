@@ -1,7 +1,6 @@
 package towerwarspp.test;
 
 import towerwarspp.preset.Move;
-import towerwarspp.preset.Position;
 
 import java.io.BufferedReader;
 import java.io.IOException;

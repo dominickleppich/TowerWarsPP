@@ -46,17 +46,16 @@ public class Position implements Serializable {
 
     // ------------------------------------------------------------
 
-    public static Position parsePosition(String str)
-            throws IllegalArgumentException, PositionFormatException {
+    public static Position parsePosition(String str) throws IllegalArgumentException,
+                                                                    PositionFormatException {
         if (str == null)
             throw new IllegalArgumentException("str == null");
 
         try {
             return new Position(Character.toUpperCase(str.charAt(0)) - 'A' + 1,
-                    Integer.parseInt(str.substring(1)));
+                                       Integer.parseInt(str.substring(1)));
         } catch (IndexOutOfBoundsException | NumberFormatException e) {
-            throw new PositionFormatException(
-                    "Error parsing: \"" + str + "\"", e);
+            throw new PositionFormatException("Error parsing: \"" + str + "\"", e);
         }
     }
 

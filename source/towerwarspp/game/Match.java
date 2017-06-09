@@ -9,9 +9,11 @@ import towerwarspp.preset.Status;
 import java.util.Observer;
 
 /**
- * This class handles a single match. It requests, confirms and updates moves of both players, initializes them
+ * This class handles a single match. It requests, confirms and updates moves
+ * of both players, initializes them
  * correctly and terminates after the game has finished.
- * The game runs in an own thread. It is possible to wait for the match to terminate.
+ * The game runs in an own thread. It is possible to wait for the match to
+ * terminate.
  * Created on 28.05.2017.
  *
  * @author dominick
@@ -45,7 +47,8 @@ public class Match implements Runnable {
     // ------------------------------------------------------------
 
     /**
-     * Create a new match with given red and blue players and specifying the boards size.
+     * Create a new match with given red and blue players and specifying the
+     * boards size.
      *
      * @param red
      *         Red player
@@ -122,7 +125,8 @@ public class Match implements Runnable {
     }
 
     /**
-     * The main game loop. The match requests moves from both players and confirms and updates them accordingly.
+     * The main game loop. The match requests moves from both players and
+     * confirms and updates them accordingly.
      * Exceptions are handled as lose.
      */
     @Override
@@ -148,20 +152,23 @@ public class Match implements Runnable {
             try {
                 m = player[moveCounter % 2].request();
             } catch (Exception e) {
-                System.out.println((moveCounter % 2 == 0 ? "Red" : "Blue") + " failed to request! (" + e.getMessage()
-                                           + ")");
+                System.out.println(
+                        (moveCounter % 2 == 0 ? "Red" : "Blue") + " failed to" + " request! (" +
+                                e.getMessage() + ")");
                 matchStatus = (moveCounter % 2 == 0 ? Status.BLUE_WIN : Status.RED_WIN);
                 continue;
             }
-            System.out.println("LOG Move No " + (moveCounter + 1) + ": " + m + " " + (board.makeMove(m) ?
-                                                                                              "succeeded" : "failed"));
+            System.out.println(
+                    "LOG Move No " + (moveCounter + 1) + ": " + m + " " + (board.makeMove(
+                            m) ? "succeeded" : "failed"));
 
             // Confirm move
             try {
                 player[moveCounter % 2].confirm(board.getStatus());
             } catch (Exception e) {
-                System.out.println((moveCounter % 2 == 0 ? "Red" : "Blue") + " failed to confirm! (" + e.getMessage()
-                                           + ")");
+                System.out.println(
+                        (moveCounter % 2 == 0 ? "Red" : "Blue") + " failed to" + " confirm! (" +
+                                e.getMessage() + ")");
                 matchStatus = (moveCounter % 2 == 0 ? Status.BLUE_WIN : Status.RED_WIN);
                 continue;
             }
@@ -170,9 +177,9 @@ public class Match implements Runnable {
             try {
                 player[(moveCounter + 1) % 2].update(m, board.getStatus());
             } catch (Exception e) {
-                System.out
-                        .println(((moveCounter + 1) % 2 == 0 ? "Red" : "Blue") + " failed to update! (" + e.getMessage()
-                                         + ")");
+                System.out.println(
+                        ((moveCounter + 1) % 2 == 0 ? "Red" : "Blue") + " " + "failed to update! " +
+                                "(" + e.getMessage() + ")");
                 matchStatus = ((moveCounter + 1) % 2 == 0 ? Status.BLUE_WIN : Status.RED_WIN);
                 continue;
             }

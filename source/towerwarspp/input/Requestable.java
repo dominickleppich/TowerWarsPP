@@ -1,7 +1,6 @@
 package towerwarspp.input;
 
 import towerwarspp.board.MoveAnalyzer;
-import towerwarspp.output.Viewer;
 import towerwarspp.preset.Move;
 
 import java.util.Set;

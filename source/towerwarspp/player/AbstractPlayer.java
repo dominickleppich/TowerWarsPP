@@ -26,7 +26,8 @@ public abstract class AbstractPlayer implements Player {
     @Override
     public Move request() throws Exception {
         if (state != State.REQUEST)
-            throw new Exception("Player methods called in wrong order! Called request() but expected: " + state);
+            throw new Exception("Player methods called in wrong order! Called" + " request() but " +
+                                        "expected: " + state);
 
         Move move = deliver();
         board.makeMove(move);
@@ -37,11 +38,11 @@ public abstract class AbstractPlayer implements Player {
     @Override
     public void confirm(Status boardStatus) throws Exception {
         if (state != State.CONFIRM)
-            throw new Exception("Player methods called in wrong order! Called confirm() but expected: " + state);
+            throw new Exception("Player methods called in wrong order! Called" + " confirm() but " +
+                                        "expected: " + state);
 
         if (!board.getStatus().equals(boardStatus))
-            throw new Exception("Board status mismatch! Player board has status " + board.getStatus() + " and game " +
-                                        "board has status " + boardStatus);
+            throw new Exception("Board status mismatch! Player board has " + "status " + board.getStatus() + " and" + " game " + "board has status " + boardStatus);
 
         state = State.UPDATE;
     }
@@ -49,13 +50,13 @@ public abstract class AbstractPlayer implements Player {
     @Override
     public void update(Move opponentMove, Status boardStatus) throws Exception {
         if (state != State.UPDATE)
-            throw new Exception("Player methods called in wrong order! Called update() but expected: " + state);
+            throw new Exception("Player methods called in wrong order! Called" + " update() but " +
+                                        "expected: " + state);
 
         board.makeMove(opponentMove);
 
         if (!board.getStatus().equals(boardStatus))
-            throw new Exception("Board status mismatch! Player board has status " + board.getStatus() + " and game " +
-                                        "board has status " + boardStatus);
+            throw new Exception("Board status mismatch! Player board has " + "status " + board.getStatus() + " and" + " game " + "board has status " + boardStatus);
 
         state = State.REQUEST;
     }
@@ -77,8 +78,6 @@ public abstract class AbstractPlayer implements Player {
      * Method call order state
      */
     private enum State {
-        REQUEST,
-        CONFIRM,
-        UPDATE
+        REQUEST, CONFIRM, UPDATE
     }
 }

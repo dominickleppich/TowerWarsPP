@@ -49,7 +49,7 @@ public class StartTest {
     private static Player createPlayer(PlayerType type, Requestable requestable) {
         switch (type) {
             case HUMAN:
-               return new HumanPlayer(requestable);
+                return new HumanPlayer(requestable);
             case RANDOM_AI:
                 return new RandomAI();
             case SIMPLE_AI:

@@ -1,7 +1,6 @@
 package towerwarspp.input;
 
 import towerwarspp.board.MoveAnalyzer;
-import towerwarspp.output.Viewer;
 import towerwarspp.player.ai.RandomAI;
 import towerwarspp.preset.Move;
 import towerwarspp.preset.MoveFormatException;
@@ -39,16 +38,18 @@ public class TextIO implements Requestable, Observer {
 
         do {
             if (!valid) {
-                System.out.println("\t" + analyzer.analyzeMove(m) +
-                                           "\n\tPlease try again...\n\tA possible move is: " +
-                                           RandomAI.getRandomMoveFromSet(possibleMoves));
+                System.out.println("\t" + analyzer.analyzeMove(
+                        m) + "\n\tPlease try again...\n\tA possible move is: " + "" + "" + "" +
+                                           RandomAI.getRandomMoveFromSet(
+                        possibleMoves));
             }
             // TODO IO class
             if (!correctFormat) {
                 System.out.println("\tYour move syntax was not correct!");
                 System.out.println("\tThe move format is: LetterNumber->LetterNumber");
-                System.out.println("\tTo move the token at position A1 to position B2 type:");
-                System.out.println("\tA1->B2\t\t(lower case syntax is allowed as well... a1->b2)");
+                System.out.println("\tTo move the token at position A1 to position B2 " + "type:");
+                System.out.println(
+                        "\tA1->B2\t\t(lower case syntax is allowed as " + "well..." + " a1->b2)");
             }
             System.out.print("Please enter a move: ");
 
@@ -65,7 +66,8 @@ public class TextIO implements Requestable, Observer {
             } catch (MoveFormatException e) {
                 correctFormat = false;
 
-                // If this exception occurs, the move couldn't be checked, thus no valid message needed
+                // If this exception occurs, the move couldn't be checked,
+                // thus no valid message needed
                 valid = true;
             }
 
