@@ -198,6 +198,11 @@ public class Board extends Observable {
                 public Set<Move> getPossibleMoves() {
                     return board.getPossibleMoves();
                 }
+
+                @Override
+                public MoveAnalyzer getMoveAnalyzer() {
+                    return new MoveAnalyzer(board);
+                }
             };
 
         // Return viewer
