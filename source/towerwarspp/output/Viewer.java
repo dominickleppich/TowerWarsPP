@@ -1,6 +1,7 @@
 package towerwarspp.output;
 
 import towerwarspp.board.Cell;
+import towerwarspp.board.MoveAnalyzer;
 import towerwarspp.preset.Move;
 import towerwarspp.preset.PlayerColor;
 import towerwarspp.preset.Position;
@@ -52,4 +53,11 @@ public interface Viewer {
      * @return Set of possible moves
      */
     Set<Move> getPossibleMoves();
+
+    /**
+     * Get a move analyzing instance.
+     *
+     * @return {@link MoveAnalyzer}
+     */
+    MoveAnalyzer getMoveAnalyzer();
 }
