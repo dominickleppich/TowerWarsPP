@@ -223,7 +223,15 @@ public class DrawPanel extends JPanel implements MouseListener {
         if (tmpPos == null)
             tmpPos = pos;
         else {
-            move = new Move(tmpPos, pos); tmpPos = null; moveReady();
+            move = new Move(tmpPos, pos);
+            tmpPos = null;
+
+            if (viewer.getPossibleMoves().contains(move))
+                moveReady();
+            else {
+                debugText = "Illegal move " + move;
+                repaint();
+            }
         }
     }
 
