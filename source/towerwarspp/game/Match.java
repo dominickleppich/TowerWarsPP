@@ -60,11 +60,8 @@ public class Match implements Runnable {
      *         Observer of this game to be updated after each move
      */
     public Match(Player red, Player blue, int size, Observer observer) {
-        player = new Player[] {red, blue};
-        this.size = size;
-        board = new Board(size);
-        this.observer = observer;
-        if (observer != null)
+        player = new Player[] {red, blue}; this.size = size;
+        board = new Board(size); this.observer = observer; if (observer != null)
             board.addObserver(observer);
     }
 
@@ -73,19 +70,15 @@ public class Match implements Runnable {
     /**
      * Starts the match.
      *
-     * @throws RuntimeException
-     *         if the game is already running
-     * @throws Exception
-     *         if the game is not initialized
+     * @throws MatchException
+     *         if the game could not be started
      */
-    public void start() throws Exception {
+    public void start() throws MatchException {
         if (matchThread != null)
-            throw new RuntimeException("Match is already running!");
-        if (!initialized)
-            throw new Exception("Match is not initialized!");
+            throw new MatchException("match already running"); if (!initialized)
+            throw new MatchException("match is not initialized");
 
-        matchThread = new Thread(this);
-        matchThread.start();
+        matchThread = new Thread(this); matchThread.start();
     }
 
     /**
@@ -112,16 +105,17 @@ public class Match implements Runnable {
     /**
      * Initialize the match (and the players)
      *
+     * @throws MatchException
+     *         if the game is already initialized
      * @throws Exception
-     *         if the game was not initialized
+     *         if initializing players fails
      */
-    public void init() throws Exception {
+    public void init() throws MatchException, Exception {
         if (initialized)
-            throw new RuntimeException("Match was already initialized!");
+            throw new RuntimeException("match already initialized");
 
         player[0].init(size, PlayerColor.RED);
-        player[1].init(size, PlayerColor.BLUE);
-        initialized = true;
+        player[1].init(size, PlayerColor.BLUE); initialized = true;
     }
 
     /**
@@ -142,23 +136,24 @@ public class Match implements Runnable {
                 e.printStackTrace();
             }
 
-            System.out.println("------------------------------------------------------------");
+            System.out.println(
+                    "------------------------------------------------------------");
             System.out.println("It's " + board.getTurn() + " turn...");
 
             // Request move
-            Move m = null;
-            try {
+            Move m = null; try {
                 m = player[moveCounter % 2].request();
             } catch (Exception e) {
                 System.out.println(
-                        (moveCounter % 2 == 0 ? "Red" : "Blue") + " failed to" + " request! (" +
-                                e.getMessage() + ")");
-                matchStatus = (moveCounter % 2 == 0 ? Status.BLUE_WIN : Status.RED_WIN);
+                        (moveCounter % 2 == 0 ? "Red" : "Blue") + " failed " +
+                                "to" + " request! (" + e.getMessage() + ")");
+                matchStatus = (moveCounter % 2 == 0 ? Status.BLUE_WIN :
+                                       Status.RED_WIN);
                 continue;
-            }
-            String analyzeResult = board.getMoveAnalyzer().analyzeMove(m);
+            } String analyzeResult = board.getMoveAnalyzer().analyzeMove(m);
             System.out.println(
-                    "LOG Move No " + (moveCounter + 1) + ": " + m + " " + (board.makeMove(
+                    "LOG Move No " + (moveCounter + 1) + ": " + m + " " +
+                            (board.makeMove(
                             m) ? "succeeded" : "failed"));
             System.out.println("Analyzing result: " + analyzeResult);
 
@@ -167,9 +162,10 @@ public class Match implements Runnable {
                 player[moveCounter % 2].confirm(board.getStatus());
             } catch (Exception e) {
                 System.out.println(
-                        (moveCounter % 2 == 0 ? "Red" : "Blue") + " failed to" + " confirm! (" +
-                                e.getMessage() + ")");
-                matchStatus = (moveCounter % 2 == 0 ? Status.BLUE_WIN : Status.RED_WIN);
+                        (moveCounter % 2 == 0 ? "Red" : "Blue") + " failed " +
+                                "to" + " confirm! (" + e.getMessage() + ")");
+                matchStatus = (moveCounter % 2 == 0 ? Status.BLUE_WIN :
+                                       Status.RED_WIN);
                 continue;
             }
 
@@ -178,9 +174,11 @@ public class Match implements Runnable {
                 player[(moveCounter + 1) % 2].update(m, board.getStatus());
             } catch (Exception e) {
                 System.out.println(
-                        ((moveCounter + 1) % 2 == 0 ? "Red" : "Blue") + " " + "failed to update! " +
-                                "(" + e.getMessage() + ")");
-                matchStatus = ((moveCounter + 1) % 2 == 0 ? Status.BLUE_WIN : Status.RED_WIN);
+                        ((moveCounter + 1) % 2 == 0 ? "Red" : "Blue") + " " +
+                                "failed to update! " + "(" + e.getMessage() +
+                                ")");
+                matchStatus = ((moveCounter + 1) % 2 == 0 ? Status.BLUE_WIN :
+                                       Status.RED_WIN);
                 continue;
             }
 
