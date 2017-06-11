@@ -227,6 +227,10 @@ public class ArgumentParser {
         return getFlag("network");
     }
 
+    public boolean isGraphic() throws ArgumentParserException {
+        return getFlag("graphic");
+    }
+
     public int getSize() throws ArgumentParserException {
         return Integer.parseInt((String) getSetting("size"));
     }
