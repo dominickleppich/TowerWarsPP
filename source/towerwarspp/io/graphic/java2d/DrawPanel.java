@@ -135,7 +135,25 @@ public class DrawPanel extends JPanel implements MouseListener {
                     g.drawString(position.toString(), x - 6, y + 3);
                 }
 
+                // Highlight clicked cell
+                if (position.equals(tmpPos)) {
+                    g.setColor(Color.ORANGE);
+                    g.draw(hex(x, y, HEX_SIZE - 5));
+                }
+            }
+        }
 
+        // Highlight possible moves
+        if (tmpPos != null) {
+            g.setColor(Color.GREEN);
+            for (Move m : viewer.getPossibleMoves()) {
+                if (m != null && m.getStart().equals(tmpPos)) {
+                    int l = m.getEnd().getLetter();
+                    int n = m.getEnd().getNumber();
+                    int x = (int) (sizesqrt3 * (l + n  / 2.0));
+                    int y = (int) (HEX_SIZE * 3.0 / 2 * n);
+                    g.draw(hex(x, y, HEX_SIZE - 5));
+                }
             }
         }
 
