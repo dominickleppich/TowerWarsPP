@@ -4,6 +4,7 @@ import towerwarspp.io.Requestable;
 import towerwarspp.io.graphic.java2d.Java2DFrame;
 import towerwarspp.player.ai.SimpleStrategy;
 import towerwarspp.preset.Move;
+import towerwarspp.preset.PlayerColor;
 
 /**
  * Human player who can be requested for moves.
@@ -19,10 +20,6 @@ public class HumanPlayer extends AbstractPlayer {
 
     public HumanPlayer(Requestable requestable) {
         this.requestable = requestable;
-
-        // TODO hacky
-        if (requestable instanceof Java2DFrame)
-            ((Java2DFrame) requestable).setRatingStrategy(new SimpleStrategy(board));
     }
 
     // ------------------------------------------------------------
@@ -30,5 +27,15 @@ public class HumanPlayer extends AbstractPlayer {
     @Override
     public Move deliver() throws Exception {
         return requestable.request(board.getPossibleMoves(), board.getMoveAnalyzer());
+    }
+
+    // ------------------------------------------------------------
+
+    @Override
+    public void init(int size, PlayerColor color) throws Exception {
+        super.init(size, color);
+
+        if (requestable instanceof Java2DFrame)
+            ((Java2DFrame) requestable).setRatingStrategy(new SimpleStrategy(board));
     }
 }
