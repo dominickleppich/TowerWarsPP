@@ -218,6 +218,10 @@ public class Board extends Observable implements Viewable {
             return "Invalid (" + move + "): Position out of board range";
         }
 
+        // Empty cells cannot move
+        if (startCell == null)
+            return "Invalid (" + move + "): Empty cell cannot be moved";
+
         // Check correct player
         if (startCell.getColor() != getTurn())
             return "Invalid (" + move + "): Cell doesn't belong to the current player";
