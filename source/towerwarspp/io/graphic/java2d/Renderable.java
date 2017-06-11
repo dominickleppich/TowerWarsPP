@@ -1,4 +1,4 @@
-package towerwarspp.io.graphic;
+package towerwarspp.io.graphic.java2d;
 
 import java.awt.*;
 

@@ -131,14 +131,16 @@ public class Match implements Runnable {
      */
     @Override
     public void run() {
-        // Print board first time
-        System.out.println(board);
         int moveCounter = 0;
 
         Status matchStatus = Status.OK;
 
         while (matchStatus == Status.OK) {
-            //Thread.sleep(50);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             System.out.println("------------------------------------------------------------");
             System.out.println("It's " + board.getTurn() + " turn...");

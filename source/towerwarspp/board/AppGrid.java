@@ -1,6 +1,5 @@
 package towerwarspp.board;
 
-import eu.nepster.frozencube.game.grid.Grid;
 import eu.nepster.frozencube.game.grid.GridCoordinate;
 import eu.nepster.frozencube.game.grid.GridLogic;
 import eu.nepster.frozencube.game.grid.hex.HexGrid;
@@ -17,7 +16,7 @@ import java.util.Set;
  */
 public class AppGrid implements Iterable<Position> {
     /** Grid */
-    private Grid<Cell> grid;
+    private HexGrid<Cell> grid;
     /** Grid logic */
     private GridLogic<Cell> gridLogic;
     /** All grid coordinates */

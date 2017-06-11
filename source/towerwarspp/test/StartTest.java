@@ -1,8 +1,10 @@
 package towerwarspp.test;
 
 import towerwarspp.game.Match;
+import towerwarspp.io.InputOutputable;
 import towerwarspp.io.Requestable;
 import towerwarspp.io.TextIO;
+import towerwarspp.io.graphic.java2d.Java2DFrame;
 import towerwarspp.player.HumanPlayer;
 import towerwarspp.player.ai.RandomAI;
 import towerwarspp.preset.ArgumentParser;
@@ -23,17 +25,19 @@ public class StartTest {
             ArgumentParser ap = new ArgumentParser(args);
 
             // Create requestable and observer
-            TextIO t = new TextIO();
-            Requestable requestable = t;
-            Observer observer = t;
+            InputOutputable inout;
+            if (ap.isGraphic())
+                inout = new Java2DFrame();
+            else
+                inout = new TextIO();
 
             // Create players
             Player red, blue;
-            red = createPlayer(ap.getRed(), requestable);
-            blue = createPlayer(ap.getBlue(), requestable);
+            red = createPlayer(ap.getRed(), inout);
+            blue = createPlayer(ap.getBlue(), inout);
 
             // Create match
-            Match match = new Match(red, blue, ap.getSize(), observer);
+            Match match = new Match(red, blue, ap.getSize(), inout);
             match.init();
 
             // Start match
@@ -41,6 +45,7 @@ public class StartTest {
             match.waitMatch();
         } catch (Exception e) {
             System.err.println("Failed to start game: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
