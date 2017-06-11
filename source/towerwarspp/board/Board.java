@@ -162,7 +162,8 @@ public class Board extends Observable implements Viewable {
 
                 @Override
                 public Cell getCell(Position position) {
-                    return board.grid.getCell(position).clone();
+                    Cell cell = board.grid.getCell(position);
+                    return cell == null ? null : cell.clone();
                 }
 
                 @Override
