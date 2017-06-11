@@ -22,7 +22,7 @@ public abstract class Cell {
      *
      * @return PlayerColor
      */
-    PlayerColor getColor() {
+    public PlayerColor getColor() {
         return color;
     }
 
