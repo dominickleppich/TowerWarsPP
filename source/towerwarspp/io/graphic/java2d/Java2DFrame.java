@@ -5,6 +5,7 @@ import towerwarspp.board.Board;
 import towerwarspp.board.MoveAnalyzer;
 import towerwarspp.io.InputOutputable;
 import towerwarspp.io.Viewer;
+import towerwarspp.player.ai.RateStrategy;
 import towerwarspp.preset.Move;
 
 import javax.swing.*;
@@ -34,6 +35,10 @@ public class Java2DFrame extends JFrame implements InputOutputable{
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+    }
+
+    public void setRatingStrategy(RateStrategy strategy) {
+        panel.setRatingStrategy(strategy);
     }
 
     // ------------------------------------------------------------

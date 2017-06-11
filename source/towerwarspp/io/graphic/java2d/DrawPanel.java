@@ -5,6 +5,7 @@ import towerwarspp.board.Cell;
 import towerwarspp.board.Token;
 import towerwarspp.board.Tower;
 import towerwarspp.io.Viewer;
+import towerwarspp.player.ai.RateStrategy;
 import towerwarspp.preset.Move;
 import towerwarspp.preset.PlayerColor;
 import towerwarspp.preset.Position;
@@ -38,6 +39,8 @@ public class DrawPanel extends JPanel implements MouseListener {
 
     private HashMap<Position, Polygon> grid;
 
+    private RateStrategy strategy;
+
     // ------------------------------------------------------------
 
     public DrawPanel() {
@@ -63,6 +66,10 @@ public class DrawPanel extends JPanel implements MouseListener {
                 }
             }
         }
+    }
+
+    public void setRatingStrategy(RateStrategy strategy) {
+        this.strategy = strategy;
     }
 
     // ------------------------------------------------------------
@@ -153,6 +160,9 @@ public class DrawPanel extends JPanel implements MouseListener {
                     int x = (int) (sizesqrt3 * (l + n  / 2.0));
                     int y = (int) (HEX_SIZE * 3.0 / 2 * n);
                     g.draw(hex(x, y, HEX_SIZE - 5));
+
+                    if (strategy != null)
+                        g.drawString(Integer.toString(strategy.rate(m)), x - 10, y - 20);
                 }
             }
         }
