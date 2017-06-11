@@ -54,7 +54,7 @@ public class Board extends Observable implements Viewable {
         grid = new AppGrid(size);
 
         // TODO better strategy
-        this.maxTowerSize = 3;
+        this.maxTowerSize = size / 3;
 
         this.turn = RED;
 
