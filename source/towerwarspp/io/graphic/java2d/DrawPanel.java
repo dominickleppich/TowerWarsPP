@@ -190,29 +190,23 @@ public class DrawPanel extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
-            Point p = mouseEvent.getPoint();
-            Position pos = null;
-            for (Map.Entry<Position, Polygon> e : grid.entrySet()) {
-                if (e.getValue().contains(p)) {
-                    pos = e.getKey();
-                    break;
-                }
-            }
-            debugText = "Clicked " + p + (pos != null ? pos : "");
-            repaint();
 
-            if (tmpPos == null)
-                tmpPos = pos;
-            else {
-                move = new Move(tmpPos, pos);
-                tmpPos = null;
-                moveReady();
-            }
     }
 
     @Override
     public void mousePressed(MouseEvent mouseEvent) {
+        Point p = mouseEvent.getPoint(); Position pos = null;
+        for (Map.Entry<Position, Polygon> e : grid.entrySet()) {
+            if (e.getValue().contains(p)) {
+                pos = e.getKey(); break;
+            }
+        } debugText = "Clicked " + p + (pos != null ? pos : ""); repaint();
 
+        if (tmpPos == null)
+            tmpPos = pos;
+        else {
+            move = new Move(tmpPos, pos); tmpPos = null; moveReady();
+        }
     }
 
     @Override
