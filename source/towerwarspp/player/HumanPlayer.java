@@ -1,6 +1,8 @@
 package towerwarspp.player;
 
 import towerwarspp.io.Requestable;
+import towerwarspp.io.graphic.java2d.Java2DFrame;
+import towerwarspp.player.ai.SimpleStrategy;
 import towerwarspp.preset.Move;
 
 /**
@@ -17,6 +19,10 @@ public class HumanPlayer extends AbstractPlayer {
 
     public HumanPlayer(Requestable requestable) {
         this.requestable = requestable;
+
+        // TODO hacky
+        if (requestable instanceof Java2DFrame)
+            ((Java2DFrame) requestable).setRatingStrategy(new SimpleStrategy(board));
     }
 
     // ------------------------------------------------------------
