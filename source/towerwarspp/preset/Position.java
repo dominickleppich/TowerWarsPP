@@ -28,7 +28,7 @@ public class Position implements Serializable {
 
     private void setLetter(int letter) {
         if (letter <= 0 || letter > 26)
-            throw new IllegalArgumentException("letter out of range!");
+            throw new IllegalArgumentException("letter " + letter + " out of range!");
 
         this.letter = letter;
     }
@@ -39,7 +39,7 @@ public class Position implements Serializable {
 
     private void setNumber(int number) {
         if (number <= 0 || number > 26)
-            throw new IllegalArgumentException("number out of range!");
+            throw new IllegalArgumentException("number " + number + " out of range!");
 
         this.number = number;
     }
