@@ -27,7 +27,8 @@ public class DrawPanel extends JPanel implements MouseListener {
     private static final int HEX_SIZE = 50;
     private static final double BASE_SIZE = 0.8;
     private static final int TOKEN_SIZE = 30;
-    private static final int TOWER_RING_DISTANCE = 5;
+    private static final int TOWER_RING_DISTANCE = 4;
+    private static final float STROKE = 2f;
 
     // ------------------------------------------------------------
 
@@ -81,7 +82,7 @@ public class DrawPanel extends JPanel implements MouseListener {
         // Nice graphics
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-        g.setStroke(new BasicStroke(2));
+        g.setStroke(new BasicStroke(STROKE));
 
         // If no viewer is available, nothing to do
         if (viewer == null)
