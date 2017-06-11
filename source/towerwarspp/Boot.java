@@ -42,13 +42,14 @@ public class Boot {
             match.start(); match.waitMatch();
         } catch (ArgumentParserException e) {
             StringBuilder sb = new StringBuilder();
-            sb.append("Something went wrong starting with your parameters\n");
+            sb.append("Something went wrong with your parameters... :(\n");
             sb.append("All parameters not written in [] have to be set!\n\n");
             sb.append("The possible parameters are:\n");
-            sb.append("\t-red\tSet the red player type {human, random, simple}");
-            sb.append("\t-blue\tSet the blue player type {human, random, simple}");
-            sb.append("\t-size\tSet the board size {6, 7, 8, ..., 26}");
-            sb.append("\t-red\tSet the red player type {human, random, simple}");
+            sb.append("\t-red\t\t\tSet the red player type {human, random, simple}\n");
+            sb.append("\t-blue\t\t\tSet the blue player type {human, random, simple}\n");
+            sb.append("\t-size\t\t\tSet the board size {4, 5, 6, ..., 26}\n");
+            sb.append("\t[--graphic]\t\tActivate a graphical in- and output\n");
+            System.out.println(sb.toString());
         } catch (Exception e) {
             System.err.println("Failed to init or start match!");
             e.printStackTrace();
