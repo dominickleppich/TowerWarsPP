@@ -6,6 +6,7 @@ import towerwarspp.preset.*;
 
 import java.util.HashSet;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 
 import static towerwarspp.preset.PlayerColor.BLUE;
@@ -676,6 +677,17 @@ public class Board extends Observable implements Viewable {
      */
     private void switchTurn() {
         turn = turn == RED ? BLUE : RED;
+    }
+
+    // ------------------------------------------------------------
+
+    @Override
+    public void addObserver(Observer observer) {
+        super.addObserver(observer);
+        // Show board without move
+        setChanged();
+        notifyObservers(null);
+        clearChanged();
     }
 
     // ------------------------------------------------------------

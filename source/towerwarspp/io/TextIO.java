@@ -1,5 +1,6 @@
 package towerwarspp.io;
 
+import com.sun.corba.se.spi.orbutil.fsm.Input;
 import towerwarspp.board.MoveAnalyzer;
 import towerwarspp.player.ai.RandomAI;
 import towerwarspp.preset.Move;
@@ -16,7 +17,7 @@ import java.util.Set;
  *
  * @author dominick
  */
-public class TextIO implements Requestable, Observer {
+public class TextIO implements InputOutputable {
     private BufferedReader rd;
 
     // ------------------------------------------------------------
