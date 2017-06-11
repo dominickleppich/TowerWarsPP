@@ -1,6 +1,5 @@
 package towerwarspp.io;
 
-import com.sun.corba.se.spi.orbutil.fsm.Input;
 import towerwarspp.board.MoveAnalyzer;
 import towerwarspp.player.ai.RandomAI;
 import towerwarspp.preset.Move;
@@ -9,7 +8,6 @@ import towerwarspp.preset.MoveFormatException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Observable;
-import java.util.Observer;
 import java.util.Set;
 
 /**
