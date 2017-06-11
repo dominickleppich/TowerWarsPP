@@ -218,6 +218,10 @@ public class Board extends Observable implements Viewable {
             return "Invalid (" + move + "): Position out of board range";
         }
 
+        // Check correct player
+        if (startCell.getColor() != getTurn())
+            return "Invalid (" + move + "): Cell doesn't belong to the current player";
+
         if (move.getStart().equals(move.getEnd()))
             return "Invalid (" + move + "): Start and end position are equal";
 
@@ -289,6 +293,9 @@ public class Board extends Observable implements Viewable {
             }
         }
         else if (startCell instanceof Tower) {
+            if (((Tower) startCell).isBlocked())
+                return "Invalid (" + move + "): Blocked tower cannot move";
+
             // Towers cannot range move
             if (grid.distance(move.getStart(), move.getEnd()) > 1)
                 return "Invalid (" + move + "): Towers cannot range move";
@@ -314,13 +321,13 @@ public class Board extends Observable implements Viewable {
 
                 // Tower on tower increase its height, if size not exceeded
             else if (endCell instanceof Tower) {
-                if (((Tower) endCell).getHeight() < maxTowerSize)
-                    return "Valid (" + move + "): Tower moved on another own " +
-                                   "" + "" + "" + "" + "" + "" + "" + "tower " +
-                                   "and " + "increased " + "its " + "height";
+                if (!((Tower) endCell).isBlocked())
+                    return "Valid (" + move + "): Tower tried to unblock own unblocked tower";
+                else if (((Tower) endCell).getHeight() < maxTowerSize)
+                    return "Valid (" + move + "): Tower moved on another own tower and increased its height";
                 else
                     return "Invalid (" + move + "): Tower tried to increase "
-                                   + "tower with max " + "height";
+                                   + "tower with max height";
             }
             else
                 return "Invalid (" + move + "): Tower moved on unknown cell "
@@ -371,15 +378,11 @@ public class Board extends Observable implements Viewable {
                 else if (endCell instanceof Tower) {
                     if (((Tower) endCell).isBlocked())
                         ((Tower) endCell).unblock();
-                    else {
-                        if (((Tower) endCell).getHeight() < maxTowerSize)
-                            ((Tower) endCell).increase();
-                        else
-                            throw new IllegalMoveException("tower max height " +
-                                                                   "" + "" +
-                                                                   "" + "" +
-                                                                   "exceed");
-                    }
+                    else if (((Tower) endCell).getHeight() < maxTowerSize)
+                        ((Tower) endCell).increase();
+                    else
+                        throw new IllegalMoveException("tower max height exceed");
+
                 }
                 else
                     throw new IllegalMoveException("unknown end cell type");
@@ -408,6 +411,10 @@ public class Board extends Observable implements Viewable {
             }
         }
         else if (startCell instanceof Tower) {
+            // Blocked towers cannot move!
+            if (((Tower) startCell).isBlocked())
+                throw new IllegalMoveException("blocked tower move");
+
             // Decrease tower if possible. Towers of height 1 become tokens
             if (((Tower) startCell).getHeight() == 1)
                 grid.setCell(move.getStart(), new Token(startCell.getColor()));
@@ -437,7 +444,9 @@ public class Board extends Observable implements Viewable {
 
                 // Tower on tower increase its height, if size not exceeded
             else if (endCell instanceof Tower) {
-                if (((Tower) endCell).getHeight() < maxTowerSize)
+                if (((Tower) endCell).isBlocked())
+                    ((Tower) endCell).unblock();
+                else if (((Tower) endCell).getHeight() < maxTowerSize)
                     ((Tower) endCell).increase();
                 else
                     throw new IllegalMoveException("tower max height exceed");
@@ -622,7 +631,7 @@ public class Board extends Observable implements Viewable {
 
                 // Tokens cannot block already blocked enemy towers
             else if (cell.getColor() != tokenColor && cell instanceof Tower
-                         && ((Tower) cell).isBlocked())
+                         && ((Tower) cell).isBlocked() && grid.distance(position, p) > 1)
                 continue;
 
             // All other cells are valid
