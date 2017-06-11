@@ -545,7 +545,7 @@ public class Board extends Observable implements Viewable {
 
             if (cell instanceof Token)
                 moves.addAll(getPossibleMovesForToken(pos));
-            else if (cell instanceof Tower)
+            else if (cell instanceof Tower && !((Tower) cell).isBlocked())
                 moves.addAll(getPossibleMovesForTower(pos));
         }
 
