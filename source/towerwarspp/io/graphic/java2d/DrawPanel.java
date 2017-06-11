@@ -230,6 +230,9 @@ public class DrawPanel extends JPanel implements MouseListener {
             }
         } debugText = "Clicked " + p + (pos != null ? pos : ""); repaint();
 
+        if (pos == null)
+            return;
+
         if (tmpPos == null)
             tmpPos = pos;
         else {
