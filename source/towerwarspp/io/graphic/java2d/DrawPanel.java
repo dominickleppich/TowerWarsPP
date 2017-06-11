@@ -109,10 +109,18 @@ public class DrawPanel extends JPanel implements MouseListener {
                                                           TOKEN_SIZE,
                                                           TOKEN_SIZE));
                     else {
+                        // Blocked towers are dark gray
+                        if (((Tower) cell).isBlocked())
+                            g.setColor(Color.DARK_GRAY);
+
                         g.fill(new Ellipse2D.Float(x - TOKEN_SIZE / 2.0f,
                                                           y - TOKEN_SIZE / 2.0f,
                                                           TOKEN_SIZE,
                                                           TOKEN_SIZE));
+
+                        g.setColor(
+                                cell.getColor() == PlayerColor.RED ? Color.RED :
+                                        Color.BLUE);
                         for (int i = 1; i <= ((Tower) cell).getHeight(); i++)
                             g.draw(new Ellipse2D.Float(x - TOKEN_SIZE / 2.0f
                                                                - i * TOWER_RING_DISTANCE,
