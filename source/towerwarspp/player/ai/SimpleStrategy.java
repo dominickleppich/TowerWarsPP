@@ -27,8 +27,6 @@ public class SimpleStrategy implements RateStrategy {
 
     @Override
     public int rate(Move move) {
-        System.out.println("Rating " + move);
-
         if (move == null)
             return Integer.MIN_VALUE;
 
@@ -66,7 +64,7 @@ public class SimpleStrategy implements RateStrategy {
         if (oppTokenAfter < oppTokenBefore)
             rating += 5;
 
-        if (oppTokenAfter < oppTowerBefore)
+        if (oppTowerAfter < oppTowerBefore)
             rating += 10;
 
         // Building towers is good as well

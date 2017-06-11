@@ -16,7 +16,6 @@ public class BestRatedMoveAI extends AbstractPlayer {
         // Rate all moves and keep the maximum
         RateableMove move = null;
         for (Move m : board.getPossibleMoves()) {
-            System.out.println("Possible move " + m);
             RateableMove tmp = new RateableMove(m, strategy);
             if (move == null || move.compareTo(tmp) < 0)
                 move = tmp;
