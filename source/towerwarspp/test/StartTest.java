@@ -6,6 +6,7 @@ import towerwarspp.io.Requestable;
 import towerwarspp.io.TextIO;
 import towerwarspp.io.graphic.java2d.Java2DFrame;
 import towerwarspp.player.HumanPlayer;
+import towerwarspp.player.ai.BestRatedMoveAI;
 import towerwarspp.player.ai.RandomAI;
 import towerwarspp.preset.ArgumentParser;
 import towerwarspp.preset.Player;
@@ -58,8 +59,7 @@ public class StartTest {
             case RANDOM_AI:
                 return new RandomAI();
             case SIMPLE_AI:
-                // TODO implement this
-                return null;
+                return new BestRatedMoveAI();
         }
         return null;
     }

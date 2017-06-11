@@ -1,8 +1,11 @@
 package towerwarspp.board;
 
-import towerwarspp.io.Viewer;
 import towerwarspp.io.Viewable;
-import towerwarspp.preset.*;
+import towerwarspp.io.Viewer;
+import towerwarspp.preset.Move;
+import towerwarspp.preset.PlayerColor;
+import towerwarspp.preset.Position;
+import towerwarspp.preset.Status;
 
 import java.util.HashSet;
 import java.util.Observable;
@@ -59,6 +62,27 @@ public class Board extends Observable implements Viewable {
         blueBasePosition = new Position(grid.getSize(), grid.getSize());
 
         initBoard();
+    }
+
+    public Board(Board b) {
+        grid = new AppGrid(b.getSize());
+
+        this.maxTowerSize = b.maxTowerSize; this.turn = b.turn;
+        this.status = b.status;
+
+        this.redBasePosition = b.redBasePosition;
+        this.blueBasePosition = b.blueBasePosition;
+
+        // Copy board
+        for (int l = 1; l <= getSize(); l++) {
+            for (int n = 1; n <= getSize(); n++) {
+                Position p = new Position(l, n); Cell c = b.grid.getCell(p);
+                grid.setCell(p, c == null ? null : c.clone());
+            }
+        }
+
+        // Calculate possible moves
+        possibleMoves = calculatePossibleMoves();
     }
 
     // ------------------------------------------------------------
@@ -186,6 +210,63 @@ public class Board extends Observable implements Viewable {
     // Helper functions
 
     /**
+     * Count tokens owned by a player.
+     *
+     * @param color
+     *         Player color
+     *
+     * @return Number of owned tokens
+     */
+    public int getPlayerTokenCount(PlayerColor color) {
+        int counter = 0; for (Position p : grid) {
+            Cell c = grid.getCell(p); if (c != null && c instanceof Token && c.getColor() == color)
+                counter++;
+        } return counter;
+    }
+
+    /**
+     * Count towers owned by a player.
+     *
+     * @param color
+     *         Player color
+     *
+     * @return Number of owned towers
+     */
+    public int getPlayerTowerCount(PlayerColor color) {
+        int counter = 0; for (Position p : grid) {
+            Cell c = grid.getCell(p); if (c != null && c instanceof Tower && c.getColor() == color)
+                counter++;
+        } return counter;
+    }
+
+    /**
+     * Count tokens and towers owned by a player.
+     *
+     * @param color
+     *         Player color
+     *
+     * @return Number of owned tokens and towers
+     */
+    public int getPlayerPlayableCellCount(PlayerColor color) {
+        int counter = 0;
+        counter += getPlayerTokenCount(color);
+        counter += getPlayerTowerCount(color);
+        return counter;
+    }
+
+    public int distance(Position a, Position b) {
+        return grid.distance(a, b);
+    }
+
+    public Position getRedBasePosition() {
+        return redBasePosition;
+    }
+
+    public Position getBlueBasePosition() {
+        return blueBasePosition;
+    }
+
+    /**
      * Checks if a given {@link Move} is valid in the current situation.
      *
      * @param move
@@ -210,8 +291,7 @@ public class Board extends Observable implements Viewable {
         if (move == null)
             return "Valid (null): Surrender move";
 
-        Cell startCell = null, endCell = null;
-        try {
+        Cell startCell = null, endCell = null; try {
             startCell = grid.getCell(move.getStart());
             endCell = grid.getCell(move.getEnd());
         } catch (IndexOutOfBoundsException e) {
@@ -224,7 +304,8 @@ public class Board extends Observable implements Viewable {
 
         // Check correct player
         if (startCell.getColor() != getTurn())
-            return "Invalid (" + move + "): Cell doesn't belong to the current player";
+            return "Invalid (" + move + "): Cell doesn't belong to the " +
+                           "current player";
 
         if (move.getStart().equals(move.getEnd()))
             return "Invalid (" + move + "): Start and end position are equal";
@@ -247,7 +328,8 @@ public class Board extends Observable implements Viewable {
                 // Cannot move on own base
                 if (endCell instanceof Base)
                     return "Invalid (" + move + "): Token cannot move on own " +
-                                   "" + "" + "" + "" + "" + "" + "" + "base";
+                                   "" + "" + "" + "" + "" + "" + "" + "" +
+                                   "base";
                     // Token on token is a new tower
                 else if (endCell instanceof Token)
                     return "Valid (" + move + "): Token moved on own token "
@@ -260,7 +342,8 @@ public class Board extends Observable implements Viewable {
                         return "Valid (" + move + "): Token moved on tower "
                                        + "and increased size";
                     else
-                        return "Invalid (" + move + "): Token tried to increase tower with max height";
+                        return "Invalid (" + move + "): Token tried to " +
+                                       "increase tower with max height";
                 }
                 else
                     return "Invalid (" + move + "): Token moved on unknown "
@@ -286,9 +369,11 @@ public class Board extends Observable implements Viewable {
                         // if move is ranged, block the tower
                     else {
                         if (((Tower) endCell).isBlocked())
-                            return "Invalid (" + move + "): Token tried to block already blocked tower";
+                            return "Invalid (" + move + "): Token tried to " +
+                                           "block already blocked tower";
                         else
-                            return "Valid (" + move + "): Token blocked opponent tower with a ranged move";
+                            return "Valid (" + move + "): Token blocked " +
+                                           "opponent tower with a ranged move";
                     }
                 }
                 else
@@ -326,9 +411,11 @@ public class Board extends Observable implements Viewable {
                 // Tower on tower increase its height, if size not exceeded
             else if (endCell instanceof Tower) {
                 if (!((Tower) endCell).isBlocked())
-                    return "Valid (" + move + "): Tower tried to unblock own unblocked tower";
+                    return "Valid (" + move + "): Tower tried to unblock own " +
+                                   "unblocked tower";
                 else if (((Tower) endCell).getHeight() < maxTowerSize)
-                    return "Valid (" + move + "): Tower moved on another own tower and increased its height";
+                    return "Valid (" + move + "): Tower moved on another own " +
+                                   "tower and increased its height";
                 else
                     return "Invalid (" + move + "): Tower tried to increase "
                                    + "tower with max height";
@@ -385,7 +472,8 @@ public class Board extends Observable implements Viewable {
                     else if (((Tower) endCell).getHeight() < maxTowerSize)
                         ((Tower) endCell).increase();
                     else
-                        throw new IllegalMoveException("tower max height exceed");
+                        throw new IllegalMoveException("tower max height " +
+                                                               "exceed");
 
                 }
                 else
@@ -586,8 +674,8 @@ public class Board extends Observable implements Viewable {
                 Cell neighbor = grid.getCell(p);
 
                 // If cell is a tower, add its size to own range
-                if (neighbor instanceof Tower && neighbor.getColor() == cell.getColor()
-                            && !((Tower) neighbor).isBlocked())
+                if (neighbor instanceof Tower && neighbor.getColor() == cell.getColor() && !((Tower) neighbor)
+                                                                                                    .isBlocked())
                     range += ((Tower) neighbor).getHeight();
             }
         }
@@ -627,15 +715,19 @@ public class Board extends Observable implements Viewable {
             else if (cell.getColor() == tokenColor && cell instanceof Base)
                 continue;
 
-                // Tokens cannot move on own towers, if max height is exceeded and tower not blocked
+                // Tokens cannot move on own towers, if max height is
+                // exceeded and tower not blocked
             else if (cell.getColor() == tokenColor && cell instanceof Tower
-                             && ((Tower) cell).getHeight() + 1 > maxTowerSize
-                         && !((Tower) cell).isBlocked())
+                             && ((Tower) cell)
+                                                                                       .getHeight() + 1 > maxTowerSize && !((Tower) cell)
+                                                                                                                                   .isBlocked())
                 continue;
 
                 // Tokens cannot block already blocked enemy towers
             else if (cell.getColor() != tokenColor && cell instanceof Tower
-                         && ((Tower) cell).isBlocked() && grid.distance(position, p) > 1)
+                             && ((Tower) cell)
+                                                                                       .isBlocked() && grid.distance(
+                    position, p) > 1)
                 continue;
 
             // All other cells are valid
@@ -699,9 +791,7 @@ public class Board extends Observable implements Viewable {
     public void addObserver(Observer observer) {
         super.addObserver(observer);
         // Show board without move
-        setChanged();
-        notifyObservers(null);
-        clearChanged();
+        setChanged(); notifyObservers(null); clearChanged();
     }
 
     // ------------------------------------------------------------
@@ -745,5 +835,10 @@ public class Board extends Observable implements Viewable {
         for (int l = 0; l < getSize(); l++)
             s.append(fixedString(Character.toString((char) (l + 'A'))));
         return s.toString();
+    }
+
+
+    public Board clone() {
+        return new Board(this);
     }
 }
