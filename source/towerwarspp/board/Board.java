@@ -340,8 +340,6 @@ public class Board extends Observable implements Viewable {
         Cell startCell = grid.getCell(move.getStart()), endCell = grid.getCell(
                 move.getEnd());
 
-        System.out.println("Distance: " + grid.distance(move.getStart(), move.getEnd()));
-
         if (move.getStart().equals(move.getEnd()))
             throw new IllegalMoveException("start == end");
 
