@@ -49,6 +49,8 @@ public class Board extends Observable implements Viewable {
      *         Size
      */
     public Board(int size) {
+        if (size < 4 || size > 26)
+            throw new IllegalArgumentException("size not in [4,26] (size == " + size + ")");
         grid = new AppGrid(size);
 
         // TODO better strategy
