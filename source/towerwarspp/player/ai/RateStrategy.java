@@ -1,6 +1,5 @@
 package towerwarspp.player.ai;
 
-import towerwarspp.board.Board;
 import towerwarspp.preset.Move;
 
 /**
