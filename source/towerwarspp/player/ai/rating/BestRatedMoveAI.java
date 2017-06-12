@@ -1,7 +1,7 @@
 package towerwarspp.player.ai.rating;
 
 import towerwarspp.player.AbstractPlayer;
-import towerwarspp.player.ai.SimpleStrategy;
+import towerwarspp.player.ai.simple.SimpleStrategy;
 import towerwarspp.preset.Move;
 
 /**
@@ -22,8 +22,6 @@ public class BestRatedMoveAI extends AbstractPlayer {
 
     @Override
     public Move deliver() throws Exception {
-        RateStrategy strategy = new SimpleStrategy();
-
         // Rate all moves and keep the maximum
         RateableMove move = null;
         for (Move m : board.getPossibleMoves()) {

@@ -6,7 +6,7 @@ import towerwarspp.io.TextIO;
 import towerwarspp.io.graphic.java2d.Java2DFrame;
 import towerwarspp.player.HumanPlayer;
 import towerwarspp.player.ai.RandomAI;
-import towerwarspp.player.ai.SimpleAI;
+import towerwarspp.player.ai.simple.SimpleAI;
 import towerwarspp.preset.ArgumentParserException;
 import towerwarspp.preset.Player;
 import towerwarspp.preset.PlayerType;
