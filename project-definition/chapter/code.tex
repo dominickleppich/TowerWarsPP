@@ -1,0 +1,133 @@
+\section*{Quellcode}
+\subsection*{Preset}
+Die Klasse \code{Position}, die Positionen auf dem Spielbrett beschreibt.
+\lstinputlisting{files/preset/Position.java}
+
+Die Klasse \code{Move}, die Spielzüge beschreibt.
+\lstinputlisting{files/preset/Move.java}
+
+Exceptions die beim Erzeugen von Positionen und Zügen aus Strings geworfen werden können.
+\lstinputlisting{files/preset/PositionFormatException.java}
+\lstinputlisting{files/preset/MoveFormatException.java} \newpage
+
+Enumeration für Spielerfarbe, Spielertyp und Status.
+\lstinputlisting{files/preset/PlayerColor.java}
+\lstinputlisting{files/preset/PlayerType.java}
+\lstinputlisting{files/preset/Status.java}
+
+Die Interfaces zum Kapseln der Ein- und Ausgabe.
+\lstinputlisting{files/preset/Requestable.java}
+\lstinputlisting{files/preset/Viewable.java}
+\lstinputlisting{files/preset/Viewer.java}
+
+\newpage
+\subsection*{Argumentparser}
+Der ArgumentParser mit seiner Exception.
+\lstinputlisting{files/preset/ArgumentParser.java}
+\lstinputlisting{files/preset/ArgumentParserException.java}
+
+\newpage
+Ein Beispiel zur Verwendung des Parsers.
+\begin{lstlisting}
+package towerwarspp.demo;
+
+import towerwarspp.preset.ArgumentParser;
+import towerwarspp.preset.ArgumentParserException;
+
+public class ArgumentParserTest {
+    public static void main(String[] args) {
+        try {
+            ArgumentParser ap = new ArgumentParser(args);
+
+            System.out.println("local: " + ap.isLocal());
+            System.out.println("network: " + ap.isNetwork());
+            System.out.println("size: " + ap.getSize());
+
+            switch (ap.getRed()) {
+                case HUMAN:
+                    System.out.println("Red chose human player");
+                    break;
+                case RANDOM_AI:
+                    System.out.println("Red chose random player");
+                    break;
+
+                // and so on..
+            }
+        } catch (ArgumentParserException e) {
+            // Something went wrong...
+            e.printStackTrace();
+        }
+    }
+}
+
+\end{lstlisting}
+
+\newpage
+\subsection*{Netzwerk (RMI)}
+Ein Gerüst für einen Netzwerkspieler finden Sie nachfolgend.
+\begin{lstlisting}
+package towerwarspp.demo;
+
+import java.rmi.*;
+import java.rmi.server.UnicastRemoteObject;
+import java.net.*;
+
+import towerwarspp.preset.*;
+
+public class NetPlayer extends UnicastRemoteObject implements Player {
+	private Player player;
+	
+	// ---------------------------------------------
+	
+	public NetPlayer(Player player) throws RemoteException {
+		this.player = player;
+	}
+	
+	public Move request() throws Exception, RemoteException {
+		return player.request();
+	}
+	
+	public void update(Move opponentMove, Status boardStatus)
+		throws Exception, RemoteException {
+		player.update(opponentMove, boardStatus);
+	}
+	
+	public void confirm(Status boardStatus)
+		throws Exception, RemoteException {
+		player.confirm(boardStatus);
+	}		
+	
+	public void init(int size, PlayerColor color)
+		throws Exception, RemoteException {
+		player.init(size, color);	
+	} 
+}
+\end{lstlisting}
+
+Die folgende Methode \code{offer} ist ein Beispiel wie ein Netzwerkspieler an einen Rechner \code{host}, auf dem eine RMI-Registry läuft, unter einem beliebigen Namen \code{name} angeboten werden kann.
+\begin{lstlisting}
+	public void offer(Player p, String host, String name) {
+		try {
+			Naming.rebind("rmi://" + host + "/" + name, p);
+			System.out.println("Player (" + name + ") ready");
+		} catch (MalformedURLException ex) {
+			ex.printStackTrace();
+		} catch (RemoteException ex) {
+			ex.printStackTrace();
+		}
+	}
+\end{lstlisting}
+
+Die folgende Methode \code{find} ist ein Beispiel wie ein Spieler auf einen Rechner \code{host}, auf dem eine RMI-Registry läuft, unter einem bekannten Namen \code{name} gefunden werden kann.
+\begin{lstlisting}
+	public Player find(String host, String name) {
+		Player p = null;
+		try {
+			p = (Player) Naming.lookup("rmi://" + host + "/" + name);
+			System.out.println("Player (" + name + ") found");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return p;
+	}
+\end{lstlisting}

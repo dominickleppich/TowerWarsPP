@@ -1,0 +1,168 @@
+\section*{Spiel}
+Realisieren Sie \textbf{TowerWarsPP} als Computerspiel in Java. Kommentieren Sie den Quellcode ausführlich. Verwenden Sie JavaDoc für das \emph{Application Programming Interface (API)} und kommentieren Sie sonst wie üblich. Verwenden Sie Ant zum automatisierten Übersetzen des Quelltextes und Erzeugen der Dokumentation.
+
+Die vorgegebenen Quelltexte finden Sie in der Stud.IP-Veranstaltung unter \\
+Dateien\textrightarrow Projekt\textrightarrow towerwarsPP.tgz
+
+Alle vorgegebenen Klassen sind im Anhang zu finden.
+
+\begin{enumerate}
+% Setup
+\item Alle Klassen und Schnittstellen gehören zu einem Package, das mit \code{towerwarspp} beginnt.
+
+Die vorgegebenen Klassen und Schnittstellen des Package \code{towerwarspp.preset} dürfen, mit Ausnahme von Kommentaren, nicht verändert werden. 
+
+Es ist allerdings erlaubt folgende Klassen zu erweitern (nähere Informationen sind dem entsprechenden Abschnitt der Projektbeschreibung zu entnehmen):
+\begin{description}
+\item[\code{Viewer}] Darf komplett selbst geschrieben werden. Im Anhang befindet sich ein Viewer, der lediglich als Anregung dienen soll.
+\item[\code{ArgumentParser}] Darf um weitere Parameter ergänzt werden.
+\end{description}
+
+% Board
+\item Erstellen Sie eine Spielbrett-Klasse mit folgenden Merkmalen:
+\begin{itemize}
+\item Ein Spielfeld mit $n \times n$ Feldern wird verwaltet. Dabei gilt $6 \le n \le 26$.
+\item Es wird eine Methode exportiert mit der Spielzüge entgegengenommen werden.
+\item Gültige Spielzüge und Spielzüge die zum Ende des Spiels führen werden erkannt.
+
+Ein leerer Zug (\code{null}) ist gültig und wird als Aufgabe des Spielers gewertet.
+\item Der erste entgegengenommene Spielzug gehört immer zum roten Spieler.
+\item Ein Spielzug ist ein Objekt der Klasse \code{towerwarspp.preset.Move}, das mit Referenzen auf Objekte der Klasse \code{towerwarspp.preset.Position} arbeitet.
+
+\item Es wird eine Methode exportiert, die einen Wert aus der Enumeration\\ \code{towerwarspp.preset.Status} zurückliefert, über die der Spielstand erfragt werden kann.
+
+\item Es wird eine Methode exportiert, die -- ausgehend von der aktuellen Spielsituation -- alle möglichen gültigen Spielzüge eines Spielers zurückliefert.
+\item Die Schnittstelle \code{towerwarspp.preset.Viewable} wird implementiert.
+\end{itemize}
+
+% Viewer
+\item Erstellen Sie eine Klasse, die die Schnittstelle \code{towerwarspp.preset.Viewer} implementiert.
+
+Diese Klasse soll es ermöglichen alle für das Anzeigen eines Spielbrett-Objekts nötigen Informationen zu erfragen, ohne Zugriff auf die Attribute des Spielbrett-Objekts zuzulassen.
+
+Die Methode \code{viewer} des Spielbretts liefert ein passendes Objekt dieser Klasse.
+
+% Text Output
+\item Erstellen Sie eine Klasse mit der der aktuelle Spielstand eines Spielbretts auf die Standardausgabe geschrieben werden kann. Dazu wird ein Objekt einer Klasse, die die Schnittstelle \code{towerwarspp.preset.Viewer} implementiert, benutzt.
+
+% Text Input
+\item Erstellen Sie eine Text-Eingabe-Klasse, die die Schnittstelle \\ \code{towerwarspp.preset.Requestable} implementiert.
+
+Die Methode \code{deliver} fordert einen Zug, in einer Zeile, von der Standardeingabe an und liefert ein dazu passendes \code{towerwarspp.preset.Move}-Objekt zurück.
+
+Verwenden Sie die statische Methode \code{parseMove} der Klasse \code{Move} um den von der Standardeingabe eingelesenen String in ein Move-Objekt umzuwandeln.
+
+Die Methode \code{parseMove} wirft eine \code{towerwarspp.preset.MoveFormatException}, falls das Einlesen missglücken sollte. Auf diese Exception muss sinnvoll reagiert werden.
+
+% Player
+\item Alle Spieler implementieren die folgende Schnittstelle \\ \code{towerwarspp.preset.Player}.
+
+\begin{itemize}
+\item Ein Spieler hat keine Referenz auf das Spielbrett-Objekt des Programmteils, der die Züge anfordert. Trotzdem muss ein Spieler den Spielverlauf dokumentieren, damit er gültige Züge identifizieren kann. Dazu erzeugt jeder Spieler ein eigenes Spielbrett-Objekt und setzt seine und die Züge des Gegenspielers auf diesem Brett.
+
+Daraus können sich Widersprüche zwischen dem Status des eigenen Spielbretts und dem gelieferten Status des Spielbretts des Hauptprogramms ergeben. Das ist ein Fehler auf den mit einer Exception reagiert wird.
+
+Für ein problemloses Netzwerkspiel ist es nötig, dass alle Exceptions die in innerhalb der Spielerklassen geworfen werden keine Instanzen eigener Exceptionklassen sind. An jeder anderen Stelle im Spiel können eigene Exceptions frei erzeugt und geworfen werden.
+
+\item Die Methoden der Player-Schnittstelle müssen in der richtige Reihenfolge aufgerufen werden. Eine Abweichung davon ist ein Fehler auf den mit einer Exception reagiert werden muss.
+\end{itemize}
+
+Die Methoden dieser Schnittstelle sind wie folgt zu verstehen:
+
+% Description player methods
+\begin{itemize}[leftmargin=4em]
+\item[\code{request}] \hfill \\Fordert vom Spieler einen Zug an.
+\item[\code{confirm}] \hfill \\Übergibt dem Spieler im Parameter \code{boardStatus} Informationen über den letzten mit \code{request} vom Spieler gelieferten Zug.
+
+\underline{Beispiele}
+\begin{itemize}
+\item Gilt \code{boardStatus == Status.OK} war der letzte Zug gültig
+\item Gilt \code{boardStatus == Status.RED\_WIN} war der letzte Zug gültig und der rote Spieler hat das Spiel gewonnen.
+\end{itemize}
+\item[\code{update}] \hfill \\Liefert dem Spieler im Parameter \code{opponentMove} den letzten Zug des Gegners und im Parameter \code{boardStatus} Informationen über diesen Zug.
+\item[\code{init}] \hfill \\Initialisiert den Spieler, sodass mit diesem Spieler-Objekt ein neues Spiel mit einem Spielbrett der Größe \code{size} $\times$ \code{size} und der durch den Parameter \code{color} bestimmten Farbe, begonnen werden kann.
+
+Die Spielerfarbe ist einer der beiden Werte der Enumeration \\
+\code{towerwarspp.preset.PlayerColor} und kann die Werte \code{RED} und \code{BLUE} haben.
+\end{itemize}
+
+% Human Player
+\item Erstellen Sie eine Interaktive-Spieler-Klasse, die die Schnittstelle \\ \code{towerwarspp.preset.Player} implementiert.
+
+Ein Interaktiver-Spieler benutzt ein Objekt einer Klasse, die das Interface \\ \code{towerwarspp.preset.Requestable} implementiert, um Züge vom Benutzer anzufordern.
+
+% Run class
+\item Erstellen Sie eine ausführbare Klasse mit folgender Funktionalität.
+\begin{itemize}
+\item Die Auswahl der roten und blauen Spieler Klassen (Interaktiver Spieler, einer der Computerspieler) und die Größe des Spielbretts soll beim Starten des Programms über die Kommandozeile festgelegt werden können.
+
+Verwenden Sie zum Einlesen der Kommandozeilenparameter und zum abfragen der entsprechenden Einstellungen ein Objekt der Klasse \\
+\code{towerwarspp.preset.ArgumentParser}.
+
+Im Anhang findet sich ein kleines kommentiertes Beispiel wie diese Klasse zu verwenden ist. Weitere Parameter dürfen bei Bedarf gerne hinzugefügt werden.
+
+\item Ein Spielbrett in Ausgangsposition mit der eingestellten Größe wird initialisiert.
+\item Zwei Spielerobjekte werden wie eingestellt erzeugt und über Referenzen der Spielerschnittstelle angesprochen. 
+
+Beide Spieler benutzen dasselbe Objekt einer Klasse, die das \code{Requestable}-Interface implementiert, um Züge vom Benutzer anzufordern.
+
+\item Von den Spieler-Referenzen werden abwechselnd Züge erfragt. Gültige Züge werden bestätigt und dem jeweils anderen Spieler mitgeteilt.
+\item Die gültigen Züge werden auf dem Spielbrett ausgeführt.
+
+\item Wenn ein Zug zum Spielende führt werden die Spieler darüber informiert und das Programm beendet.
+\end{itemize}
+
+% Random AI
+\item Erstellen Sie eine Computerspieler-Klasse, die die Spieler-Schnittstelle implementiert und gültige, aber nicht notwendigerweise zielgerichtete, Züge generiert. Dazu wird aus allen aktuell möglichen gültigen Spielzügen zufällig ein Zug ausgewählt.
+
+\underline{Hinweis}
+
+Java stellt für die Erzeugung von Pseudozufallszahlen die Klasse \code{java.util.Random} zur Verfügung.
+
+% Simple AI
+\item Erstellen Sie einen weiteren Computerspieler, der zielgerichtet, entsprechend der unten beschriebenen einfachen Strategie, versucht das Spiel zu gewinnen.
+
+Zusätzlich gelten die beiden folgenden Regeln.
+\begin{enumerate}[label=\alph*)]
+\item Gibt es einen Zug mit dem das Spiel gewonnen werden kann, dann wird dieser ausgeführt.
+\item Ein Zug, der zur Folge hätte, dass der Gegner im nächsten Zug gewinnen könnte, wird nur ausgeführt, wenn es keine Alternative gibt.
+\end{enumerate}
+
+% Graphic
+\item Erstellen Sie eine grafische Ein-Ausgabe-Klasse. Diese Klasse implementiert die Schnittstelle \code{towerwarspp.preset.Requestable} und benutzt ein Objekt einer \\Klasse, die die Schnittstelle \code{towerwarspp.preset.Viewer} implementiert, für eine einfache grafische Ausgabe.
+
+% Optional
+Sorgen Sie dafür, dass die Grafik mit unterschiedlichen Spielfeldgrößen sinnvoll skaliert.
+
+Sorgen Sie dafür, dass man das Spiel Computer gegen Computer mit grafischer Ausgabe verfolgen kann, verwenden Sie hierfür den Kommandozeilenparameter \code{-delay}.
+
+\underline{Hinweis}
+
+Investieren Sie nicht zu viel Zeit in das Design, denn es wird nicht bewertet.
+
+% Network
+\item Programmieren Sie einen Netzwerkspieler mit dem sie jede Implementation der Schnittstelle \code{towerwarspp.preset.Player} an eine andere TowerWarsPP- \\Implementation exportieren können.
+
+Im Anhang befinden sich Codebeispiele für den Umgang mit \code{RMI}.
+
+Erweitern Sie die ausführbare Klasse um die Möglichkeit Netzwerkspiele zu spielen. Mit den Schaltern \code{--local} und \code{--network} soll gesteuert werden ob es sich um ein lokales oder ein Netzwerkspiel handelt. 
+
+Sehen Sie im Falle eines Netzwerkspiels geeignete Kommandozeilenparameter vor um zu steuern, ob ein Spieler im Netzwerk angeboten werden oder ein Spieler aus dem Netzwerk gefunden und mit diesem gespielt werden soll.
+
+\item \textbf{Optional.} Bauen Sie das Spiel weiter aus.
+\begin{itemize}
+\item Laden und Speichern von Spielständen
+\item Implementieren Sie einen Turniermodus
+\item Erstellen Sie einen weiteren, intelligenteren Computerspieler, z.B. durch die Vorrausberechnung weiterer Züge und/oder einer besser balancierten und/oder erweiterten Bewertung.
+\item \dots
+\end{itemize}
+\end{enumerate}
+
+\textbf{Anforderungen an das fertige Projekt}
+\begin{enumerate}
+\item Per E-Mail an \code{brosenne@informatik.uni-goettingen.de} wird eine Anleitung und ein Archiv (tar, zip, etc.) ausgeliefert.
+\item Das Archiv enthält den Quelltext des TowerWarsPP-Computerspiels, der sich im Rechnerpool des Instituts für Informatik übersetzen und starten lässt.
+
+Es gibt ein Ant-Buildfile, das eine lauffähige Version des Spiels, gepackt in ein Jar-File, und die vollständige API-Dokumentation erzeugen kann.
+\item Die Anleitung beschreibt wie das Archiv zu entpacken ist, der Quelltext übersetzt, die API-Dokumentation erzeugt und das TowerWarsPP-Computerspiel gestartet wird. Weiterhin wird die Bedienung des Spiels beschrieben.
+\end{enumerate}
