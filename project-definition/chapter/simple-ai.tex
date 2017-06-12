@@ -1,4 +1,4 @@
-\section*{Einfache Strategie}
+\hypertarget{strategy}{\section*{Einfache Strategie}}
 \underline{In Richtung gegnerischer Basis ziehen}
 
 Es ist eine gute Idee in Richtung der gegnerischen Basis zu ziehen und weniger gut sich von ihr wegzubewegen. Für jeden Zug sei $d_1$ der Abstand zur gegnerischen Basis vor dem Zug und $d_2$ der Abstand nach dem Zug. Daraus berechnet sich ein Basis-Abstandsbonus \[r_\text{Basis} = d_1 - d_2\]
@@ -9,6 +9,7 @@ Weiterhin ist es klug gegnerische Einheiten zu schlagen. Berechne hierfür einen
 0, & \text{wenn keine Einheit geschlagen wurde} \\
 1, & \text{wenn ein Stein geschlagen wurde} \\
 2, & \text{wenn ein Turm geschlagen wurde} \\
+1337, & \text{wenn die gegnerische Basis geschlagen wurde}
 \end{cases}\]
 
 \underline{Gesamtwertung}
@@ -18,4 +19,10 @@ Berechnen Sie daraus für jeden Zug eine Bewertung
 
 und wählen Sie unter den Zügen mit Maximalbewertung zufällig einen aus.
 
-Falls ein Zug zum Sieg führt, muss dieser Zug gewählt werden. Falls ein Zug zur Folge hat, dass der Gegner im nächsten Zug gewinnen kann, darf dieser nur ausgewählt werden, wenn es keine Alternativen gibt.
+\bigskip
+
+Zusätzlich gelten die beiden folgenden Regeln.
+\begin{enumerate}[label=\alph*)]
+\item Gibt es einen Zug mit dem das Spiel gewonnen werden kann, dann wird dieser ausgeführt.
+\item Ein Zug, der zur Folge hätte, dass der Gegner im nächsten Zug gewinnen könnte, wird nur ausgeführt, wenn es keine Alternative gibt.
+\end{enumerate}
