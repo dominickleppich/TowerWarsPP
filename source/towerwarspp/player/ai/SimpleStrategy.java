@@ -58,14 +58,14 @@ public class SimpleStrategy implements RateStrategy {
         Position baseDestination = ownColor == RED ? tmpBoard.getBlueBasePosition() : tmpBoard.getRedBasePosition();
 //        int rating = tmpBoard.getSize() * 2 * 50 - tmpBoard.distance(move.getEnd(), baseDestination) * 5;
         int deltaDistance = tmpBoard.distance(move.getEnd(), baseDestination) - tmpBoard.distance(move.getStart(), baseDestination);
-        rating += -2 * deltaDistance;
+        rating += -1 * deltaDistance;
 
         // Kicking tokens and towers increase rating
         if (oppTokenAfter < oppTokenBefore)
-            rating += 5;
+            rating += 1;
 
         if (oppTowerAfter < oppTowerBefore)
-            rating += 5;
+            rating += 2;
 
         // Building towers is good as well
 //        if (ownTowerAfter > ownTowerBefore)
