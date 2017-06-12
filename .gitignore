@@ -28,3 +28,8 @@ yguardlog.xml
 
 TowerWarsPP.iml
 resource/
+
+# ignore latextmp
+*.log
+*.aux
+*.synctex.gz
