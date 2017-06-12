@@ -62,6 +62,8 @@ Türme können geschlagen und \emph{blockiert} und Blockaden von Türmen können
 
 Zieht ein Stein auf ein Feld mit einem eigenen Stein, so wird auf diesem Feld ein Turm der Höhe $1$ gebaut.
 
+Zieht ein Stein auf ein Feld mit einem eigenen Turm, so wird dessen Höhe um $1$ erhöht (Ausnahme bilden hier blockierte Türme, deren Blockade aufgehoben wird und dessen Höhe unverändert bleibt). Hierbei darf die Maximalhöhe $h_\text{max}$ jedoch nicht überschritten werden.
+
 Türme erhöhen die Reichweite angrenzender Steine um die Höhe des Turmes, dabei spielt es keine Rolle ob der Stein in dieser Reichweite Ziehen oder Schlagen will.
 
 Hat ein Stein einen benachbarten Turm, so erhöht sich die Reichweite des Steins um die Höhe $h$ des Turmes. Der Stein kann dann auf alle erlaubten Felder mit Abstand $d \le 1 + h$ ziehen. Hat ein Stein mehrere angrenzende Türme, so summieren sich deren Höhen bei der Bestimmung der Reichweite auf. Blockierte Türme geben keinen Bonus. Ein Stein mit $6$ benachbarten Türmen kann folglich alle Felder mit folgendem Abstand erreichen \[d \le 1 + \sum_{i=1}^6 h_i\]
@@ -90,8 +92,6 @@ Hat ein Stein einen benachbarten Turm, so erhöht sich die Reichweite des Steins
 Zieht ein Stein auf ein benachbartes Feld spricht man von einem \emph{Nahzug}, sonst von einem \emph{Fernzug}.
 
 \newpage
-Zieht ein Stein auf ein Feld mit einem eigenen Turm, so wird dessen Höhe um $1$ erhöht (Ausnahme bilden hier blockierte Türme, deren Blockade aufgehoben wird und dessen Höhe unverändert bleibt). Hierbei darf die Maximalhöhe $h_\text{max}$ jedoch nicht überschritten werden.
-
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=0.25]{graphic/token-kick-block-tower.png}
@@ -100,12 +100,11 @@ Zieht ein Stein auf ein Feld mit einem eigenen Turm, so wird dessen Höhe um $1$
 \end{figure}
 
 Zieht ein Stein auf ein Feld mit einem gegnerischen Turm entscheidet die Art des Zuges was passiert. Handelt es sich um einen Nahzug, wird der gesamte gegnerische Turm geschlagen. Im Falle eines Fernzuges wird der gegnerische Turm blockiert.
-\newpage
 
 Auch Türme haben Zugmöglichkeiten. Es ist nicht möglich Türme in Ihrer Gesamtheit zu bewegen. 
 
 Allerdings kann der oberste Stein vom Turm auf ein benachbartes Feld gezogen werden. Angrenzende Türme verleihen hierfür keinen Bonus auf die Reichweite. Es kann nur auf ein leeres oder eigenes Feld gezogen werden, ohne dabei die Maximalhöhe von Türmen zu überschreiten.
-
+\newpage 
 Bei diesem Abbau eines Turmes ist es nicht erlaubt zu schlagen. Daraus ergibt sich direkt, dass Türme nicht die gegnerische Basis schlagen können. Weiter ist es möglich, dass ein Spieler hierdurch keine Handlungsmöglichkeit mehr hat, wenn er nur noch einen Turm besitzt, der komplett von benachbarten gegnerischen Figuren besetzt ist. 
 
 \begin{figure}[ht]
