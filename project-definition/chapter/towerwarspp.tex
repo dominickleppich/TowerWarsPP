@@ -32,7 +32,7 @@ Es ist Ziel des Spiels die gegnerische Basis zu zerstören und folglich auch die
 \subsubsection*{Steine}
 Jeder Spieler hat zu Beginn eine vordefinierte Menge an Steinen. 
 
-Ein Stein kann sich von sich aus ein Feld in jede Richtung bewegen (außer auf die eigene Basis natürlich).
+Ein Stein kann sich von seiner Position aus ein Feld in jede Richtung bewegen (außer auf die eigene Basis natürlich).
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=0.25]{graphic/token-nobase.png}
@@ -40,7 +40,7 @@ Ein Stein kann sich von sich aus ein Feld in jede Richtung bewegen (außer auf d
 \caption*{$B1$ kann nicht auf Basis $A1$ ziehen}
 \end{figure}
 
-Zieht ein Stein auf ein leeres Feld, ist das ein ganz normaler Zug. Zieht ein Stein auf ein Feld mit einem gegnerischen Stein, ist dieser geschlagen und der eigene Stein nimmt dessen Platz ein.
+Zieht ein Stein auf ein leeres Feld, ist das ein \emph{Nahzug}. Zieht ein Stein auf ein Feld mit einem gegnerischen Stein, ist dieser geschlagen und der eigene Stein nimmt dessen Platz ein.
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=0.25]{graphic/token-move-kick.png}
@@ -56,13 +56,14 @@ Zu Beginn hat ein Spieler keine Türme. Türme können durch Ziehen eigener Stei
 
 Türme haben eine Höhe $h \le h_\text{max}$, wobei \[h_\text{max} = \left\lfloor \frac{n}{3}\right\rfloor\]
 
-Türme können geschlagen und \emph{blockiert} und Blockaden von Türmen können aufgehoben werden, dazu  später mehr. Beim Erhöhen eines Turms darf die Maximalhöhe nie überschritten werden.
+Beim Erhöhen eines Turms darf die Maximalhöhe nie überschritten werden.
 
+Gegnerische Türme können geschlagen und \emph{blockiert} werden. Außerdem kann die Blockade eigener Türme aufgehoben werden, dazu  später mehr. 
 \bigskip
 
 Zieht ein Stein auf ein Feld mit einem eigenen Stein, so wird auf diesem Feld ein Turm der Höhe $1$ gebaut.
 
-Zieht ein Stein auf ein Feld mit einem eigenen Turm, so wird dessen Höhe um $1$ erhöht (Ausnahme bilden hier blockierte Türme, deren Blockade aufgehoben wird und dessen Höhe unverändert bleibt). Hierbei darf die Maximalhöhe $h_\text{max}$ jedoch nicht überschritten werden.
+Zieht ein Stein auf ein Feld mit einem eigenen Turm, so wird dessen Höhe um $1$ erhöht (Ausnahme bilden hier blockierte Türme, deren Blockade aufgehoben wird und dessen Höhe unverändert bleibt).
 
 Türme erhöhen die Reichweite angrenzender Steine um die Höhe des Turmes, dabei spielt es keine Rolle ob der Stein in dieser Reichweite Ziehen oder Schlagen will.
 
@@ -74,7 +75,7 @@ Hat ein Stein einen benachbarten Turm, so erhöht sich die Reichweite des Steins
 \end{center}
 \caption*{$I7$ hat durch den Turm auf $J6$ die Reichweite $2$}
 \end{figure}
-
+\newpage
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=0.25]{graphic/move-rangeddouble.png}
@@ -91,7 +92,6 @@ Hat ein Stein einen benachbarten Turm, so erhöht sich die Reichweite des Steins
 
 Zieht ein Stein auf ein benachbartes Feld spricht man von einem \emph{Nahzug}, sonst von einem \emph{Fernzug}.
 
-\newpage
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=0.25]{graphic/token-kick-block-tower.png}
@@ -130,7 +130,7 @@ Beim Abbau des Turmes wird dessen Höhe natürlich um $1$ reduziert. Wird ein Tu
 
 Ist ein Turm blockiert, kann dieser weder abgebaut werden noch gibt er anderen Steinen einen Bonus. Er steht nur noch blockiert auf dem Feld. 
 
-Durch Ziehen eines eigenen Steins auf den Turm kann die Blockade wieder aufgehoben werden, ohne die Höhe des Turms zu verändern. Dies kann durch einen normalen Zug oder durch Abbau eines angrenzenden Turms auf diesen Turm erfolgen.
+Durch Ziehen eines eigenen Steins auf den Turm kann die Blockade wieder aufgehoben werden, ohne die Höhe des Turms zu verändern. Dies kann durch einen Nah- oder Fernzug oder durch Abbau eines angrenzenden Turms auf diesen Turm erfolgen.
 \newpage
 \begin{figure}[ht]
 \begin{center}
