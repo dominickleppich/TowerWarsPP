@@ -131,6 +131,9 @@ Zusätzlich gelten die beiden folgenden Regeln.
 % Graphic
 \item Erstellen Sie eine grafische Ein-Ausgabe-Klasse. Diese Klasse implementiert die Schnittstelle \code{towerwarspp.preset.Requestable} und benutzt ein Objekt einer \\Klasse, die die Schnittstelle \code{towerwarspp.preset.Viewer} implementiert, für eine einfache grafische Ausgabe.
 
+% Optional
+Sorgen Sie dafür, dass die Grafik mit unterschiedlichen Spielfeldgrößen sinnvoll skaliert.
+
 Sorgen Sie dafür, dass man das Spiel Computer gegen Computer mit grafischer Ausgabe verfolgen kann, verwenden Sie hierfür den Kommandozeilenparameter \code{-delay}.
 
 \underline{Hinweis}
@@ -144,7 +147,7 @@ Im Anhang befinden sich Codebeispiele für den Umgang mit \code{RMI}.
 
 Erweitern Sie die ausführbare Klasse um die Möglichkeit Netzwerkspiele zu spielen. Mit den Schaltern \code{--local} und \code{--network} soll gesteuert werden ob es sich um ein lokales oder ein Netzwerkspiel handelt. 
 
-Im Falle eines Netzwerkspiels wird über die Einstellung \code{-networktype} gesteuert ob ein Spieler im Netzwerk angeboten werden oder ein Spieler aus dem Netzwerk gefunden und mit diesem gespielt werden soll.
+Sehen Sie im Falle eines Netzwerkspiels geeignete Kommandozeilenparameter vor um zu steuern, ob ein Spieler im Netzwerk angeboten werden oder ein Spieler aus dem Netzwerk gefunden und mit diesem gespielt werden soll.
 
 \item \textbf{Optional.} Bauen Sie das Spiel weiter aus.
 \begin{itemize}
