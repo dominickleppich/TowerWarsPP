@@ -65,11 +65,11 @@ public class SimpleStrategy implements RateStrategy {
             rating += 5;
 
         if (oppTowerAfter < oppTowerBefore)
-            rating += 10;
+            rating += 5;
 
         // Building towers is good as well
-        if (ownTowerAfter > ownTowerBefore)
-            rating += 3;
+//        if (ownTowerAfter > ownTowerBefore)
+//            rating += 3;
 
         return rating;
     }
