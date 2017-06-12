@@ -1,5 +1,6 @@
 package towerwarspp.io.graphic.java2d;
 
+import towerwarspp.Boot;
 import towerwarspp.board.Base;
 import towerwarspp.board.Cell;
 import towerwarspp.board.Token;
@@ -31,6 +32,7 @@ public class DrawPanel extends JPanel implements MouseListener {
     private static final float STROKE = 2f;
     private static final Font LABEL_FONT = new Font(Font.SANS_SERIF, Font.BOLD, 10);
     private static final Font RATING_FONT = new Font(Font.SERIF, Font.ITALIC, 40);
+    private static final Font DEBUG_FONT = new Font(Font.MONOSPACED, Font.PLAIN, 20);
 
     // ------------------------------------------------------------
 
@@ -152,10 +154,12 @@ public class DrawPanel extends JPanel implements MouseListener {
                     int y = (int) (HEX_SIZE * 3.0 / 2 * n);
                     g.draw(hex(x, y, HEX_SIZE - 5));
 
-                    g.setFont(RATING_FONT);
-                    String str = Integer.toString(viewer.rateMove(new SimpleStrategy(), m));
-                    int w = g.getFontMetrics().stringWidth(str);
-                    g.drawString(str, x - w / 2, y + 5);
+                    if (Boot.isDebug()) {
+                        g.setFont(RATING_FONT);
+                        String str = Integer.toString(viewer.rateMove(new SimpleStrategy(), m));
+                        int w = g.getFontMetrics().stringWidth(str);
+                        g.drawString(str, x - w / 2, y + 5);
+                    }
                 }
             }
         }
@@ -164,9 +168,10 @@ public class DrawPanel extends JPanel implements MouseListener {
         for (Polygon p : grid.values())
             g.draw(p);
 
-//        if (debugText != null) {
-//            g.setColor(Color.BLACK); g.drawString(debugText, 20, 20);
-//        }
+        if (Boot.isDebug() && debugText != null) {
+            g.setFont(DEBUG_FONT);
+            g.setColor(Color.BLACK); g.drawString(debugText, 20, 20);
+        }
     }
 
     private int[] hexCorner(int xCenter, int yCenter, int size, int i) {
