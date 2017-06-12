@@ -140,7 +140,9 @@ public class DrawPanel extends JPanel implements MouseListener {
                     }
 
                     g.setColor(Color.WHITE);
-                    g.drawString(position.toString(), x - 6, y + 3);
+                    String str = position.toString();
+                    int w = g.getFontMetrics().stringWidth(str);
+                    g.drawString(str, x - w / 2, y + 4);
                 }
 
                 // Highlight clicked cell
@@ -162,8 +164,8 @@ public class DrawPanel extends JPanel implements MouseListener {
                     int y = (int) (HEX_SIZE * 3.0 / 2 * n);
                     g.draw(hex(x, y, HEX_SIZE - 5));
 
-                    if (strategy != null)
-                        g.drawString(Integer.toString(strategy.rate(m)), x - 10, y - 20);
+//                    if (strategy != null)
+//                        g.drawString(Integer.toString(strategy.rate(m)), x - 10, y - 20);
                 }
             }
         }
@@ -171,9 +173,9 @@ public class DrawPanel extends JPanel implements MouseListener {
         g.setColor(Color.BLACK); for (Polygon p : grid.values())
             g.draw(p);
 
-        if (debugText != null) {
-            g.setColor(Color.BLACK); g.drawString(debugText, 20, 20);
-        }
+//        if (debugText != null) {
+//            g.setColor(Color.BLACK); g.drawString(debugText, 20, 20);
+//        }
     }
 
     private int[] hexCorner(int xCenter, int yCenter, int size, int i) {
