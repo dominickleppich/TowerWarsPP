@@ -34,7 +34,6 @@ public class Java2DFrame extends JFrame implements InputOutputable{
         add(vBox);
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
     }
 
     public void setRatingStrategy(RateStrategy strategy) {
@@ -43,34 +42,30 @@ public class Java2DFrame extends JFrame implements InputOutputable{
 
     // ------------------------------------------------------------
 
-    private void show(Viewer viewer, Move move) {
-        panel.setViewer(viewer);
-        pack();
+    private void show(Move move) {
         repaint();
 
         // Update label
         statusLabel.setText("Move: " + move);
-        setVisible(true);
     }
 
     // ------------------------------------------------------------
 
     @Override
-    public void update(Observable observable, Object o) {
-        // Get viewer
-        Viewer viewer = ((Board) observable).viewer();
-        // Get Move
-        Move move;
-        if (o == null)
-            move = null;
-        else
-            move = (Move) o;
-
-        show(viewer, move);
+    public void setViewer(Viewer viewer) {
+        panel.setViewer(viewer);
+        pack();
+        setVisible(true);
+        repaint();
     }
 
     @Override
-    public Move request(Set<Move> possibleMoves, MoveAnalyzer analyzer) throws
+    public void update(Move move) {
+        show(move);
+    }
+
+    @Override
+    public Move deliver() throws
             Exception {
         return panel.request();
     }

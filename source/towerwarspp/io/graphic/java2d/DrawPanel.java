@@ -49,7 +49,7 @@ public class DrawPanel extends JPanel implements MouseListener {
         addMouseListener(this);
     }
 
-    public void setViewer(Viewer viewer) {
+    public synchronized void setViewer(Viewer viewer) {
         this.viewer = viewer;
 
         if (viewer != null) {
@@ -67,6 +67,7 @@ public class DrawPanel extends JPanel implements MouseListener {
                     grid.put(new Position(l, n), hex(x, y, HEX_SIZE));
                 }
             }
+            System.out.println("herE");
         }
     }
 
@@ -77,7 +78,7 @@ public class DrawPanel extends JPanel implements MouseListener {
     // ------------------------------------------------------------
 
     @Override
-    public void paintComponent(Graphics gg) {
+    public synchronized void paintComponent(Graphics gg) {
         Graphics2D g = (Graphics2D) gg;
 
         // Nice graphics

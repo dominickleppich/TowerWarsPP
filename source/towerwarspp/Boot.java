@@ -2,16 +2,12 @@ package towerwarspp;
 
 import towerwarspp.game.Match;
 import towerwarspp.io.InputOutputable;
-import towerwarspp.io.Requestable;
 import towerwarspp.io.TextIO;
 import towerwarspp.io.graphic.java2d.Java2DFrame;
 import towerwarspp.player.HumanPlayer;
 import towerwarspp.player.ai.BestRatedMoveAI;
 import towerwarspp.player.ai.RandomAI;
-import towerwarspp.preset.ArgumentParser;
-import towerwarspp.preset.ArgumentParserException;
-import towerwarspp.preset.Player;
-import towerwarspp.preset.PlayerType;
+import towerwarspp.preset.*;
 
 /**
  * Start class.

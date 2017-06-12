@@ -2,6 +2,7 @@ package towerwarspp.game;
 
 import towerwarspp.Boot;
 import towerwarspp.board.Board;
+import towerwarspp.io.InputOutputable;
 import towerwarspp.preset.Move;
 import towerwarspp.preset.Player;
 import towerwarspp.preset.PlayerColor;
@@ -43,7 +44,7 @@ public class Match implements Runnable {
     /**
      * Board observer
      */
-    private Observer observer;
+    private InputOutputable inout;
 
     // ------------------------------------------------------------
 
@@ -57,13 +58,13 @@ public class Match implements Runnable {
      *         Blue player
      * @param size
      *         Board size
-     * @param observer
-     *         Observer of this game to be updated after each move
+     * @param inout
+     *         In- and output of the game
      */
-    public Match(Player red, Player blue, int size, Observer observer) {
+    public Match(Player red, Player blue, int size, InputOutputable inout) {
         player = new Player[] {red, blue}; this.size = size;
-        board = new Board(size); this.observer = observer; if (observer != null)
-            board.addObserver(observer);
+        board = new Board(size);
+        this.inout = inout;
     }
 
     // ------------------------------------------------------------
@@ -117,6 +118,9 @@ public class Match implements Runnable {
 
         player[0].init(size, PlayerColor.RED);
         player[1].init(size, PlayerColor.BLUE); initialized = true;
+
+        // Set viewer
+        inout.setViewer(board.viewer());
     }
 
     /**
@@ -203,9 +207,6 @@ public class Match implements Runnable {
      */
     private synchronized void end(Status status) {
         System.out.println("\n\nGame ended with status: " + status);
-
-        // Remove observer
-        board.deleteObserver(observer);
 
         notify();
     }

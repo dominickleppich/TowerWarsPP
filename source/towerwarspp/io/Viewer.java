@@ -60,4 +60,11 @@ public interface Viewer {
      * @return {@link MoveAnalyzer}
      */
     MoveAnalyzer getMoveAnalyzer();
+
+    /**
+     * Show String representation of the board.
+     *
+     * @return String
+     */
+    String toString();
 }

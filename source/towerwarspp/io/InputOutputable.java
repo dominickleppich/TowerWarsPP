@@ -1,10 +1,10 @@
 package towerwarspp.io;
 
-import java.util.Observer;
+import towerwarspp.preset.Requestable;
 
 /**
  * Grouping in- and output interfaces.
  *
  * @author Dominick Leppich
  */
-public interface InputOutputable extends Requestable, Observer { }
+public interface InputOutputable extends Requestable, Display { }

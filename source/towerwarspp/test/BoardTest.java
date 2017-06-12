@@ -31,7 +31,7 @@ public class BoardTest {
     private static void startGame(int size) throws Exception {
         Board b = new Board(size);
         TextIO textIO = new TextIO();
-        b.addObserver(textIO);
+        textIO.setViewer(b.viewer());
 
         Player[] players = new Player[2];
 

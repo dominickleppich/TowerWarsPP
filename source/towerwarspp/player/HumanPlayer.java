@@ -1,10 +1,10 @@
 package towerwarspp.player;
 
-import towerwarspp.io.Requestable;
 import towerwarspp.io.graphic.java2d.Java2DFrame;
 import towerwarspp.player.ai.SimpleStrategy;
 import towerwarspp.preset.Move;
 import towerwarspp.preset.PlayerColor;
+import towerwarspp.preset.Requestable;
 
 /**
  * Human player who can be requested for moves.
@@ -26,7 +26,7 @@ public class HumanPlayer extends AbstractPlayer {
 
     @Override
     public Move deliver() throws Exception {
-        return requestable.request(board.getPossibleMoves(), board.getMoveAnalyzer());
+        return requestable.deliver();
     }
 
     // ------------------------------------------------------------

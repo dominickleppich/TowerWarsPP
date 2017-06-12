@@ -2,7 +2,6 @@ package towerwarspp.test;
 
 import towerwarspp.game.Match;
 import towerwarspp.io.InputOutputable;
-import towerwarspp.io.Requestable;
 import towerwarspp.io.TextIO;
 import towerwarspp.io.graphic.java2d.Java2DFrame;
 import towerwarspp.player.HumanPlayer;
@@ -11,8 +10,7 @@ import towerwarspp.player.ai.RandomAI;
 import towerwarspp.preset.ArgumentParser;
 import towerwarspp.preset.Player;
 import towerwarspp.preset.PlayerType;
-
-import java.util.Observer;
+import towerwarspp.preset.Requestable;
 
 /**
  * Created on 09.06.2017.

@@ -21,7 +21,7 @@ import static towerwarspp.preset.PlayerColor.RED;
  *
  * @author dominick
  */
-public class Board extends Observable implements Viewable {
+public class Board implements Viewable {
     private static final int TO_STRING_SPACE = 6;
 
     // ------------------------------------------------------------
@@ -200,6 +200,11 @@ public class Board extends Observable implements Viewable {
                 @Override
                 public MoveAnalyzer getMoveAnalyzer() {
                     return new MoveAnalyzer(board);
+                }
+
+                @Override
+                public String toString() {
+                    return board.toString();
                 }
             };
 
@@ -606,9 +611,6 @@ public class Board extends Observable implements Viewable {
                 status = Status.RED_WIN;
         }
 
-        // Notify observers
-        setChanged(); notifyObservers(move); clearChanged();
-
         return true;
     }
 
@@ -785,15 +787,6 @@ public class Board extends Observable implements Viewable {
      */
     private void switchTurn() {
         turn = turn == RED ? BLUE : RED;
-    }
-
-    // ------------------------------------------------------------
-
-    @Override
-    public void addObserver(Observer observer) {
-        super.addObserver(observer);
-        // Show board without move
-        setChanged(); notifyObservers(null); clearChanged();
     }
 
     // ------------------------------------------------------------

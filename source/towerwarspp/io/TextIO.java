@@ -7,7 +7,6 @@ import towerwarspp.preset.MoveFormatException;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Observable;
 import java.util.Set;
 
 /**
@@ -17,6 +16,7 @@ import java.util.Set;
  */
 public class TextIO implements InputOutputable {
     private BufferedReader rd;
+    private Viewer viewer;
 
     // ------------------------------------------------------------
 
@@ -30,7 +30,9 @@ public class TextIO implements InputOutputable {
     // ------------------------------------------------------------
 
     @Override
-    public Move request(Set<Move> possibleMoves, MoveAnalyzer analyzer) throws Exception {
+    public Move deliver() throws Exception {
+        MoveAnalyzer analyzer = viewer.getMoveAnalyzer();
+        Set<Move> possibleMoves = viewer.getPossibleMoves();
         Move m = null;
         boolean valid = true;
         boolean correctFormat = true;
@@ -75,10 +77,16 @@ public class TextIO implements InputOutputable {
         return m;
     }
 
-    // ------------------------------------------------------------
+    @Override
+    public void update(Move move) {
+        System.out.println("Move: " + move);
+    }
 
     @Override
-    public void update(Observable observable, Object o) {
-        System.out.println("Move: " + o + "\n" + observable);
+    public void setViewer(Viewer viewer) {
+        this.viewer = viewer;
+
+        // Print board the first time
+        System.out.println(viewer.toString());
     }
 }
