@@ -165,7 +165,7 @@ public class ArgumentParser {
      *         wenn der Schalter den falschen Typ hat (falls eine Einstellung
      *         versucht wird als Schalter auszulesen)
      */
-    private boolean getFlag(String flag) throws ArgumentParserException {
+    protected boolean getFlag(String flag) throws ArgumentParserException {
         if (!params.containsKey(flag))
             return false;
 
@@ -186,7 +186,7 @@ public class ArgumentParser {
      * @throws ArgumentParserException
      *         wenn die Einstellung nicht existiert
      */
-    private Object getSetting(String key) throws ArgumentParserException {
+    protected Object getSetting(String key) throws ArgumentParserException {
         if (!params.containsKey(key))
             throw new ArgumentParserException("Setting " + key + " not " +
                                                       "defined");

@@ -17,6 +17,7 @@ import towerwarspp.preset.*;
  */
 public class Boot {
     private static int delay;
+    private static int debug;
 
     // ------------------------------------------------------------
 
