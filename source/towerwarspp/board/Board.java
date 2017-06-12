@@ -2,14 +2,13 @@ package towerwarspp.board;
 
 import towerwarspp.io.Viewable;
 import towerwarspp.io.Viewer;
+import towerwarspp.player.ai.rating.RateStrategy;
 import towerwarspp.preset.Move;
 import towerwarspp.preset.PlayerColor;
 import towerwarspp.preset.Position;
 import towerwarspp.preset.Status;
 
 import java.util.HashSet;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Set;
 
 import static towerwarspp.preset.PlayerColor.BLUE;
@@ -200,6 +199,12 @@ public class Board implements Viewable {
                 @Override
                 public MoveAnalyzer getMoveAnalyzer() {
                     return new MoveAnalyzer(board);
+                }
+
+                @Override
+                public int rateMove(RateStrategy strategy, Move move) {
+                    // TODO clone?!
+                    return strategy.rate(board, move);
                 }
 
                 @Override

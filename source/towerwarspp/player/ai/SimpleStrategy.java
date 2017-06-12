@@ -1,6 +1,7 @@
 package towerwarspp.player.ai;
 
 import towerwarspp.board.Board;
+import towerwarspp.player.ai.rating.RateStrategy;
 import towerwarspp.preset.Move;
 import towerwarspp.preset.PlayerColor;
 import towerwarspp.preset.Position;
@@ -15,18 +16,8 @@ import static towerwarspp.preset.PlayerColor.RED;
  * @author Dominick Leppich
  */
 public class SimpleStrategy implements RateStrategy {
-    private Board board;
-
-    // ------------------------------------------------------------
-
-    public SimpleStrategy(Board board) {
-        this.board = board;
-    }
-
-    // ------------------------------------------------------------
-
     @Override
-    public int rate(Move move) {
+    public int rate(Board board, Move move) {
         if (move == null)
             return Integer.MIN_VALUE;
 
@@ -57,7 +48,8 @@ public class SimpleStrategy implements RateStrategy {
         // Distance
         Position baseDestination = ownColor == RED ? tmpBoard.getBlueBasePosition() : tmpBoard.getRedBasePosition();
 //        int rating = tmpBoard.getSize() * 2 * 50 - tmpBoard.distance(move.getEnd(), baseDestination) * 5;
-        int deltaDistance = tmpBoard.distance(move.getEnd(), baseDestination) - tmpBoard.distance(move.getStart(), baseDestination);
+        int deltaDistance = tmpBoard.distance(move.getEnd(), baseDestination) - tmpBoard.distance(move.getStart(),
+                baseDestination);
         rating += -1 * deltaDistance;
 
         // Kicking tokens and towers increase rating

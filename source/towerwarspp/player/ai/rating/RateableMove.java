@@ -1,4 +1,4 @@
-package towerwarspp.player.ai;
+package towerwarspp.player.ai.rating;
 
 import towerwarspp.preset.Move;
 
@@ -7,15 +7,15 @@ import towerwarspp.preset.Move;
  *
  * @author Dominick Leppich
  */
-public class RateableMove implements Rateable, Comparable<RateableMove> {
+public class RateableMove implements Comparable<RateableMove> {
     private Move move;
-    private RateStrategy strategy;
+    private int rating;
 
     // ------------------------------------------------------------
 
-    public RateableMove(Move move, RateStrategy strategy) {
+    public RateableMove(Move move, int rating) {
         this.move = move;
-        this.strategy = strategy;
+        this.rating = rating;
     }
 
     // ------------------------------------------------------------
@@ -24,13 +24,12 @@ public class RateableMove implements Rateable, Comparable<RateableMove> {
         return move;
     }
 
-    @Override
-    public int rate() {
-        return strategy.rate(move);
+    public int getRating() {
+        return rating;
     }
 
     @Override
     public int compareTo(RateableMove rateableMove) {
-        return new Integer(rate()).compareTo(new Integer(rateableMove.rate()));
+        return new Integer(getRating()).compareTo(new Integer(rateableMove.getRating()));
     }
 }

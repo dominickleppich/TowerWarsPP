@@ -5,7 +5,8 @@ import towerwarspp.io.InputOutputable;
 import towerwarspp.io.TextIO;
 import towerwarspp.io.graphic.java2d.Java2DFrame;
 import towerwarspp.player.HumanPlayer;
-import towerwarspp.player.ai.BestRatedMoveAI;
+import towerwarspp.player.ai.SimpleAI;
+import towerwarspp.player.ai.rating.BestRatedMoveAI;
 import towerwarspp.player.ai.RandomAI;
 import towerwarspp.preset.*;
 
@@ -93,7 +94,7 @@ public class Boot {
         switch (type) {
             case HUMAN: return new HumanPlayer(requestable);
             case RANDOM_AI: return new RandomAI();
-            case SIMPLE_AI: return new BestRatedMoveAI();
+            case SIMPLE_AI: return new SimpleAI();
         } return null;
     }
 }

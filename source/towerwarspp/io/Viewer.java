@@ -2,6 +2,7 @@ package towerwarspp.io;
 
 import towerwarspp.board.Cell;
 import towerwarspp.board.MoveAnalyzer;
+import towerwarspp.player.ai.rating.RateStrategy;
 import towerwarspp.preset.Move;
 import towerwarspp.preset.PlayerColor;
 import towerwarspp.preset.Position;
@@ -60,6 +61,18 @@ public interface Viewer {
      * @return {@link MoveAnalyzer}
      */
     MoveAnalyzer getMoveAnalyzer();
+
+    /**
+     * Rate a move with a given strategy.
+     *
+     * @param strategy
+     *         Strategy
+     * @param move
+     *         Move
+     *
+     * @return Rating
+     */
+    int rateMove(RateStrategy strategy, Move move);
 
     /**
      * Show String representation of the board.

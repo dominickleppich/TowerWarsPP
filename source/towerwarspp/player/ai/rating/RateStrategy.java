@@ -1,5 +1,6 @@
-package towerwarspp.player.ai;
+package towerwarspp.player.ai.rating;
 
+import towerwarspp.board.Board;
 import towerwarspp.preset.Move;
 
 /**
@@ -8,5 +9,5 @@ import towerwarspp.preset.Move;
  * @author Dominick Leppich
  */
 public interface RateStrategy {
-    int rate(Move move);
+    int rate(Board board, Move move);
 }

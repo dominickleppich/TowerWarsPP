@@ -3,7 +3,7 @@ package towerwarspp.io.graphic.java2d;
 
 import towerwarspp.io.InputOutputable;
 import towerwarspp.io.Viewer;
-import towerwarspp.player.ai.RateStrategy;
+import towerwarspp.player.ai.rating.RateStrategy;
 import towerwarspp.preset.Move;
 
 import javax.swing.*;
@@ -30,10 +30,6 @@ public class Java2DFrame extends JFrame implements InputOutputable{
         add(vBox);
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-    }
-
-    public void setRatingStrategy(RateStrategy strategy) {
-        panel.setRatingStrategy(strategy);
     }
 
     // ------------------------------------------------------------
