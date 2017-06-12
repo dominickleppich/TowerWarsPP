@@ -1,4 +1,4 @@
-package towerwarspp.player.ai;
+package towerwarspp.player.ai.simple;
 
 import towerwarspp.player.ai.rating.BestRatedMoveAI;
 

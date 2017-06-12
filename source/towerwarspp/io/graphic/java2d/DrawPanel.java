@@ -6,7 +6,7 @@ import towerwarspp.board.Cell;
 import towerwarspp.board.Token;
 import towerwarspp.board.Tower;
 import towerwarspp.io.Viewer;
-import towerwarspp.player.ai.SimpleStrategy;
+import towerwarspp.player.ai.simple.SimpleStrategy;
 import towerwarspp.preset.Move;
 import towerwarspp.preset.PlayerColor;
 import towerwarspp.preset.Position;
