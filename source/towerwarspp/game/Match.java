@@ -3,6 +3,7 @@ package towerwarspp.game;
 import towerwarspp.Boot;
 import towerwarspp.board.Board;
 import towerwarspp.io.InputOutputable;
+import towerwarspp.io.TextIO;
 import towerwarspp.preset.Move;
 import towerwarspp.preset.Player;
 import towerwarspp.preset.PlayerColor;
@@ -145,24 +146,27 @@ public class Match implements Runnable {
                 e.printStackTrace();
             }
 
-            System.out.println("------------------------------------------------------------");
-            System.out.println("It's " + board.getTurn() + " turn...");
-
             // Request move
             Move m = null;
             try {
                 m = player[moveCounter % 2].request();
             } catch (Exception e) {
-                System.out.println(
+                System.err.println(
                         (moveCounter % 2 == 0 ? "Red" : "Blue") + " failed " + "to" + " request! (" + e.getMessage()
                                 + ")");
                 matchStatus = (moveCounter % 2 == 0 ? Status.BLUE_WIN : Status.RED_WIN);
                 continue;
             }
-            String analyzeResult = board.getMoveAnalyzer().analyzeMove(m);
-            System.out.println(
-                    "LOG Move No " + (moveCounter + 1) + ": " + m + " " + (board.makeMove(m) ? "succeeded" : "failed"));
-            System.out.println("Analyzing result: " + analyzeResult);
+
+            boolean success = board.makeMove(m);
+
+            if (Boot.isDebug()) {
+                System.out.println("LOG Move No " + (moveCounter + 1) + ": " + m + " " + (success ?
+                                                                                                  "succeeded" : "failed"));
+                if (!(inout instanceof TextIO))
+                    System.out.println(board);
+            }
+
 
             // Update display
             inout.update(m);
@@ -171,7 +175,7 @@ public class Match implements Runnable {
             try {
                 player[moveCounter % 2].confirm(board.getStatus());
             } catch (Exception e) {
-                System.out.println(
+                System.err.println(
                         (moveCounter % 2 == 0 ? "Red" : "Blue") + " failed " + "to" + " confirm! (" + e.getMessage()
                                 + ")");
                 matchStatus = (moveCounter % 2 == 0 ? Status.BLUE_WIN : Status.RED_WIN);
@@ -182,7 +186,7 @@ public class Match implements Runnable {
             try {
                 player[(moveCounter + 1) % 2].update(m, board.getStatus());
             } catch (Exception e) {
-                System.out.println(
+                System.err.println(
                         ((moveCounter + 1) % 2 == 0 ? "Red" : "Blue") + " " + "failed to update! " + "(" + e.getMessage() + ")");
                 matchStatus = ((moveCounter + 1) % 2 == 0 ? Status.BLUE_WIN : Status.RED_WIN);
                 continue;

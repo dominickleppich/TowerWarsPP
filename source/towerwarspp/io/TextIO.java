@@ -37,6 +37,10 @@ public class TextIO implements InputOutputable {
         boolean valid = true;
         boolean correctFormat = true;
 
+        System.out.println("------------------------------------------------------------");
+        System.out.println("It's " + viewer.getTurn() + "'s turn...");
+        System.out.println(viewer);
+
         do {
             if (!valid) {
                 System.out.println("\t" + analyzer.analyzeMove(
@@ -79,14 +83,13 @@ public class TextIO implements InputOutputable {
 
     @Override
     public void update(Move move) {
-        System.out.println("Move: " + move);
+        System.out.println("Made move: " + move);
+        String analyzeResult = viewer.getMoveAnalyzer().analyzeMove(move);
+        System.out.println("Analyzing result: " + analyzeResult);
     }
 
     @Override
     public void setViewer(Viewer viewer) {
         this.viewer = viewer;
-
-        // Print board the first time
-        System.out.println(viewer.toString());
     }
 }
