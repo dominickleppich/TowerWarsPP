@@ -24,11 +24,12 @@ import java.util.Map;
  * @author Dominick Leppich
  */
 public class DrawPanel extends JPanel implements MouseListener {
-    private static final int HEX_SIZE = 50;
+    private static final int HEX_SIZE = 60;
     private static final double BASE_SIZE = 0.8;
-    private static final int TOKEN_SIZE = 30;
+    private static final int TOKEN_SIZE = 50;
     private static final int TOWER_RING_DISTANCE = 4;
     private static final float STROKE = 2f;
+    private static final Font TEXT_FONT = new Font(Font.SANS_SERIF, Font.BOLD, 10);
 
     // ------------------------------------------------------------
 
@@ -83,6 +84,9 @@ public class DrawPanel extends JPanel implements MouseListener {
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
         g.setStroke(new BasicStroke(STROKE));
+
+        // Text font
+        g.setFont(TEXT_FONT);
 
         // If no viewer is available, nothing to do
         if (viewer == null)
