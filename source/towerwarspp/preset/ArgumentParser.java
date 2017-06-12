@@ -37,7 +37,8 @@ import java.util.HashMap;
  * </p>
  * <p>
  * Alle Schalter und Einstellungen in dieser Klasse duerfen nicht geaendert
- * werden. Es ist jedoch erlaubt weitere Schalter oder Einstellungen hinzuzufuegen,
+ * werden. Es ist jedoch erlaubt weitere Schalter oder Einstellungen
+ * hinzuzufuegen,
  * dies ist im Quellcode kenntlich gemacht.
  * </p>
  *
@@ -60,8 +61,7 @@ public class ArgumentParser {
      *         wenn das Parsen der Argumente fehlschlaegt
      */
     public ArgumentParser(String[] args) throws ArgumentParserException {
-        params = new HashMap<>();
-        parseArgs(args);
+        params = new HashMap<>(); parseArgs(args);
     }
     // ------------------------------------------------------------
 
@@ -82,15 +82,15 @@ public class ArgumentParser {
             while (index < args.length) {
                 // Check if argument is a flag or setting
                 if (args[index].startsWith("--")) {
-                    addFlag(args[index].substring(2));
-                    index += 1;
+                    addFlag(args[index].substring(2)); index += 1;
                 }
                 else if (args[index].startsWith("-")) {
                     addSetting(args[index].substring(1), args[index + 1]);
                     index += 2;
                 }
                 else
-                    throw new ArgumentParserException("Error parsing: " + args[index]);
+                    throw new ArgumentParserException("Error parsing: " +
+                                                              args[index]);
             }
         } catch (IndexOutOfBoundsException e) {
             throw new ArgumentParserException("Missing parameter");
@@ -126,18 +126,32 @@ public class ArgumentParser {
      *         wenn die Einstellung nicht existiert oder der Wert ein
      *         ungueltiges Format hat
      */
-    private void addSetting(String key, String value) throws ArgumentParserException {
+    private void addSetting(String key, String value) throws
+            ArgumentParserException {
         // Check if a param with this name already exists
         if (params.containsKey(key))
             throw new ArgumentParserException("Param already exists: " + key);
 
         if (value.startsWith("-"))
-            throw new ArgumentParserException("Setting value wrong format: " + value);
+            throw new ArgumentParserException("Setting value wrong format: "
+                                                      + value);
 
         params.put(key, value);
     }
 
     // ------------------------------------------------------------
+
+    /**
+     * Pruefe ob ein Parameter gesetzt ist.
+     *
+     * @param parameter
+     *         Zu pruefender Parameter
+     *
+     * @return wahr, wenn der Parameter gesetzt wurde
+     */
+    public boolean isSet(String parameter) {
+        return params.containsKey(parameter);
+    }
 
     /**
      * Gib den Wert eines Schalters zurueck.
@@ -155,8 +169,7 @@ public class ArgumentParser {
         if (!params.containsKey(flag))
             return false;
 
-        Object o = params.get(flag);
-        if (!(o instanceof Boolean))
+        Object o = params.get(flag); if (!(o instanceof Boolean))
             throw new ArgumentParserException("This is not a flag");
 
         return (Boolean) params.get(flag);
@@ -175,7 +188,8 @@ public class ArgumentParser {
      */
     private Object getSetting(String key) throws ArgumentParserException {
         if (!params.containsKey(key))
-            throw new ArgumentParserException("Setting " + key + " not " + "defined");
+            throw new ArgumentParserException("Setting " + key + " not " +
+                                                      "defined");
 
         return params.get(key);
     }
@@ -193,27 +207,20 @@ public class ArgumentParser {
      * @throws ArgumentParserException
      *         wenn der eingelese Typ nicht passt
      */
-    private PlayerType parsePlayerType(String type) throws ArgumentParserException {
+    private PlayerType parsePlayerType(String type) throws
+            ArgumentParserException {
         switch (type) {
-            case "human":
-                return PlayerType.HUMAN;
-            case "random":
-                return PlayerType.RANDOM_AI;
-            case "simple":
-                return PlayerType.SIMPLE_AI;
-            case "adv1":
-                return PlayerType.ADVANCED_AI_1;
-            case "adv2":
-                return PlayerType.ADVANCED_AI_2;
-            case "adv3":
-                return PlayerType.ADVANCED_AI_3;
-            case "adv4":
-                return PlayerType.ADVANCED_AI_4;
-            case "adv5":
-                return PlayerType.ADVANCED_AI_5;
+            case "human": return PlayerType.HUMAN;
+            case "random": return PlayerType.RANDOM_AI;
+            case "simple": return PlayerType.SIMPLE_AI;
+            case "adv1": return PlayerType.ADVANCED_AI_1;
+            case "adv2": return PlayerType.ADVANCED_AI_2;
+            case "adv3": return PlayerType.ADVANCED_AI_3;
+            case "adv4": return PlayerType.ADVANCED_AI_4;
+            case "adv5": return PlayerType.ADVANCED_AI_5;
 
-            default:
-                throw new ArgumentParserException("Unknown player type: " + type);
+            default: throw new ArgumentParserException("Unknown player type: " +
+                                                               "" + type);
         }
     }
 

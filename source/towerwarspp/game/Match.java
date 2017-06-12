@@ -1,5 +1,6 @@
 package towerwarspp.game;
 
+import towerwarspp.Boot;
 import towerwarspp.board.Board;
 import towerwarspp.preset.Move;
 import towerwarspp.preset.Player;
@@ -131,7 +132,9 @@ public class Match implements Runnable {
 
         while (matchStatus == Status.OK) {
             try {
-                Thread.sleep(100);
+                int delay = Boot.getDelay();
+                if (delay > 0)
+                    Thread.sleep(delay);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
