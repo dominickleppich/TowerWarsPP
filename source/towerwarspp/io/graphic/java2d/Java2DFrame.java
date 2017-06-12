@@ -1,16 +1,12 @@
 package towerwarspp.io.graphic.java2d;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-import towerwarspp.board.Board;
-import towerwarspp.board.MoveAnalyzer;
+
 import towerwarspp.io.InputOutputable;
 import towerwarspp.io.Viewer;
 import towerwarspp.player.ai.RateStrategy;
 import towerwarspp.preset.Move;
 
 import javax.swing.*;
-import java.util.Observable;
-import java.util.Set;
 
 /**
  * Graphical in- and output class using the Java2D framework.
