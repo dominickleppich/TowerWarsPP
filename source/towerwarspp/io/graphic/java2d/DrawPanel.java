@@ -67,7 +67,6 @@ public class DrawPanel extends JPanel implements MouseListener {
                     grid.put(new Position(l, n), hex(x, y, HEX_SIZE));
                 }
             }
-            System.out.println("herE");
         }
     }
 
