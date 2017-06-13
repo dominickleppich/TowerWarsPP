@@ -63,7 +63,16 @@
 
 \newcommand{\ggT}{\textrm{ggT}}
 \newcommand{\kgV}{\textrm{kgV}}
-\newcommand{\code}[1]{\texttt{#1}} 
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\examplegraphic}[3]{
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=#2]{#1} \\
+\smallskip
+{\footnotesize #3}
+\end{center}
+\end{figure}
+}
 
 \setlength{\parindent}{0cm}
 \setlength{\parskip}\medskipamount

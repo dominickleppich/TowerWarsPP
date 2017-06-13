@@ -14,12 +14,7 @@ Das Feld $A1$ steht die rote Basis, auf dem Feld $Xn$ steht die blaue Basis (wob
 
 Alle Felder die einen Abstand $d' \le d$ zur eigenen Basis haben, werden mit Steinen des jeweiligen Spielers befüllt. Der Abstand ist hierbei so definiert, dass Felder, die sich über eine Seite berühren, den Abstand $1$ zueinander haben.
 
-\underline{Beispiel}
-
-TowerWarsPP-Spielfeld aus $8 \times 8$ Feldern mit Startaufstellung.
-\begin{center}
-\includegraphics[scale=0.25]{graphic/start8.png}
-\end{center}
+\examplegraphic{graphic/start8.png}{0.3}{TowerWarsPP-Spielfeld aus $8 \times 8$ Feldern mit Startaufstellung}
 
 Ein Nachbar eines Feldes ist ein Feld mit Abstand $1$ zu diesem. Jedes Feld in der Mitte hat demnach $6$ Nachbarn.
 
@@ -35,22 +30,10 @@ Es ist Ziel des Spiels die gegnerische Basis zu zerstören und folglich auch die
 Jeder Spieler hat zu Beginn eine vordefinierte Menge an Steinen. 
 
 Ein Stein kann sich von seiner Position aus ein Feld in jede Richtung bewegen (außer auf die eigene Basis natürlich).
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[scale=0.25]{graphic/token-nobase.png} \\
-\smallskip
-{\footnotesize $B1$ kann nicht auf Basis $A1$ ziehen}
-\end{center}
-\end{figure}
+\examplegraphic{graphic/token-nobase.png}{0.25}{$B1$ kann nicht auf Basis $A1$ ziehen}
 
 Zieht ein Stein auf ein leeres Feld, ist das ein \emph{Nahzug}. Zieht ein Stein auf ein Feld mit einem gegnerischen Stein, ist dieser geschlagen und der eigene Stein nimmt dessen Platz ein.
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[scale=0.25]{graphic/token-move-kick.png} \\
-\smallskip
-{\footnotesize $I7$ kann auf ein benachbartes leeres Feld ziehen oder $J6$ schlagen}
-\end{center}
-\end{figure}
+\examplegraphic{graphic/token-move-kick.png}{0.25}{$I7$ kann auf ein benachbartes leeres Feld ziehen oder $J6$ schlagen}
 
 Ein Stein kann nicht auf die eigene Basis ziehen, sehr wohl jedoch auf die gegnerische Basis (was zum Sieg führt).
 
@@ -73,21 +56,9 @@ Hat ein Stein einen benachbarten Turm, so erhöht sich die Reichweite des Steins
 
 Zieht ein Stein auf ein benachbartes Feld spricht man von einem \emph{Nahzug}, sonst von einem \emph{Fernzug}.
 
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[scale=0.25]{graphic/move-ranged.png} \\
-\smallskip
-{\footnotesize $I7$ hat durch den Turm auf $J6$ die Reichweite $2$}
-\end{center}
-\end{figure}
+\examplegraphic{graphic/move-ranged.png}{0.25}{$I7$ hat durch den Turm auf $J6$ die Reichweite $2$}
 \newpage
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[scale=0.25]{graphic/move-rangeddouble.png} \\
-\smallskip
-{\footnotesize $I7$ hat durch die Türme auf $J6$ und $H8$ die Reichweite $3$}
-\end{center}
-\end{figure}
+\examplegraphic{graphic/move-rangeddouble.png}{0.25}{$I7$ hat durch die Türme auf $J6$ und $H8$ die Reichweite $3$}
 
 \bigskip
 
@@ -99,49 +70,26 @@ Beim Abbau des Turmes wird dessen Höhe natürlich um $1$ reduziert. Wird ein Tu
 
 Bei diesem Abbau eines Turmes ist es nicht erlaubt zu schlagen. Daraus ergibt sich direkt, dass Türme nicht die gegnerische Basis schlagen können. Weiter ist es möglich, dass ein Spieler hierdurch keine Handlungsmöglichkeit mehr hat, wenn er nur noch einen Turm besitzt, der komplett von benachbarten gegnerischen Figuren besetzt ist. 
 
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[scale=0.25]{graphic/tower-move.png} \\
-\smallskip {\footnotesize
+\examplegraphic{graphic/tower-move.png}{0.25}{
 \begin{itemize}
 \item Turm $I7$ kann auf ein leeres Feld abgebaut werden
 \item Turm $I7$ kann auf den eigenen Stein $H8$ abgebaut werden und damit einen neuen Turm bauen
 \item Turm $I7$ kann auf den eigenen Turm $H7$ abgebaut werden und diesen damit erhöhen
 \item Turm $I7$ darf weder nach $J6$ noch nach $J7$ abgebaut werden, da dort gegnerische Figuren stehen
 \end{itemize}}
-\end{center}
-\end{figure}
 
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[scale=0.25]{graphic/neighbor-blocked-tower.png} \\
-\smallskip
-{\footnotesize Turm $I7$ hat keine Zugmöglichkeiten mehr}
-\end{center}
-\end{figure}
+\examplegraphic{graphic/neighbor-blocked-tower.png}{0.25}{Turm $I7$ hat keine Zugmöglichkeiten mehr}
 
 \newpage 
 Gegnerische Türme können von Steinen geschlagen und \emph{blockiert} werden. 
 
 Zieht ein Stein auf ein Feld mit einem gegnerischen Turm entscheidet die Art des Zuges was passiert. Handelt es sich um einen Nahzug, wird der gesamte gegnerische Turm geschlagen. Im Falle eines Fernzuges wird der gegnerische Turm blockiert.
 
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[scale=0.25]{graphic/token-kick-block-tower.png} \\
-\smallskip
-{\footnotesize $I6$ kann gegnerischen Turm $J6$ schlagen, \\$H7$ kann den gegnerischen Turm blockieren}
-\end{center}
-\end{figure}
+\examplegraphic{graphic/token-kick-block-tower.png}{0.25}{$I6$ kann gegnerischen Turm $J6$ schlagen, \\$H7$ kann den gegnerischen Turm blockieren}
 
 Ist ein Turm blockiert, kann dieser weder abgebaut werden noch gibt er eigenen Steinen einen Bonus auf die Zugreichweite. Er steht nur noch blockiert auf dem Feld. 
 
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[scale=0.25]{graphic/range-blockedbonus.png} \\
-\smallskip
-{\footnotesize $I7$ hat einen Bonus durch Turm $J6$ aber nicht durch blockierten Turm $I6$}
-\end{center}
-\end{figure}
+\examplegraphic{graphic/range-blockedbonus.png}{0.25}{$I7$ hat einen Bonus durch Turm $J6$ aber nicht durch blockierten Turm $I6$}
 
 Diese Blockade kann wieder aufgehoben werden, indem ein eigener Steinauf den blockierten Turm zieht. Dies kann durch einen Nah- oder Fernzug oder durch Abbau eines angrenzenden Turms auf diesen Turm erfolgen.
 
@@ -149,21 +97,9 @@ Ein blockierter Turm kann nicht erneut blockiert werden. Beim Blockieren eines T
 
 \newpage
 
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[scale=0.25]{graphic/tower-blocked.png} \\
-\smallskip
-{\footnotesize Turm $I7$ ist blockiert und kann nicht abgebaut werden}
-\end{center}
-\end{figure}
+\examplegraphic{graphic/tower-blocked.png}{0.25}{Turm $I7$ ist blockiert und kann nicht abgebaut werden}
 
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[scale=0.25]{graphic/tower-unblock.png} \\
-\smallskip
-{\footnotesize Die Blockade von Turm $I7$ kann durch Abbauen des Turms $I6$\\ oder durch den Stein auf $J6$ aufgehoben werden}
-\end{center}
-\end{figure}
+\examplegraphic{graphic/tower-unblock.png}{0.25}{Die Blockade von Turm $I7$ kann durch Abbauen des Turms $I6$\\ oder durch den Stein auf $J6$ aufgehoben werden}
 
 \subsection*{Ende des Spiels}
 Das Spiel ist gewonnen, wenn eine der folgenden Situationen eintritt:
