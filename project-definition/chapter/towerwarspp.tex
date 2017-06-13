@@ -8,7 +8,9 @@ Das Spiel TowerWarsPP ist ein Spiel für zwei Spieler, wobei ein Spieler mit rot
 TowerWarsPP wird auf einem Spielfeld mit hexagonalen Feldern gespielt, die in einem Parallelogramm mit $n \times n$ Feldern angeordnet sind. Die Zeilen werden durchnummeriert, die Spalten werden mit Buchstaben bezeichnet. Die obere linke Ecke des Spielfeldes ist mit $A1$ gekennzeichnet.
 
 \subsection*{Startaufstellung}
-Für $n$ gilt $4 \le n \le 26$ und es gibt eine Distanz $d$ mit \[d = \left\lfloor \frac{n}{2}\right\rfloor\] Auf dem Feld $A1$ steht die rote Basis, auf dem Feld $Xn$ steht die blaue Basis (wobei das $X$ für den $n$-ten Buchstaben steht). 
+Für $n$ gilt $4 \le n \le 26$ und für die Distanz $d$ gilt 
+\[d = \left\lfloor \frac{n}{2}\right\rfloor\hspace{10pt}.\] 
+Das Feld $A1$ steht die rote Basis, auf dem Feld $Xn$ steht die blaue Basis (wobei das $X$ für den $n$-ten Buchstaben steht). 
 
 Alle Felder die einen Abstand $d' \le d$ zur eigenen Basis haben, werden mit Steinen des jeweiligen Spielers befüllt. Der Abstand ist hierbei so definiert, dass Felder, die sich über eine Seite berühren, den Abstand $1$ zueinander haben.
 
@@ -22,7 +24,7 @@ TowerWarsPP-Spielfeld aus $8 \times 8$ Feldern mit Startaufstellung.
 Ein Nachbar eines Feldes ist ein Feld mit Abstand $1$ zu diesem. Jedes Feld in der Mitte hat demnach $6$ Nachbarn.
 
 \subsection*{Spielablauf}
-Der Spieler mit den roten Steinen hat den ersten Zug. Dann wird abwechselnd gezogen, einen Zug auszulassen ist nicht möglich. Ein Feld in TowerWarsPP ist entweder leer oder enthält eines der folgenden Elemente, deren Bedeutung gleich erklärt wird. In jedem Zug muss ein Spieler genau eine Figur von einem auf ein anderes Feld bewegen.
+Der Spieler mit den roten Steinen hat den ersten Zug. Dann wird abwechselnd gezogen, einen Zug auszulassen ist nicht möglich. Ein Feld in TowerWarsPP ist entweder leer oder enthält eine Basis, einen Stein oder einen Turm. In jedem Zug muss ein Spieler genau einen Stein von einem auf ein anderes Feld bewegen.
 
 \subsubsection*{Basis}
 Jeder Spieler hat zu Beginn des Spiels eine Basis, deren Position festgelegt ist. Diese kann nicht bewegt werden. Es ist auch nicht möglich eigene Figuren auf die eigene Basis zu bewegen.
@@ -49,7 +51,8 @@ Zieht ein Stein auf ein leeres Feld, ist das ein \emph{Nahzug}. Zieht ein Stein 
 \end{figure}
 
 Ein Stein kann nicht auf die eigene Basis ziehen, sehr wohl jedoch auf die gegnerische Basis (was zum Sieg führt).
-\newpage
+
+Zieht ein Stein auf ein Feld mit einem eigenen Stein, so wird auf diesem Feld ein Turm der Höhe $1$ gebaut.
 
 \subsubsection*{Türme}
 Zu Beginn hat ein Spieler keine Türme. Türme können durch Ziehen eigener Steine auf eigene Steine gebaut und durch Ziehen eigener Steine auf Türme erhöht werden. Es ist durchaus möglich ein Spiel ohne Bauen eines einzigen Turms zu spielen und zu gewinnen.
@@ -60,8 +63,6 @@ Beim Erhöhen eines Turms darf die Maximalhöhe nie überschritten werden.
 
 Gegnerische Türme können geschlagen und \emph{blockiert} werden. Außerdem kann die Blockade eigener Türme aufgehoben werden, dazu  später mehr. 
 \bigskip
-
-Zieht ein Stein auf ein Feld mit einem eigenen Stein, so wird auf diesem Feld ein Turm der Höhe $1$ gebaut.
 
 Zieht ein Stein auf ein Feld mit einem eigenen Turm, so wird dessen Höhe um $1$ erhöht (Ausnahme bilden hier blockierte Türme, deren Blockade aufgehoben wird und dessen Höhe unverändert bleibt).
 
@@ -103,7 +104,7 @@ Zieht ein Stein auf ein Feld mit einem gegnerischen Turm entscheidet die Art des
 
 Auch Türme haben Zugmöglichkeiten. Es ist nicht möglich Türme in Ihrer Gesamtheit zu bewegen. 
 
-Allerdings kann der oberste Stein vom Turm auf ein benachbartes Feld gezogen werden. Angrenzende Türme verleihen hierfür keinen Bonus auf die Reichweite. Es kann nur auf ein leeres oder eigenes Feld gezogen werden, ohne dabei die Maximalhöhe von Türmen zu überschreiten.
+Allerdings kann der oberste Stein vom Turm auf ein benachbartes Feld gezogen werden. Angrenzende Türme verleihen keinen Bonus auf die Reichweite beim Turmabbau. Es kann nur auf ein leeres oder eigenes Feld gezogen werden, ohne dabei die Maximalhöhe von Türmen zu überschreiten.
 \newpage 
 Bei diesem Abbau eines Turmes ist es nicht erlaubt zu schlagen. Daraus ergibt sich direkt, dass Türme nicht die gegnerische Basis schlagen können. Weiter ist es möglich, dass ein Spieler hierdurch keine Handlungsmöglichkeit mehr hat, wenn er nur noch einen Turm besitzt, der komplett von benachbarten gegnerischen Figuren besetzt ist. 
 
@@ -112,10 +113,10 @@ Bei diesem Abbau eines Turmes ist es nicht erlaubt zu schlagen. Daraus ergibt si
 \includegraphics[scale=0.25]{graphic/tower-move.png}
 \end{center}
 \begin{itemize}
-\item Turm $I7$ kann auf ein leeres Feld ziehen
-\item Turm $I7$ kann auf den eigenen Stein $H8$ ziehen und damit einen neuen Turm bauen
-\item Turm $I7$ kann auf den eigenen Turm $H7$ ziehen und diesen damit erhöhen
-\item Turm $I7$ darf weder nach $J6$ noch nach $J7$ ziehen, da dort gegnerische Figuren stehen
+\item Turm $I7$ kann auf ein leeres Feld abgebaut werden
+\item Turm $I7$ kann auf den eigenen Stein $H8$ abgebaut werden und damit einen neuen Turm bauen
+\item Turm $I7$ kann auf den eigenen Turm $H7$ abgebaut werden und diesen damit erhöhen
+\item Turm $I7$ darf weder nach $J6$ noch nach $J7$ abgebaut werden, da dort gegnerische Figuren stehen
 \end{itemize}
 \end{figure}
 
@@ -156,7 +157,7 @@ Das Spiel ist gewonnen, wenn eine der folgenden Situationen eintritt:
 \item Der Gegenspieler gibt auf
 \end{itemize}
 
-Da in jedem Zug ein Stein bewegt werden muss und im Falle von keiner Zugmöglichkeit der Gegner gewinnt, kann das Spiel nicht unentschieden enden. Es ist jedoch sehr gut möglich, dass ein Spiel endlos andauert.
+Da in jedem Zug ein Stein bewegt werden muss und im Falle von Handlungsunfähigkeit der Gegner gewinnt, kann das Spiel nicht unentschieden enden. Es ist jedoch sehr gut möglich, dass ein Spiel endlos andauert.
 
 \subsection*{Spielidee}
 Die Spielidee für TowerWarsPP wurde dieses Semester von Ole Umlauft und Dominick Leppich entwickelt und im Laufe von Testspielen zu dem ausgebaut, was jetzt in dieser Spielbeschreibung definiert ist.
