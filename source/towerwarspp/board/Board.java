@@ -24,19 +24,33 @@ public class Board implements Viewable {
     private static final int TO_STRING_SPACE = 6;
 
     // ------------------------------------------------------------
-    /** Base positions */
+    /**
+     * Base positions
+     */
     private final Position redBasePosition, blueBasePosition;
-    /** Board grid */
+    /**
+     * Board grid
+     */
     private AppGrid grid;
-    /** Maximum Tower size */
+    /**
+     * Maximum Tower size
+     */
     private int maxTowerSize;
-    /** Who's players turn is it? */
+    /**
+     * Who's players turn is it?
+     */
     private PlayerColor turn;
-    /** Possible moves for current player */
+    /**
+     * Possible moves for current player
+     */
     private Set<Move> possibleMoves;
-    /** Status */
+    /**
+     * Status
+     */
     private Status status;
-    /** Board viewer */
+    /**
+     * Board viewer
+     */
     private Viewer viewer;
 
     // ------------------------------------------------------------
@@ -44,8 +58,7 @@ public class Board implements Viewable {
     /**
      * Create a new board with side length {@code size}.
      *
-     * @param size
-     *         Size
+     * @param size Size
      */
     public Board(int size) {
         if (size < 4 || size > 26)
@@ -68,7 +81,8 @@ public class Board implements Viewable {
     public Board(Board b) {
         grid = new AppGrid(b.getSize());
 
-        this.maxTowerSize = b.maxTowerSize; this.turn = b.turn;
+        this.maxTowerSize = b.maxTowerSize;
+        this.turn = b.turn;
         this.status = b.status;
 
         this.redBasePosition = b.redBasePosition;
@@ -77,7 +91,8 @@ public class Board implements Viewable {
         // Copy board
         for (int l = 1; l <= getSize(); l++) {
             for (int n = 1; n <= getSize(); n++) {
-                Position p = new Position(l, n); Cell c = b.grid.getCell(p);
+                Position p = new Position(l, n);
+                Cell c = b.grid.getCell(p);
                 grid.setCell(p, c == null ? null : c.clone());
             }
         }
@@ -224,39 +239,39 @@ public class Board implements Viewable {
     /**
      * Count tokens owned by a player.
      *
-     * @param color
-     *         Player color
-     *
+     * @param color Player color
      * @return Number of owned tokens
      */
     public int getPlayerTokenCount(PlayerColor color) {
-        int counter = 0; for (Position p : grid) {
-            Cell c = grid.getCell(p); if (c != null && c instanceof Token && c.getColor() == color)
+        int counter = 0;
+        for (Position p : grid) {
+            Cell c = grid.getCell(p);
+            if (c != null && c instanceof Token && c.getColor() == color)
                 counter++;
-        } return counter;
+        }
+        return counter;
     }
 
     /**
      * Count towers owned by a player.
      *
-     * @param color
-     *         Player color
-     *
+     * @param color Player color
      * @return Number of owned towers
      */
     public int getPlayerTowerCount(PlayerColor color) {
-        int counter = 0; for (Position p : grid) {
-            Cell c = grid.getCell(p); if (c != null && c instanceof Tower && c.getColor() == color)
+        int counter = 0;
+        for (Position p : grid) {
+            Cell c = grid.getCell(p);
+            if (c != null && c instanceof Tower && c.getColor() == color)
                 counter++;
-        } return counter;
+        }
+        return counter;
     }
 
     /**
      * Count tokens and towers owned by a player.
      *
-     * @param color
-     *         Player color
-     *
+     * @param color Player color
      * @return Number of owned tokens and towers
      */
     public int getPlayerPlayableCellCount(PlayerColor color) {
@@ -281,9 +296,7 @@ public class Board implements Viewable {
     /**
      * Checks if a given {@link Move} is valid in the current situation.
      *
-     * @param move
-     *         Move
-     *
+     * @param move Move
      * @return true, if the move is valid
      */
     public boolean checkMove(Move move) {
@@ -294,16 +307,15 @@ public class Board implements Viewable {
      * Analyze if a move is valid or not. In case of illegal moves, give a
      * detailed description of the error.
      *
-     * @param move
-     *         Move
-     *
+     * @param move Move
      * @return Analyze result of this move
      */
     public String analyzeMove(Move move) {
         if (move == null)
             return "Valid (null): Surrender move";
 
-        Cell startCell = null, endCell = null; try {
+        Cell startCell = null, endCell = null;
+        try {
             startCell = grid.getCell(move.getStart());
             endCell = grid.getCell(move.getEnd());
         } catch (IndexOutOfBoundsException e) {
@@ -317,7 +329,7 @@ public class Board implements Viewable {
         // Check correct player
         if (startCell.getColor() != getTurn())
             return "Invalid (" + move + "): Cell doesn't belong to the " +
-                           "current player";
+                    "current player";
 
         if (move.getStart().equals(move.getEnd()))
             return "Invalid (" + move + "): Start and end position are equal";
@@ -339,27 +351,24 @@ public class Board implements Viewable {
             else if (startCell.getColor() == endCell.getColor()) {
                 // Cannot move on own base
                 if (endCell instanceof Base)
-                    return "Invalid (" + move + "): Token cannot move on own " +
-                                   "" + "" + "" + "" + "" + "" + "" + "" +
-                                   "base";
+                    return "Invalid (" + move + "): Token cannot move on own base";
                     // Token on token is a new tower
                 else if (endCell instanceof Token)
                     return "Valid (" + move + "): Token moved on own token "
-                                   + "and created new " + "tower";
+                            + "and created new " + "tower";
                     // Token on tower increase its size
                 else if (endCell instanceof Tower) {
                     if (((Tower) endCell).isBlocked())
                         return "Valid (" + move + "): Token unblocked tower";
                     else if (((Tower) endCell).getHeight() < maxTowerSize)
                         return "Valid (" + move + "): Token moved on tower "
-                                       + "and increased size";
+                                + "and increased size";
                     else
                         return "Invalid (" + move + "): Token tried to " +
-                                       "increase tower with max height";
-                }
-                else
+                                "increase tower with max height";
+                } else
                     return "Invalid (" + move + "): Token moved on unknown "
-                                   + "cell type";
+                            + "cell type";
             }
             // opponent
             else {
@@ -367,7 +376,7 @@ public class Board implements Viewable {
                 if (endCell instanceof Base)
                     // base is kicked (win situation)
                     return "Valid (" + move + "): Token moved on opponent " +
-                                   "base -> WIN";
+                            "base -> WIN";
                     // Token on enemy token kicks it
                 else if (endCell instanceof Token)
                     // simply move the token there
@@ -377,23 +386,21 @@ public class Board implements Viewable {
                     // if move is melee, kick tower completely
                     if (grid.distance(move.getStart(), move.getEnd()) == 1)
                         return "Valid (" + move + "): Token kicked opponent "
-                                       + "tower with a " + "melee move";
+                                + "tower with a " + "melee move";
                         // if move is ranged, block the tower
                     else {
                         if (((Tower) endCell).isBlocked())
                             return "Invalid (" + move + "): Token tried to " +
-                                           "block already blocked tower";
+                                    "block already blocked tower";
                         else
                             return "Valid (" + move + "): Token blocked " +
-                                           "opponent tower with a ranged move";
+                                    "opponent tower with a ranged move";
                     }
-                }
-                else
+                } else
                     return "Invalid (" + move + "): Token moved on unknown "
-                                   + "cell type";
+                            + "cell type";
             }
-        }
-        else if (startCell instanceof Tower) {
+        } else if (startCell instanceof Tower) {
             if (((Tower) startCell).isBlocked())
                 return "Invalid (" + move + "): Blocked tower cannot move";
 
@@ -408,7 +415,7 @@ public class Board implements Viewable {
                 // Towers cannot move on enemy cells
             else if (startCell.getColor() != endCell.getColor())
                 return "Invalid (" + move + "): Towers cannot kick opponent "
-                               + "tokens or towers";
+                        + "tokens or towers";
 
                 // Tower on base is not allowed (neither own, nor enemy ->
                 // cause towers cannot kick)
@@ -418,33 +425,30 @@ public class Board implements Viewable {
                 // Tower on token is new tower
             else if (endCell instanceof Token)
                 return "Valid (" + move + "): Tower moved on own token and "
-                               + "created new tower";
+                        + "created new tower";
 
                 // Tower on tower increase its height, if size not exceeded
             else if (endCell instanceof Tower) {
                 if (!((Tower) endCell).isBlocked())
                     return "Valid (" + move + "): Tower tried to unblock own " +
-                                   "unblocked tower";
+                            "unblocked tower";
                 else if (((Tower) endCell).getHeight() < maxTowerSize)
                     return "Valid (" + move + "): Tower moved on another own " +
-                                   "tower and increased its height";
+                            "tower and increased its height";
                 else
                     return "Invalid (" + move + "): Tower tried to increase "
-                                   + "tower with max height";
-            }
-            else
+                            + "tower with max height";
+            } else
                 return "Invalid (" + move + "): Tower moved on unknown cell "
-                               + "type";
-        }
-        else
+                        + "type";
+        } else
             return "Invalid (" + move + "): Unknown start cell type";
     }
 
     /**
      * Apply the move on the board
      *
-     * @param move
-     *         Move
+     * @param move Move
      */
     private void applyMove(Move move) {
         Cell startCell = grid.getCell(move.getStart()), endCell = grid.getCell(
@@ -485,10 +489,9 @@ public class Board implements Viewable {
                         ((Tower) endCell).increase();
                     else
                         throw new IllegalMoveException("tower max height " +
-                                                               "exceed");
+                                "exceed");
 
-                }
-                else
+                } else
                     throw new IllegalMoveException("unknown end cell type");
             }
             // opponent
@@ -507,14 +510,14 @@ public class Board implements Viewable {
                     if (grid.distance(move.getStart(), move.getEnd()) == 1)
                         grid.setCell(move.getEnd(), startCell);
                         // if move is ranged, block the tower
+                    else if (((Tower) endCell).isBlocked())
+                        throw new IllegalMoveException("opponent tower already blocked");
                     else
                         ((Tower) endCell).block();
-                }
-                else
+                } else
                     throw new IllegalMoveException("unknown end cell type");
             }
-        }
-        else if (startCell instanceof Tower) {
+        } else if (startCell instanceof Tower) {
             // Blocked towers cannot move!
             if (((Tower) startCell).isBlocked())
                 throw new IllegalMoveException("blocked tower move");
@@ -554,20 +557,16 @@ public class Board implements Viewable {
                     ((Tower) endCell).increase();
                 else
                     throw new IllegalMoveException("tower max height exceed");
-            }
-            else
+            } else
                 throw new IllegalMoveException("unknown end cell type");
-        }
-        else
+        } else
             throw new IllegalMoveException("unknown start cell type");
     }
 
     /**
      * Make a move on the board.
      *
-     * @param move
-     *         Move
-     *
+     * @param move Move
      * @return true, if move was made
      */
     public boolean makeMove(Move move) {
@@ -577,7 +576,8 @@ public class Board implements Viewable {
 
         // check if move is valid
         if (!checkMove(move)) {
-            status = Status.ILLEGAL; return false;
+            status = Status.ILLEGAL;
+            return false;
         }
 
         // check for null move, player surrender
@@ -586,7 +586,8 @@ public class Board implements Viewable {
             if (turn == RED)
                 status = Status.BLUE_WIN;
             else
-                status = Status.RED_WIN; return true;
+                status = Status.RED_WIN;
+            return true;
         }
 
         // apply move
@@ -655,14 +656,12 @@ public class Board implements Viewable {
 
     /**
      * Calculate the move range of a given position.
-     *
+     * <p>
      * Empty cells and bases cannot move. Towers can move one field. Tokens can
      * move one field, their move range is increased by each direct non-blocked
      * own tower height.
      *
-     * @param position
-     *         Position
-     *
+     * @param position Position
      * @return Range
      */
     private int calculateMoveRange(Position position) {
@@ -684,7 +683,7 @@ public class Board implements Viewable {
 
                 // If cell is a tower, add its size to own range
                 if (neighbor instanceof Tower && neighbor.getColor() == cell.getColor() && !((Tower) neighbor)
-                                                                                                    .isBlocked())
+                        .isBlocked())
                     range += ((Tower) neighbor).getHeight();
             }
         }
@@ -695,9 +694,7 @@ public class Board implements Viewable {
     /**
      * Calculate the set of all possible moves for a given token.
      *
-     * @param position
-     *         Position
-     *
+     * @param position Position
      * @return Set of possible {@link Move}'s
      */
     private Set<Move> getPossibleMovesForToken(Position position) {
@@ -727,15 +724,15 @@ public class Board implements Viewable {
                 // Tokens cannot move on own towers, if max height is
                 // exceeded and tower not blocked
             else if (cell.getColor() == tokenColor && cell instanceof Tower
-                             && ((Tower) cell)
-                                                                                       .getHeight() + 1 > maxTowerSize && !((Tower) cell)
-                                                                                                                                   .isBlocked())
+                    && ((Tower) cell)
+                    .getHeight() + 1 > maxTowerSize && !((Tower) cell)
+                    .isBlocked())
                 continue;
 
                 // Tokens cannot block already blocked enemy towers
             else if (cell.getColor() != tokenColor && cell instanceof Tower
-                             && ((Tower) cell)
-                                                                                       .isBlocked() && grid.distance(
+                    && ((Tower) cell)
+                    .isBlocked() && grid.distance(
                     position, p) > 1)
                 continue;
 
@@ -749,9 +746,7 @@ public class Board implements Viewable {
     /**
      * Calculate the set of all possible moves for a given tower
      *
-     * @param position
-     *         Position
-     *
+     * @param position Position
      * @return Set of possible {@link Move}'s
      */
     private Set<Move> getPossibleMovesForTower(Position position) {
@@ -779,8 +774,8 @@ public class Board implements Viewable {
                 // Towers can move on own tower, if max tower size is not
                 // exceeded
             else if (cell instanceof Tower && ((Tower) cell)
-                                                      .getHeight() + 1 <=
-                                                      maxTowerSize)
+                    .getHeight() + 1 <=
+                    maxTowerSize)
                 moves.add(new Move(position, p));
         }
 
@@ -797,8 +792,10 @@ public class Board implements Viewable {
     // ------------------------------------------------------------
 
     private static String fillSpaces(int n) {
-        StringBuilder sb = new StringBuilder(); while (n-- > 0)
-            sb.append(" "); return sb.toString();
+        StringBuilder sb = new StringBuilder();
+        while (n-- > 0)
+            sb.append(" ");
+        return sb.toString();
     }
 
     private static String fixedString(String s) {
@@ -815,11 +812,13 @@ public class Board implements Viewable {
         s.append(fillSpaces(TO_STRING_SPACE / 2));
         for (int l = 0; l < getSize(); l++)
             s.append(fixedString(Character.toString((char) (l + 'A'))));
-        s.append("\n\n"); for (int n = 1; n <= getSize(); n++) {
+        s.append("\n\n");
+        for (int n = 1; n <= getSize(); n++) {
             s.append(fillSpaces(TO_STRING_SPACE / 2 * (n - 1)) + fixedString(
                     Integer.toString(n)));
             for (int l = 1; l <= getSize(); l++) {
-                Cell cell = grid.getCell(new Position(l, n)); String ss;
+                Cell cell = grid.getCell(new Position(l, n));
+                String ss;
                 if (cell instanceof Base)
                     ss = (cell.getColor() == RED ? "R" : "B") + "B";
                 else if (cell instanceof Token)
@@ -827,11 +826,13 @@ public class Board implements Viewable {
                 else if (cell instanceof Tower) {
                     int size = Math.abs(((Tower) cell).getHeight());
                     ss = (cell.getColor() == RED ? "R" : "B") + "T" + size;
-                }
-                else
-                    ss = "."; s.append(fixedString(ss));
-            } s.append(fixedString(Integer.toString(n)) + "\n\n");
-        } s.append(fillSpaces(TO_STRING_SPACE / 2 * (getSize() + 2)));
+                } else
+                    ss = ".";
+                s.append(fixedString(ss));
+            }
+            s.append(fixedString(Integer.toString(n)) + "\n\n");
+        }
+        s.append(fillSpaces(TO_STRING_SPACE / 2 * (getSize() + 2)));
         for (int l = 0; l < getSize(); l++)
             s.append(fixedString(Character.toString((char) (l + 'A'))));
         return s.toString();
