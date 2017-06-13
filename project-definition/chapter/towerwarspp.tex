@@ -37,17 +37,19 @@ Jeder Spieler hat zu Beginn eine vordefinierte Menge an Steinen.
 Ein Stein kann sich von seiner Position aus ein Feld in jede Richtung bewegen (außer auf die eigene Basis natürlich).
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[scale=0.25]{graphic/token-nobase.png}
+\includegraphics[scale=0.25]{graphic/token-nobase.png} \\
+\smallskip
+{\footnotesize $B1$ kann nicht auf Basis $A1$ ziehen}
 \end{center}
-\caption*{$B1$ kann nicht auf Basis $A1$ ziehen}
 \end{figure}
 
 Zieht ein Stein auf ein leeres Feld, ist das ein \emph{Nahzug}. Zieht ein Stein auf ein Feld mit einem gegnerischen Stein, ist dieser geschlagen und der eigene Stein nimmt dessen Platz ein.
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[scale=0.25]{graphic/token-move-kick.png}
+\includegraphics[scale=0.25]{graphic/token-move-kick.png} \\
+\smallskip
+{\footnotesize $I7$ kann auf ein benachbartes leeres Feld ziehen oder $J6$ schlagen}
 \end{center}
-\caption*{$I7$ kann auf ein benachbartes leeres Feld ziehen oder $J6$ schlagen}
 \end{figure}
 
 Ein Stein kann nicht auf die eigene Basis ziehen, sehr wohl jedoch auf die gegnerische Basis (was zum Sieg führt).
@@ -59,92 +61,107 @@ Zu Beginn hat ein Spieler keine Türme. Türme können durch Ziehen eigener Stei
 
 Türme haben eine Höhe $h \le h_\text{max}$, wobei \[h_\text{max} = \left\lfloor \frac{n}{3}\right\rfloor\]
 
+Zieht ein Stein auf ein Feld mit einem eigenen Turm, so wird dessen Höhe um $1$ erhöht.
+
 Beim Erhöhen eines Turms darf die Maximalhöhe nie überschritten werden.
 
-Gegnerische Türme können geschlagen und \emph{blockiert} werden. Außerdem kann die Blockade eigener Türme aufgehoben werden, dazu  später mehr. 
 \bigskip
-
-Zieht ein Stein auf ein Feld mit einem eigenen Turm, so wird dessen Höhe um $1$ erhöht (Ausnahme bilden hier blockierte Türme, deren Blockade aufgehoben wird und dessen Höhe unverändert bleibt).
 
 Türme erhöhen die Reichweite angrenzender Steine um die Höhe des Turmes, dabei spielt es keine Rolle ob der Stein in dieser Reichweite Ziehen oder Schlagen will.
 
-Hat ein Stein einen benachbarten Turm, so erhöht sich die Reichweite des Steins um die Höhe $h$ des Turmes. Der Stein kann dann auf alle erlaubten Felder mit Abstand $d \le 1 + h$ ziehen. Hat ein Stein mehrere angrenzende Türme, so summieren sich deren Höhen bei der Bestimmung der Reichweite auf. Blockierte Türme geben keinen Bonus. Ein Stein mit $6$ benachbarten Türmen kann folglich alle Felder mit folgendem Abstand erreichen \[d \le 1 + \sum_{i=1}^6 h_i\]
-
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[scale=0.25]{graphic/move-ranged.png}
-\end{center}
-\caption*{$I7$ hat durch den Turm auf $J6$ die Reichweite $2$}
-\end{figure}
-\newpage
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[scale=0.25]{graphic/move-rangeddouble.png}
-\end{center}
-\caption*{$I7$ hat durch die Türme auf $J6$ und $H8$ die Reichweite $3$}
-\end{figure}
-
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[scale=0.25]{graphic/range-blockedbonus.png}
-\end{center}
-\caption*{$I7$ hat einen Bonus durch Turm $J6$ aber nicht durch blockierten Turm $I6$}
-\end{figure}
+Hat ein Stein einen benachbarten Turm, so erhöht sich die Reichweite des Steins um die Höhe $h$ des Turmes. Der Stein kann dann auf alle erlaubten Felder mit Abstand $d \le 1 + h$ ziehen. Hat ein Stein mehrere angrenzende Türme, so summieren sich deren Höhen bei der Bestimmung der möglichen Zugreichweite auf. Ein Stein mit $6$ benachbarten Türmen kann folglich alle Felder mit folgendem Abstand erreichen \[d \le 1 + \sum_{i=1}^6 h_i\hspace*{10pt}.\]
 
 Zieht ein Stein auf ein benachbartes Feld spricht man von einem \emph{Nahzug}, sonst von einem \emph{Fernzug}.
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[scale=0.25]{graphic/token-kick-block-tower.png}
+\includegraphics[scale=0.25]{graphic/move-ranged.png} \\
+\smallskip
+{\footnotesize $I7$ hat durch den Turm auf $J6$ die Reichweite $2$}
 \end{center}
-\caption*{$I6$ kann gegnerischen Turm $J6$ schlagen, $H7$ kann den gegnerischen Turm blockieren}
+\end{figure}
+\newpage
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=0.25]{graphic/move-rangeddouble.png} \\
+\smallskip
+{\footnotesize $I7$ hat durch die Türme auf $J6$ und $H8$ die Reichweite $3$}
+\end{center}
 \end{figure}
 
-Zieht ein Stein auf ein Feld mit einem gegnerischen Turm entscheidet die Art des Zuges was passiert. Handelt es sich um einen Nahzug, wird der gesamte gegnerische Turm geschlagen. Im Falle eines Fernzuges wird der gegnerische Turm blockiert.
+\bigskip
 
 Auch Türme haben Zugmöglichkeiten. Es ist nicht möglich Türme in Ihrer Gesamtheit zu bewegen. 
 
-Allerdings kann der oberste Stein vom Turm auf ein benachbartes Feld gezogen werden. Angrenzende Türme verleihen keinen Bonus auf die Reichweite beim Turmabbau. Es kann nur auf ein leeres oder eigenes Feld gezogen werden, ohne dabei die Maximalhöhe von Türmen zu überschreiten.
-\newpage 
+Allerdings kann ein Turm abgebaut werden, indem der oberste Stein vom Turm auf ein benachbartes Feld gezogen werden. Angrenzende Türme verleihen keinen Bonus auf die Reichweite beim Turmabbau. Es kann nur auf ein leeres oder eigenes Feld gezogen werden, ohne dabei die Maximalhöhe von Türmen zu überschreiten.
+
+Beim Abbau des Turmes wird dessen Höhe natürlich um $1$ reduziert. Wird ein Turm der Höhe $1$ abgebaut, so bleibt dort ein normaler Stein zurück.
+
 Bei diesem Abbau eines Turmes ist es nicht erlaubt zu schlagen. Daraus ergibt sich direkt, dass Türme nicht die gegnerische Basis schlagen können. Weiter ist es möglich, dass ein Spieler hierdurch keine Handlungsmöglichkeit mehr hat, wenn er nur noch einen Turm besitzt, der komplett von benachbarten gegnerischen Figuren besetzt ist. 
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[scale=0.25]{graphic/tower-move.png}
-\end{center}
+\includegraphics[scale=0.25]{graphic/tower-move.png} \\
+\smallskip {\footnotesize
 \begin{itemize}
 \item Turm $I7$ kann auf ein leeres Feld abgebaut werden
 \item Turm $I7$ kann auf den eigenen Stein $H8$ abgebaut werden und damit einen neuen Turm bauen
 \item Turm $I7$ kann auf den eigenen Turm $H7$ abgebaut werden und diesen damit erhöhen
 \item Turm $I7$ darf weder nach $J6$ noch nach $J7$ abgebaut werden, da dort gegnerische Figuren stehen
-\end{itemize}
+\end{itemize}}
+\end{center}
 \end{figure}
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[scale=0.25]{graphic/neighbor-blocked-tower.png}
+\includegraphics[scale=0.25]{graphic/neighbor-blocked-tower.png} \\
+\smallskip
+{\footnotesize Turm $I7$ hat keine Zugmöglichkeiten mehr}
 \end{center}
-\caption*{Turm $I7$ hat keine Zugmöglichkeiten mehr}
 \end{figure}
 
-Beim Abbau des Turmes wird dessen Höhe natürlich um $1$ reduziert. Wird ein Turm der Höhe $1$ abgebaut, so bleibt dort ein normaler Stein zurück.
+\newpage 
+Gegnerische Türme können von Steinen geschlagen und \emph{blockiert} werden. 
 
-Ist ein Turm blockiert, kann dieser weder abgebaut werden noch gibt er anderen Steinen einen Bonus. Er steht nur noch blockiert auf dem Feld. 
+Zieht ein Stein auf ein Feld mit einem gegnerischen Turm entscheidet die Art des Zuges was passiert. Handelt es sich um einen Nahzug, wird der gesamte gegnerische Turm geschlagen. Im Falle eines Fernzuges wird der gegnerische Turm blockiert.
 
-Durch Ziehen eines eigenen Steins auf den Turm kann die Blockade wieder aufgehoben werden, ohne die Höhe des Turms zu verändern. Dies kann durch einen Nah- oder Fernzug oder durch Abbau eines angrenzenden Turms auf diesen Turm erfolgen.
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=0.25]{graphic/token-kick-block-tower.png} \\
+\smallskip
+{\footnotesize $I6$ kann gegnerischen Turm $J6$ schlagen, \\$H7$ kann den gegnerischen Turm blockieren}
+\end{center}
+\end{figure}
+
+Ist ein Turm blockiert, kann dieser weder abgebaut werden noch gibt er eigenen Steinen einen Bonus auf die Zugreichweite. Er steht nur noch blockiert auf dem Feld. 
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=0.25]{graphic/range-blockedbonus.png} \\
+\smallskip
+{\footnotesize $I7$ hat einen Bonus durch Turm $J6$ aber nicht durch blockierten Turm $I6$}
+\end{center}
+\end{figure}
+
+Diese Blockade kann wieder aufgehoben werden, indem ein eigener Steinauf den blockierten Turm zieht. Dies kann durch einen Nah- oder Fernzug oder durch Abbau eines angrenzenden Turms auf diesen Turm erfolgen.
+
+Ein blockierter Turm kann nicht erneut blockiert werden. Beim Blockieren eines Turms wird die Höhe nicht verringert, beim Aufheben der Blockade nicht erhöht.
+
 \newpage
+
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[scale=0.25]{graphic/tower-blocked.png}
+\includegraphics[scale=0.25]{graphic/tower-blocked.png} \\
+\smallskip
+{\footnotesize Turm $I7$ ist blockiert und kann nicht abgebaut werden}
 \end{center}
-\caption*{Turm $I7$ ist blockiert und kann nicht abgebaut werden}
 \end{figure}
 
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=0.25]{graphic/tower-unblock.png} \\
-\hspace{10pt}\\
-Die Blockade von Turm $I7$ kann durch Abbauen des Turms $I6$\\ oder durch den Stein auf $J6$ aufgehoben werden
+\smallskip
+{\footnotesize Die Blockade von Turm $I7$ kann durch Abbauen des Turms $I6$\\ oder durch den Stein auf $J6$ aufgehoben werden}
 \end{center}
 \end{figure}
 
@@ -159,5 +176,15 @@ Das Spiel ist gewonnen, wenn eine der folgenden Situationen eintritt:
 
 Da in jedem Zug ein Stein bewegt werden muss und im Falle von Handlungsunfähigkeit der Gegner gewinnt, kann das Spiel nicht unentschieden enden. Es ist jedoch sehr gut möglich, dass ein Spiel endlos andauert.
 
-\subsection*{Spielidee}
-Die Spielidee für TowerWarsPP wurde dieses Semester von Ole Umlauft und Dominick Leppich entwickelt und im Laufe von Testspielen zu dem ausgebaut, was jetzt in dieser Spielbeschreibung definiert ist.
+\subsection*{Herkunft von TowerWars}
+Die Spielidee für TowerWarsPP wurde im Verlaufe dieses Semesters von Ole Umlauft und Dominick Leppich entwickelt und im Laufe von Testspielen zu dem ausgebaut, was jetzt in dieser Spielbeschreibung definiert ist.
+
+Die Spielidee ist unter der \emph{Creative-Commons}-Lizenz ``CC BY-NC'' veröffentlicht.
+
+Wir würden uns freuen über Modifikationen des Spiels informiert zu werden.
+
+\href{mailto:dominick.leppich@gmail.com}{dominick.leppich@gmail.com} \\
+\href{mailto:ole.umlauft@gmail.com}{ole.umlauft@gmail.com}
+\begin{flushright}
+\includegraphics[scale=0.7]{graphic/cc.png}
+\end{flushright}
