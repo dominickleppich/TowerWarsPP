@@ -10,13 +10,15 @@ TowerWarsPP wird auf einem Spielfeld mit hexagonalen Feldern gespielt, die in ei
 \subsection*{Startaufstellung}
 Für $n$ gilt $4 \le n \le 26$ und für die Distanz $d$ gilt 
 \[d = \left\lfloor \frac{n}{2}\right\rfloor\hspace{10pt}.\] 
-Das Feld $A1$ steht die rote Basis, auf dem Feld $Xn$ steht die blaue Basis (wobei das $X$ für den $n$-ten Buchstaben steht). 
+Auf dem Feld $A1$ steht die rote Basis, auf dem Feld $Xn$ steht die blaue Basis (wobei das $X$ für den $n$-ten Buchstaben steht). 
 
-Alle Felder die einen Abstand $d' \le d$ zur eigenen Basis haben, werden mit Steinen des jeweiligen Spielers befüllt. Der Abstand ist hierbei so definiert, dass Felder, die sich über eine Seite berühren, den Abstand $1$ zueinander haben.
+Alle Felder die einen Abstand $d' \le d$ zur eigenen Basis haben, werden mit Steinen des jeweiligen Spielers befüllt. 
 
 \examplegraphic{graphic/start8.png}{0.3}{TowerWarsPP-Spielfeld aus $8 \times 8$ Feldern mit Startaufstellung}
 
-Ein Nachbar eines Feldes ist ein Feld mit Abstand $1$ zu diesem. Jedes Feld in der Mitte hat demnach $6$ Nachbarn.
+Der Abstand ist hierbei so definiert, dass Felder, die sich über eine Seite berühren, den Abstand $1$ zueinander haben. Ein Nachbar eines Feldes ist ein Feld mit Abstand $1$ zu diesem. Jedes Feld in der Mitte hat demnach $6$ Nachbarn. Der Abstand zwischen zwei Feldern $A$ und $B$ ist die minimale Anzahl an Feldern die man durchlaufen muss um von Feld $A$ auf Feld $B$ zu ziehen, wobei jedes Feld bei diesem Durchlauf Nachbar des nächsten sein muss.
+
+Der Abstand entspricht der \textit{Manhatten-Distance} auf hexagonalen Feldern. Anschaulich kann man dies auf \href{http://www.redblobgames.com/grids/hexagons/#distances}{http://www.redblobgames.com/grids/hexagons/\#distances}
 
 \subsection*{Spielablauf}
 Der Spieler mit den roten Steinen hat den ersten Zug. Dann wird abwechselnd gezogen, einen Zug auszulassen ist nicht möglich. Ein Feld in TowerWarsPP ist entweder leer oder enthält eine Basis, einen Stein oder einen Turm. In jedem Zug muss ein Spieler genau einen Stein von einem auf ein anderes Feld bewegen.
@@ -32,18 +34,19 @@ Jeder Spieler hat zu Beginn eine vordefinierte Menge an Steinen.
 Ein Stein kann sich von seiner Position aus ein Feld in jede Richtung bewegen (außer auf die eigene Basis natürlich).
 \examplegraphic{graphic/token-nobase.png}{0.25}{$B1$ kann nicht auf Basis $A1$ ziehen}
 
-Zieht ein Stein auf ein leeres Feld, ist das ein \emph{Nahzug}. Zieht ein Stein auf ein Feld mit einem gegnerischen Stein, ist dieser geschlagen und der eigene Stein nimmt dessen Platz ein.
-\examplegraphic{graphic/token-move-kick.png}{0.25}{$I7$ kann auf ein benachbartes leeres Feld ziehen oder $J6$ schlagen}
+Zieht ein Stein auf ein Feld mit einem gegnerischen Stein, ist dieser geschlagen und der eigene Stein nimmt dessen Platz ein.
+\examplegraphic{graphic/token-move-kick.png}{0.25}{$I7$ kann auf ein benachbartes leeres Feld ziehen oder den Stein $J6$ schlagen}
 
 Ein Stein kann nicht auf die eigene Basis ziehen, sehr wohl jedoch auf die gegnerische Basis (was zum Sieg führt).
 
-Zieht ein Stein auf ein Feld mit einem eigenen Stein, so wird auf diesem Feld ein Turm der Höhe $1$ gebaut.
+Zieht ein Stein auf ein Feld mit einem eigenen Stein, so wird auf diesem Feld ein Turm gebaut.
 
 \subsubsection*{Türme}
 Zu Beginn hat ein Spieler keine Türme. Türme können durch Ziehen eigener Steine auf eigene Steine gebaut und durch Ziehen eigener Steine auf Türme erhöht werden. Es ist durchaus möglich ein Spiel ohne Bauen eines einzigen Turms zu spielen und zu gewinnen.
 
 Türme haben eine Höhe $h \le h_\text{max}$, wobei \[h_\text{max} = \left\lfloor \frac{n}{3}\right\rfloor\]
 
+Zieht ein Stein auf ein Feld mit einem eigenen Stein, so wird auf diesem Feld ein Turm der Höhe $1$ gebaut.
 Zieht ein Stein auf ein Feld mit einem eigenen Turm, so wird dessen Höhe um $1$ erhöht.
 
 Beim Erhöhen eines Turms darf die Maximalhöhe nie überschritten werden.
@@ -68,7 +71,7 @@ Allerdings kann ein Turm abgebaut werden, indem der oberste Stein vom Turm auf e
 
 Beim Abbau des Turmes wird dessen Höhe natürlich um $1$ reduziert. Wird ein Turm der Höhe $1$ abgebaut, so bleibt dort ein normaler Stein zurück.
 
-Bei diesem Abbau eines Turmes ist es nicht erlaubt zu schlagen. Daraus ergibt sich direkt, dass Türme nicht die gegnerische Basis schlagen können. Weiter ist es möglich, dass ein Spieler hierdurch keine Handlungsmöglichkeit mehr hat, wenn er nur noch einen Turm besitzt, der komplett von benachbarten gegnerischen Figuren besetzt ist. 
+Bei diesem Abbau eines Turmes ist es nicht erlaubt zu schlagen. Daraus ergibt sich direkt, dass Türme nicht die gegnerische Basis schlagen können. Weiter ist es möglich, dass ein Turm hierdurch keine Handlungsmöglichkeit mehr hat, wenn er komplett von benachbarten gegnerischen Figuren umzingelt ist. 
 
 \examplegraphic{graphic/tower-move.png}{0.25}{
 \begin{itemize}
@@ -83,7 +86,7 @@ Bei diesem Abbau eines Turmes ist es nicht erlaubt zu schlagen. Daraus ergibt si
 \newpage 
 Gegnerische Türme können von Steinen geschlagen und \emph{blockiert} werden. 
 
-Zieht ein Stein auf ein Feld mit einem gegnerischen Turm entscheidet die Art des Zuges was passiert. Handelt es sich um einen Nahzug, wird der gesamte gegnerische Turm geschlagen. Im Falle eines Fernzuges wird der gegnerische Turm blockiert.
+Zieht ein Stein auf ein Feld mit einem gegnerischen Turm entscheidet die Art des Zuges was passiert. Handelt es sich um einen Nahzug, wird der gesamte gegnerische Turm geschlagen. Im Falle eines Fernzuges wird der gegnerische Turm blockiert, indem der Stein auf den gegnerischen Turm gesetzt wird.
 
 \examplegraphic{graphic/token-kick-block-tower.png}{0.25}{$I6$ kann gegnerischen Turm $J6$ schlagen, \\$H7$ kann den gegnerischen Turm blockieren}
 
@@ -91,9 +94,9 @@ Ist ein Turm blockiert, kann dieser weder abgebaut werden noch gibt er eigenen S
 
 \examplegraphic{graphic/range-blockedbonus.png}{0.25}{$I7$ hat einen Bonus durch Turm $J6$ aber nicht durch blockierten Turm $I6$}
 
-Diese Blockade kann wieder aufgehoben werden, indem ein eigener Steinauf den blockierten Turm zieht. Dies kann durch einen Nah- oder Fernzug oder durch Abbau eines angrenzenden Turms auf diesen Turm erfolgen.
+Diese Blockade kann wieder aufgehoben werden, indem ein eigener Stein auf den blockierten Turm zieht und den blockierenden gegnerischen Stein schlägt, beide Steine kommen aus dem Spiel. Dies kann durch einen Nah- oder Fernzug oder durch Abbau eines angrenzenden Turms auf diesen Turm erfolgen.
 
-Ein blockierter Turm kann nicht erneut blockiert werden. Beim Blockieren eines Turms wird die Höhe nicht verringert, beim Aufheben der Blockade nicht erhöht.
+Ein blockierter Turm kann nicht mehrfach blockiert werden, d.h. durch mehrere gegnerische Steine. Allerdings ist es möglich einen blockierten Turm durch einen gegnerischen Nahzug zu schlagen. Beim Blockieren eines Turms wird die Höhe nicht verringert, beim Aufheben der Blockade nicht erhöht.
 
 \newpage
 
@@ -106,16 +109,21 @@ Das Spiel ist gewonnen, wenn eine der folgenden Situationen eintritt:
 \begin{itemize}
 \item Ein Spieler zieht einen Stein auf die gegnerische Basis
 \item Ein Spieler schlägt alle Steine des Gegenspielers
-\item Ein Spieler macht den anderen Spieler handlungsunfähig
+\item Ein Spieler macht den anderen Spieler handlungsunfähig (der andere Spieler hat nur noch umzingelte und blockierte Türme)
 \item Der Gegenspieler gibt auf
 \end{itemize}
 
 Da in jedem Zug ein Stein bewegt werden muss und im Falle von Handlungsunfähigkeit der Gegner gewinnt, kann das Spiel nicht unentschieden enden. Es ist jedoch sehr gut möglich, dass ein Spiel endlos andauert.
 
+\subsection*{Fragen und Antworten}
+Falls Sie Fragen zu den Spielregeln haben oder Sie vor einer Spielsituation stehen, die mit den Spielregeln nicht eindeutig geregelt ist, stellen Sie diese Frage bitte im Forum.
+
+Hierfür wird im Stud.IP unter der Veranstaltung \textit{Allgemeines Programmierpraktikum} ein Forum \textit{Fragen zu TowerWars} erstellt.
+
 \subsection*{Herkunft von TowerWars}
 Die Spielidee für TowerWarsPP wurde im Verlaufe dieses Semesters von Ole Umlauft und Dominick Leppich entwickelt und im Laufe von Testspielen zu dem ausgebaut, was jetzt in dieser Spielbeschreibung definiert ist.
 
-Die Spielidee ist unter der \emph{Creative-Commons}-Lizenz ``CC BY-NC'' veröffentlicht.
+Die Spielidee steht unter der \emph{Creative-Commons}-Lizenz ``CC BY-NC''.
 
 Wir würden uns freuen über Modifikationen des Spiels informiert zu werden.
 

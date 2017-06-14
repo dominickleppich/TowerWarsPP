@@ -1,8 +1,8 @@
 \section*{Spiel}
-Realisieren Sie \textbf{TowerWarsPP} als Computerspiel in Java. Kommentieren Sie den Quellcode ausführlich. Verwenden Sie JavaDoc für das \emph{Application Programming Interface (API)} und kommentieren Sie sonst wie üblich. Verwenden Sie Ant zum automatisierten Übersetzen des Quelltextes und Erzeugen der Dokumentation.
+Realisieren Sie \textbf{TowerWarsPP} als Computerspiel in Java. Kommentieren Sie den Quellcode ausführlich. Verwenden Sie JavaDoc für das \emph{Application Programming Interface (API)} und kommentieren Sie sonst wie üblich.
 
 Die vorgegebenen Quelltexte finden Sie in der Stud.IP-Veranstaltung unter \\
-Dateien\textrightarrow Projekt\textrightarrow towerwarsPP.tgz
+\textit{Dateien\textrightarrow Projekt\textrightarrow TowerWarsPP.tgz}
 
 Alle vorgegebenen Klassen sind im Anhang zu finden.
 
@@ -55,9 +55,6 @@ Diese Klasse soll es ermöglichen alle für das Anzeigen eines Spielbrett-Objekt
 
 Die Methode \code{viewer} des Spielbretts liefert ein passendes Objekt dieser Klasse.
 
-% Text Output
-\item Erstellen Sie eine Text-Ausgabe-Klasse mit der der aktuelle Spielstand eines Spielbretts auf die Standardausgabe geschrieben werden kann. Dazu wird ein Objekt einer Klasse, die die Schnittstelle \code{towerwarspp.preset.Viewer} implementiert, benutzt.
-
 % Text Input
 \item Erstellen Sie eine Text-Eingabe-Klasse, die die Schnittstelle \\ \code{towerwarspp.preset.Requestable} implementiert.
 
@@ -67,20 +64,25 @@ Verwenden Sie die statische Methode \code{parseMove} der Klasse \code{Move} um d
 
 Die Methode \code{parseMove} wirft eine \code{towerwarspp.preset.MoveFormatException}, falls das Einlesen missglücken sollte. Auf diese Exception muss sinnvoll reagiert werden.
 
+% Text Output
+\item Erstellen Sie eine Text-Ausgabe-Klasse mit der der aktuelle Spielstand eines Spielbretts auf die Standardausgabe geschrieben werden kann. Dazu wird ein Objekt einer Klasse, die die Schnittstelle \code{towerwarspp.preset.Viewer} implementiert, benutzt.
+
+Schreiben Sie für die Ausgabe eine eigene Schnittstelle, die sich an \code{Requestable} orientiert.
+
 \underline{Hinweis}
 
 Text-Eingabe- und Ausgabe-Klasse können in einer Klasse vereint werden.
 
 % Graphic
-\item Erstellen Sie eine grafische Ein-Ausgabe-Klasse. Diese Klasse implementiert die Schnittstelle \code{towerwarspp.preset.Requestable} und benutzt ein Objekt einer \\Klasse, die die Schnittstelle \code{towerwarspp.preset.Viewer} implementiert, für eine einfache grafische Ausgabe.
+\item Erstellen Sie eine grafische Ein-Ausgabe-Klasse. Diese Klasse implementiert die Schnittstellen \code{towerwarspp.preset.Requestable} und die von Ihnen geschriebene Ausgab-eSchnittstelle und benutzt ein Objekt einer Klasse, die die Schnittstelle \code{towerwarspp.preset.Viewer} implementiert, für eine einfache grafische Ausgabe.
 
 Sorgen Sie dafür, dass die Grafik mit ändernder Fenstergröße sinnvoll skaliert.
-
-Sorgen Sie dafür, dass man das Spiel Computer gegen Computer mit grafischer Ausgabe verfolgen kann, verwenden Sie hierfür den Kommandozeilenparameter \code{-delay}.
 
 \underline{Hinweis}
 
 Investieren Sie nicht zu viel Zeit in das Design, denn es wird nicht bewertet.
+
+Sie können nützliche Informationen zum Zeichnen und Arbeiten mit hexagonalen Spielfeldern auf dieser Seite finden: \href{http://www.redblobgames.com/grids/hexagons}{http://www.redblobgames.com/grids/hexagons}
 
 \subsection*{Spieler}
 
@@ -92,12 +94,13 @@ Investieren Sie nicht zu viel Zeit in das Design, denn es wird nicht bewertet.
 
 Daraus können sich Widersprüche zwischen dem Status des eigenen Spielbretts und dem gelieferten Status des Spielbretts des Hauptprogramms ergeben. Das ist ein Fehler auf den mit einer Exception reagiert wird.
 
-Für ein problemloses Netzwerkspiel ist es nötig, dass die Spielerklassen nur \code{Exception}'s werfen und keine selbst erstellten Klassen, die von dieser erben. An jeder anderen Stelle im Spiel können eigene Exceptions frei erzeugt und geworfen werden.
-
 \item Die Methoden der Player-Schnittstelle müssen in der richtigen Reihenfolge aufgerufen werden. Eine Abweichung davon ist ein Fehler auf den mit einer Exception reagiert werden muss.
-\end{itemize}
 
 Ein Spieler wird zu Spielbeginn mit einem Aufruf von \code{init} initialisiert und durchläuft danach die Methoden \code{request}, \code{confirm} und danach \code{update} bis das Spiel endet. Im Falle eines blauen Spielers beginnt der Spieler mit \code{update} statt \code{request}. Der Zeitpunkt des Spielbeginns und eines erneuten Spiels ist für den Spieler nicht ersichtlich, \code{init} kann zu einem beliebigen Zeitpunkt aufgerufen werden.
+
+
+\item Für ein problemloses Netzwerkspiel ist es nötig, dass die Spielerklassen nur \code{Exception}'s werfen und keine selbst erstellten Klassen, die von dieser erben. An jeder anderen Stelle im Spiel können eigene Exceptions frei erzeugt und geworfen werden.
+\end{itemize}
 
 \newpage
 Die Methoden dieser Schnittstelle sind wie folgt zu verstehen:
@@ -113,10 +116,18 @@ Die Spielerfarbe ist einer der beiden Werte der Enumeration \\
 
 \underline{Beispiele}
 \begin{itemize}
-\item Gilt \code{boardStatus == Status.OK} war der letzte Zug gültig
-\item Gilt \code{boardStatus == Status.RED\_WIN} war der letzte Zug gültig und der rote Spieler hat das Spiel gewonnen.
+\item Gilt \code{boardStatus == }\textit{eigener Status} und\dots
+\begin{itemize}
+\item \dots \code{boardStatus == Status.OK} war der letzte Zug gültig
+\item \dots \code{boardStatus == Status.RED\_WIN} war der letzte Zug gültig und der rote Spieler hat das Spiel gewonnen
+\end{itemize}
+\item Gilt \code{boardStatus != }\textit{eigener Status} wird eine Exception geworfen
 \end{itemize}
 \item[\code{update}] \hfill \\Liefert dem Spieler im Parameter \code{opponentMove} den letzten Zug des Gegners und im Parameter \code{boardStatus} Informationen über diesen Zug.
+
+\underline{Hinweis}
+
+Hier gelten die gleichen Beispiele wie auch für \code{confirm}.
 \end{itemize}
 
 % Human Player
@@ -139,9 +150,10 @@ Verwenden Sie hierzu eine Instanz der erweiterten Spielbrett-Klasse, um die Züg
 % Network
 \item Programmieren Sie einen Netzwerkspieler mit dem sie jede Implementation der Schnittstelle \code{towerwarspp.preset.Player} einer anderen TowerWarsPP- \\Implementation anbieten können.
 
+Falls Sie den Netzwerkspieler im Netzwerk anbieten möchten, läuft die Spiellogik auf einer entfernten TowerWarsPP-Implementation. Sehen Sie hierfür eine Möglichkeit vor, das Spiel dennoch über die selbst geschriebene Ausgabe-Schnittstelle zu verfolgen.
+
 Im Anhang befinden sich Codebeispiele für den Umgang mit \code{RMI}.
 
-\newpage
 \subsection*{Hauptprogramm}
 % Run class
 \item Erstellen Sie eine ausführbare Klasse mit folgender Funktionalität.
@@ -152,17 +164,15 @@ Verwenden Sie zum Einlesen der Kommandozeilenparameter und zum Abfragen der ents
 \code{towerwarspp.preset.ArgumentParser}.
 
 Im Anhang findet sich ein kleines kommentiertes Beispiel wie diese Klasse zu verwenden ist. Weitere Parameter dürfen bei Bedarf gerne hinzugefügt werden.
-
 \item Ein Spielbrett in Ausgangsposition mit der eingestellten Größe wird initialisiert.
-\item Zwei Spielerobjekte werden wie eingestellt erzeugt und über Referenzen der Spielerschnittstelle angesprochen. 
+\item Zwei Spielerobjekte werden wie eingestellt erzeugt und über Referenzen der \code{towerwarspp.preset.Player}-Schnittstelle angesprochen. 
 
 Beide Spieler benutzen dasselbe Objekt einer Klasse, die das \code{Requestable}-Interface implementiert, um Züge vom Benutzer anzufordern.
-
 \item Von den Spieler-Referenzen werden abwechselnd Züge erfragt. Gültige Züge werden bestätigt und dem jeweils anderen Spieler mitgeteilt.
 \item Die gültigen Züge werden auf dem Spielbrett ausgeführt.
-
+\item Der aktuelle Stand des Spiels (und des Spielbretts) wird über die selbst geschriebene Ausgabe-Schnittstelle (textuell oder grafisch, je nach Konfiguration) ausgegeben.
 \item Wenn ein Zug zum Spielende führt, macht die Ausgabe (textuell oder grafisch) eine Meldung darüber.
-
+\item Sorgen Sie dafür, dass man das Spiel Computer gegen Computer gut verfolgen kann, verwenden Sie hierfür den Kommandozeilenparameter \code{-delay}.
 \item Sehen Sie eine Möglichkeit vor über das Netzwerk zu spielen. Mit den Schaltern \code{----local} und \code{----network} soll gesteuert werden ob es sich um ein lokales oder ein Netzwerkspiel handelt. 
 
 Sehen Sie im Falle eines Netzwerkspiels eine Möglichkeit vor, diese zu konfigurieren (Finden oder Anbieten eines Spielers, Art des Spielers der angeboten wird, Adresse:Port). Dies können Sie zum Beispiel mit Konfigurationsdateien oder weiteren Kommandozeilenparametern lösen.
