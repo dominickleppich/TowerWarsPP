@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>yGuard 2.5.5 Release Notes</title>
+<title>yGuard 2.6 Release Notes</title>
  <style type="text/css">
 
      body {
@@ -177,7 +177,7 @@
   </style>
 </head>
 <body>
-<h1>yGuard 2.5.5 Release Notes</h1>
+<h1>yGuard 2.6 Release Notes</h1>
 
 <h2>Contents of the yGuard distribution</h2>
 <div class="table">
@@ -222,10 +222,9 @@
 
 
 <h1>Technical requirements</h1>
-<p>yGuard requires Java2 SDK 1.4.x or greater and Ant 1.5 or greater installed on your system.
+<p>yGuard requires JDK 1.7.x or greater and Ant 1.5 or greater installed on your system.
 It may work with earlier versions of these pieces of software as well, however this has not
-been tested thoroughly. yGuard 1.3.x and upwards works together with Ant 1.6.
-yGuard works well with JDK 1.6 and Ant 1.7.</p>
+been tested thoroughly. yGuard 1.3.x and upwards works together with Ant 1.6.</p>
 <p></p>
 
 <a name="java7compat"></a>
@@ -241,6 +240,16 @@ yGuard works well with JDK 1.6 and Ant 1.7.</p>
 </p>
 
 <h1>Changelog</h1>
+
+<h2>yGuard 2.6 - Changes since 2.5.5</h2>
+<ul>
+  <li>Fixed incorrect obfuscation of <code>invokedynamic</code> instructions leading to AbstractMethodErrors of 
+  class files which had their constant pool entry order permutated for some reason (for example by the JarJar plugin for maven).</li>
+  <li>Added support for <a href="https://blogs.oracle.com/java-platform-group/java-8s-new-type-annotations">Java 8 Type Annotations</a>.</li>
+  <li>The <code>implements</code> attribute now considers types in <code>&lt;externalclasses&gt;</code> as well 
+  when determining the interfaces implemented by a given class.</li>
+  <li>Changed the class file version of the yGuard library, so yGuard can be run with Java 7 again.</li>
+</ul>
 
 <h2>yGuard 2.5.5 - Changes since 2.5.4</h2>
 <p>
