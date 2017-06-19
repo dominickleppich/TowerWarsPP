@@ -18,7 +18,7 @@
 
     <property name="blackbox.name" value="TowerWarsPP-blackbox" />
     <property name="blackbox.dir" value="blackbox" />
-    <property name="blackbox.main.class" value="towerwarspp.blackbox.Start" />
+    <property name="blackbox.main.class" value="towerwarspp.Boot" />
     <property name="blackbox.keep.preset" value="towerwarspp.preset.*" />
 
     <property name="yguard.path" value="tools/yguard-2.5.5/lib/yguard.jar" />
@@ -116,11 +116,18 @@
 		</jar>
 	</target>
 
-	<target name="blackbox">
+	<target name="blackbox" depends="build">
         <echo>Creating blackbox jar...</echo>
         <mkdir dir="${blackbox.dir}" />
-        <jar compress="true" destfile="${blackbox.dir}/${blackbox.name}-tmp.jar" basedir="${build.dir}"
-             includes="**/preset/**/*.class,**/blackbox/**/*.class">
+		<echo>Copying class files...</echo>
+		<mkdir dir="${blackbox.dir}/build" />
+		<copy todir="${blackbox.dir}/build">
+			<fileset dir="${build.dir}" />
+		</copy>
+		<unjar dest="${blackbox.dir}/build">
+			<fileset dir="${lib.dir}" includes="*.jar" />
+		</unjar>
+        <jar compress="true" destfile="${blackbox.dir}/${blackbox.name}-tmp.jar" basedir="${blackbox.dir}/build">
             <manifest>
                 <attribute name="Main-Class" value="${blackbox.main.class}" />
             </manifest>
@@ -145,6 +152,8 @@
 
         <echo>Remove unobfuscated blackbox jar file...</echo>
         <delete file="${blackbox.dir}/${blackbox.name}-tmp.jar" />
+		<echo>Remove blackbox class files...</echo>
+		<delete dir="${blackbox.dir}/build" />
 	</target>
 
 	<!-- ************************ Compile ************************ -->
