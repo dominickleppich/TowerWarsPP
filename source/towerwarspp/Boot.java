@@ -64,7 +64,7 @@ public class Boot {
             sb.append("\t-red\t\t\tSet the red player type {human, random, " + "simple}\n");
             sb.append("\t-blue\t\t\tSet the blue player type {human, random, " + "simple}\n");
             sb.append("\t-size\t\t\tSet the board size {4, 5, 6, ..., 26}\n");
-            sb.append("\t-delay\t\t\tDelay between moves\n");
+            sb.append("\t[-delay]\t\t\tDelay between moves\n");
             sb.append("\t[--graphic]\t\tActivate a graphical in- and output\n");
             System.out.println(sb.toString());
         } catch (Exception e) {
