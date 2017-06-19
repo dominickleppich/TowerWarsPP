@@ -18,4 +18,8 @@ public class MyArgumentParser extends ArgumentParser {
     public boolean isDebug() throws ArgumentParserException {
         return getFlag("debug");
     }
+
+    public boolean isAnalyze() throws ArgumentParserException {
+        return getFlag("analyze");
+    }
 }

@@ -355,7 +355,7 @@ public class Board implements Viewable {
                     // Token on token is a new tower
                 else if (endCell instanceof Token)
                     return "Valid (" + move + "): Token moved on own token "
-                            + "and created new " + "tower";
+                            + "and created new tower";
                     // Token on tower increase its size
                 else if (endCell instanceof Tower) {
                     if (((Tower) endCell).isBlocked())

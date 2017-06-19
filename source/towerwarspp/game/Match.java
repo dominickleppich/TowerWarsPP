@@ -158,6 +158,9 @@ public class Match implements Runnable {
                 continue;
             }
 
+            if (Boot.isAnalyze())
+                System.out.println((moveCounter % 2 == 0 ? "Red" : "Blue") + " makes move " + m + ", analyze result: " + board.analyzeMove(m));
+
             boolean success = board.makeMove(m);
 
             if (Boot.isDebug()) {
@@ -166,6 +169,8 @@ public class Match implements Runnable {
                 if (!(inout instanceof TextIO))
                     System.out.println(board);
             }
+
+
 
 
             // Update display

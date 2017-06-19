@@ -21,6 +21,7 @@ import towerwarspp.preset.Requestable;
 public class Boot {
     private static int delay;
     private static boolean debug;
+    private static boolean analyze;
 
     // ------------------------------------------------------------
 
@@ -36,6 +37,8 @@ public class Boot {
 
             // Debug?
             debug = ap.isDebug();
+            // Analyze?
+            analyze = ap.isAnalyze();
 
             // Create requestable and observer
             InputOutputable inout;
@@ -91,6 +94,15 @@ public class Boot {
      */
     public static boolean isDebug() {
         return debug;
+    }
+
+    /**
+     * Is analyze mode enabled?
+     *
+     * @return analyze
+     */
+    public static boolean isAnalyze() {
+        return analyze;
     }
 
     // ------------------------------------------------------------
