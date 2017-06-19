@@ -158,23 +158,22 @@ public class Match implements Runnable {
                 continue;
             }
 
-            if (Boot.isAnalyze())
-                System.out.println((moveCounter % 2 == 0 ? "Red" : "Blue") + " makes move " + m + ", analyze result: " + board.analyzeMove(m));
+            String analyzeResult = board.analyzeMove(m);
 
             boolean success = board.makeMove(m);
+
+            if (success)
+                // Update display
+                inout.update(m);
+
+            if (Boot.isAnalyze())
+                System.out.println("Analyze result for move " + m + ": " + analyzeResult);
 
             if (Boot.isDebug()) {
                 System.out.println("LOG Move No " + (moveCounter + 1) + ": " + m + " " + (success ?
                                                                                                   "succeeded" : "failed"));
-                if (!(inout instanceof TextIO))
-                    System.out.println(board);
+                System.out.println(board);
             }
-
-
-
-
-            // Update display
-            inout.update(m);
 
             // Confirm move
             try {

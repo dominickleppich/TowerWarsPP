@@ -4,6 +4,7 @@ import towerwarspp.board.MoveAnalyzer;
 import towerwarspp.player.ai.RandomAI;
 import towerwarspp.preset.Move;
 import towerwarspp.preset.MoveFormatException;
+import towerwarspp.preset.PlayerColor;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -83,9 +84,11 @@ public class TextIO implements InputOutputable {
 
     @Override
     public void update(Move move) {
-        System.out.println("Made move: " + move);
-        String analyzeResult = viewer.getMoveAnalyzer().analyzeMove(move);
-        System.out.println("Analyzing result: " + analyzeResult);
+        if (viewer == null)
+            throw new IllegalStateException("No viewer set");
+
+        // Player already swapped
+        System.out.println((viewer.getTurn() == PlayerColor.BLUE ? "Red" : "Blue") + " makes move: " + move);
     }
 
     @Override

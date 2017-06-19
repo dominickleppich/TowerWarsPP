@@ -319,55 +319,55 @@ public class Board implements Viewable {
             startCell = grid.getCell(move.getStart());
             endCell = grid.getCell(move.getEnd());
         } catch (IndexOutOfBoundsException e) {
-            return "Invalid (" + move + "): Position out of board range";
+            return "Invalid, Position out of board range";
         }
 
         // Empty cells cannot move
         if (startCell == null)
-            return "Invalid (" + move + "): Empty cell cannot be moved";
+            return "Invalid, Empty cell cannot be moved";
 
         // Check correct player
         if (startCell.getColor() != getTurn())
-            return "Invalid (" + move + "): Cell doesn't belong to the " +
+            return "Invalid, Cell doesn't belong to the " +
                     "current player";
 
         if (move.getStart().equals(move.getEnd()))
-            return "Invalid (" + move + "): Start and end position are equal";
+            return "Invalid, Start and end position are equal";
 
         // Empty cells and bases cannot be moved
         if (startCell == null)
-            return "Invalid (" + move + "): Start position is empty";
+            return "Invalid, Start position is empty";
         if (startCell instanceof Base)
-            return "Invalid (" + move + "): Base cannot be moved";
+            return "Invalid, Base cannot be moved";
 
         // Check whether the move is a token or tower move
         if (startCell instanceof Token) {
             // Tokens simply move on empty cells
             if (endCell == null)
-                return "Valid (" + move + "): Token moved on empty cell";
+                return "Valid, Token moved on empty cell";
 
                 // difference between colors
                 // own color
             else if (startCell.getColor() == endCell.getColor()) {
                 // Cannot move on own base
                 if (endCell instanceof Base)
-                    return "Invalid (" + move + "): Token cannot move on own base";
+                    return "Invalid, Token cannot move on own base";
                     // Token on token is a new tower
                 else if (endCell instanceof Token)
-                    return "Valid (" + move + "): Token moved on own token "
+                    return "Valid, Token moved on own token "
                             + "and created new tower";
                     // Token on tower increase its size
                 else if (endCell instanceof Tower) {
                     if (((Tower) endCell).isBlocked())
-                        return "Valid (" + move + "): Token unblocked tower";
+                        return "Valid, Token unblocked tower";
                     else if (((Tower) endCell).getHeight() < maxTowerSize)
-                        return "Valid (" + move + "): Token moved on tower "
+                        return "Valid, Token moved on tower "
                                 + "and increased size";
                     else
-                        return "Invalid (" + move + "): Token tried to " +
+                        return "Invalid, Token tried to " +
                                 "increase tower with max height";
                 } else
-                    return "Invalid (" + move + "): Token moved on unknown "
+                    return "Invalid, Token moved on unknown "
                             + "cell type";
             }
             // opponent
@@ -375,74 +375,74 @@ public class Board implements Viewable {
                 // move on opponent base is win (=> allowed)
                 if (endCell instanceof Base)
                     // base is kicked (win situation)
-                    return "Valid (" + move + "): Token moved on opponent " +
+                    return "Valid, Token moved on opponent " +
                             "base -> WIN";
                     // Token on enemy token kicks it
                 else if (endCell instanceof Token)
                     // simply move the token there
-                    return "Valid (" + move + "): Token kicked opponent token";
+                    return "Valid, Token kicked opponent token";
                     // Token on tower kicks or blocks it
                 else if (endCell instanceof Tower) {
                     // if move is melee, kick tower completely
                     if (grid.distance(move.getStart(), move.getEnd()) == 1)
-                        return "Valid (" + move + "): Token kicked opponent "
+                        return "Valid, Token kicked opponent "
                                 + "tower with a " + "melee move";
                         // if move is ranged, block the tower
                     else {
                         if (((Tower) endCell).isBlocked())
-                            return "Invalid (" + move + "): Token tried to " +
+                            return "Invalid, Token tried to " +
                                     "block already blocked tower";
                         else
-                            return "Valid (" + move + "): Token blocked " +
+                            return "Valid, Token blocked " +
                                     "opponent tower with a ranged move";
                     }
                 } else
-                    return "Invalid (" + move + "): Token moved on unknown "
+                    return "Invalid, Token moved on unknown "
                             + "cell type";
             }
         } else if (startCell instanceof Tower) {
             if (((Tower) startCell).isBlocked())
-                return "Invalid (" + move + "): Blocked tower cannot move";
+                return "Invalid, Blocked tower cannot move";
 
             // Towers cannot range move
             if (grid.distance(move.getStart(), move.getEnd()) > 1)
-                return "Invalid (" + move + "): Towers cannot range move";
+                return "Invalid, Towers cannot range move";
 
             // Towers simply move on empty cells
             if (endCell == null)
-                return "Valid (" + move + "): Tower moved on empty cell";
+                return "Valid, Tower moved on empty cell";
 
                 // Towers cannot move on enemy cells
             else if (startCell.getColor() != endCell.getColor())
-                return "Invalid (" + move + "): Towers cannot kick opponent "
+                return "Invalid, Towers cannot kick opponent "
                         + "tokens or towers";
 
                 // Tower on base is not allowed (neither own, nor enemy ->
                 // cause towers cannot kick)
             else if (endCell instanceof Base)
-                return "Invalid (" + move + "): Towers cannot move on bases";
+                return "Invalid, Towers cannot move on bases";
 
                 // Tower on token is new tower
             else if (endCell instanceof Token)
-                return "Valid (" + move + "): Tower moved on own token and "
+                return "Valid, Tower moved on own token and "
                         + "created new tower";
 
                 // Tower on tower increase its height, if size not exceeded
             else if (endCell instanceof Tower) {
                 if (!((Tower) endCell).isBlocked())
-                    return "Valid (" + move + "): Tower tried to unblock own " +
+                    return "Valid, Tower tried to unblock own " +
                             "unblocked tower";
                 else if (((Tower) endCell).getHeight() < maxTowerSize)
-                    return "Valid (" + move + "): Tower moved on another own " +
+                    return "Valid, Tower moved on another own " +
                             "tower and increased its height";
                 else
-                    return "Invalid (" + move + "): Tower tried to increase "
+                    return "Invalid, Tower tried to increase "
                             + "tower with max height";
             } else
-                return "Invalid (" + move + "): Tower moved on unknown cell "
+                return "Invalid, Tower moved on unknown cell "
                         + "type";
         } else
-            return "Invalid (" + move + "): Unknown start cell type";
+            return "Invalid, Unknown start cell type";
     }
 
     /**
