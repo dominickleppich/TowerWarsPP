@@ -21,7 +21,7 @@
     <property name="blackbox.main.class" value="towerwarspp.Boot" />
     <property name="blackbox.keep.preset" value="towerwarspp.preset.*" />
 
-    <property name="yguard.path" value="tools/yguard-2.5.5/lib/yguard.jar" />
+    <property name="yguard.path" value="tools/yguard-2.6/lib/yguard.jar" />
 
 	<path id="userclasspath">
 		<fileset dir="${lib.dir}">
@@ -140,7 +140,7 @@
 
             <obfuscate mainclass="${blackbox.main.class}" replaceclassnamestrings="true">
                 <property name="error-checking" value="pedantic"/>
-                <property name="naming-scheme" value="bestWill"/>
+                <property name="naming-scheme" value="smallWill"/>
                 <property name="language-conformity" value="illegalWill"/>
                 <property name="overload-enabled" value="true"/>
                 <property name="digest" value="SHA-1"/>
