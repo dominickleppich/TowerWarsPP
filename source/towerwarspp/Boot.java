@@ -40,6 +40,10 @@ public class Boot {
             // Analyze?
             analyze = ap.isAnalyze();
 
+            // Debug always includes analyzing moves
+            if (debug)
+                analyze = true;
+
             // Create requestable and observer
             InputOutputable inout;
             if (ap.isGraphic())
