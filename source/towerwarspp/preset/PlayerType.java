@@ -8,5 +8,6 @@ public enum PlayerType {
     ADVANCED_AI_2,
     ADVANCED_AI_3,
     ADVANCED_AI_4,
-    ADVANCED_AI_5
+    ADVANCED_AI_5,
+    REMOTE
 }

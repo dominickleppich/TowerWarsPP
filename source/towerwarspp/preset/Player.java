@@ -1,11 +1,13 @@
 package towerwarspp.preset;
 
-public interface Player {
-    Move request() throws Exception;
+import java.rmi.*;
 
-    void confirm(Status boardStatus) throws Exception;
+public interface Player extends Remote {
+    Move request() throws Exception, RemoteException;
 
-    void update(Move opponentMove, Status boardStatus) throws Exception;
+    void confirm(Status boardStatus) throws Exception, RemoteException;
 
-    void init(int size, PlayerColor color) throws Exception;
+    void update(Move opponentMove, Status boardStatus) throws Exception, RemoteException;
+
+    void init(int size, PlayerColor color) throws Exception, RemoteException;
 }

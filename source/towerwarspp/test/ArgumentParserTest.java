@@ -8,8 +8,6 @@ public class ArgumentParserTest {
         try {
             ArgumentParser ap = new ArgumentParser(args);
 
-            System.out.println("local: " + ap.isLocal());
-            System.out.println("network: " + ap.isNetwork());
             System.out.println("size: " + ap.getSize());
 
             switch (ap.getRed()) {

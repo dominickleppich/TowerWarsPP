@@ -1,6 +1,7 @@
 package towerwarspp.player;
 
 import towerwarspp.board.Board;
+import towerwarspp.io.Viewer;
 import towerwarspp.preset.Move;
 import towerwarspp.preset.Player;
 import towerwarspp.preset.PlayerColor;
@@ -27,7 +28,7 @@ public abstract class AbstractPlayer implements Player {
     public Move request() throws Exception {
         if (state != State.REQUEST)
             throw new Exception("Player methods called in wrong order! Called" + " request() but " +
-                                        "expected: " + state);
+                    "expected: " + state);
 
         Move move = deliver();
         board.makeMove(move);
@@ -39,7 +40,7 @@ public abstract class AbstractPlayer implements Player {
     public void confirm(Status boardStatus) throws Exception {
         if (state != State.CONFIRM)
             throw new Exception("Player methods called in wrong order! Called" + " confirm() but " +
-                                        "expected: " + state);
+                    "expected: " + state);
 
         if (!board.getStatus().equals(boardStatus))
             throw new Exception("Board status mismatch! Player board has " + "status " + board.getStatus() + " and" + " game " + "board has status " + boardStatus);
@@ -51,7 +52,7 @@ public abstract class AbstractPlayer implements Player {
     public void update(Move opponentMove, Status boardStatus) throws Exception {
         if (state != State.UPDATE)
             throw new Exception("Player methods called in wrong order! Called" + " update() but " +
-                                        "expected: " + state);
+                    "expected: " + state);
 
         board.makeMove(opponentMove);
 
@@ -71,6 +72,15 @@ public abstract class AbstractPlayer implements Player {
     }
 
     public abstract Move deliver() throws Exception;
+
+    /**
+     * Return a viewer of the player board.
+     *
+     * @return Viewer
+     */
+    public Viewer getViewer() {
+        return board.viewer();
+    }
 
     // ------------------------------------------------------------
 

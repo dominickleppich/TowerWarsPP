@@ -3,6 +3,8 @@ package towerwarspp.preset;
 import java.io.Serializable;
 
 public class Move implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private Position start;
     private Position end;
 

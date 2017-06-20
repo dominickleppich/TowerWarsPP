@@ -207,7 +207,7 @@ public class ArgumentParser {
      * @throws ArgumentParserException
      *         wenn der eingelese Typ nicht passt
      */
-    private PlayerType parsePlayerType(String type) throws
+    protected PlayerType parsePlayerType(String type) throws
             ArgumentParserException {
         switch (type) {
             case "human": return PlayerType.HUMAN;
@@ -218,6 +218,7 @@ public class ArgumentParser {
             case "adv3": return PlayerType.ADVANCED_AI_3;
             case "adv4": return PlayerType.ADVANCED_AI_4;
             case "adv5": return PlayerType.ADVANCED_AI_5;
+            case "remote": return PlayerType.REMOTE;
 
             default: throw new ArgumentParserException("Unknown player type: " +
                                                                "" + type);
@@ -226,16 +227,12 @@ public class ArgumentParser {
 
     // ------------------------------------------------------------
 
-    public boolean isLocal() throws ArgumentParserException {
-        return getFlag("local");
-    }
-
-    public boolean isNetwork() throws ArgumentParserException {
-        return getFlag("network");
-    }
-
     public boolean isGraphic() throws ArgumentParserException {
         return getFlag("graphic");
+    }
+
+    public boolean isDebug() throws ArgumentParserException {
+        return getFlag("debug");
     }
 
     public int getSize() throws ArgumentParserException {
