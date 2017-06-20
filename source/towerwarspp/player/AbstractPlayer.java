@@ -1,5 +1,6 @@
 package towerwarspp.player;
 
+import towerwarspp.Boot;
 import towerwarspp.board.Board;
 import towerwarspp.io.Viewer;
 import towerwarspp.preset.Move;
@@ -33,6 +34,10 @@ public abstract class AbstractPlayer implements Player {
         Move move = deliver();
         board.makeMove(move);
         state = State.CONFIRM;
+
+        if (Boot.isDebug())
+            System.out.println("Player method request: move = " + move);
+
         return move;
     }
 
@@ -46,6 +51,9 @@ public abstract class AbstractPlayer implements Player {
             throw new Exception("Board status mismatch! Player board has " + "status " + board.getStatus() + " and" + " game " + "board has status " + boardStatus);
 
         state = State.UPDATE;
+
+        if (Boot.isDebug())
+            System.out.println("Player method confirm: boardStatus = " + boardStatus);
     }
 
     @Override
@@ -60,6 +68,9 @@ public abstract class AbstractPlayer implements Player {
             throw new Exception("Board status mismatch! Player board has " + "status " + board.getStatus() + " and" + " game " + "board has status " + boardStatus);
 
         state = State.REQUEST;
+
+        if (Boot.isDebug())
+            System.out.println("Player method update: opponentMove = " + opponentMove + ", boardStatus = " + boardStatus);
     }
 
     @Override
@@ -69,6 +80,9 @@ public abstract class AbstractPlayer implements Player {
             state = State.REQUEST;
         else
             state = State.UPDATE;
+
+        if (Boot.isDebug())
+            System.out.println("Player initialized with size " + size + " and color " + color);
     }
 
     public abstract Move deliver() throws Exception;

@@ -1,5 +1,6 @@
 package towerwarspp.net;
 
+import towerwarspp.Boot;
 import towerwarspp.io.Display;
 import towerwarspp.player.AbstractPlayer;
 import towerwarspp.preset.Move;
@@ -32,7 +33,18 @@ public class RMIPlayer extends UnicastRemoteObject implements Player {
     @Override
     public Move request() throws Exception {
         Move move = player.request();
+        String analyzeResult = null;
+        if (Boot.isAnalyze() && player instanceof AbstractPlayer)
+            analyzeResult = ((AbstractPlayer) player).getViewer().getMoveAnalyzer().analyzeMove(move);
+
         display.update(move);
+
+        if (analyzeResult != null)
+            System.out.println("Analyze result for move " + move + ": " + analyzeResult);
+
+        if (Boot.isDebug() && player instanceof AbstractPlayer)
+            System.out.println(((AbstractPlayer) player).getViewer());
+
         return move;
     }
 
@@ -43,8 +55,18 @@ public class RMIPlayer extends UnicastRemoteObject implements Player {
 
     @Override
     public void update(Move opponentMove, Status boardStatus) throws Exception {
+        String analyzeResult = null;
+        if (Boot.isAnalyze() && player instanceof AbstractPlayer)
+            analyzeResult = ((AbstractPlayer) player).getViewer().getMoveAnalyzer().analyzeMove(opponentMove);
+
         player.update(opponentMove, boardStatus);
         display.update(opponentMove);
+
+        if (analyzeResult != null)
+            System.out.println("Analyze result for move " + opponentMove + ": " + analyzeResult);
+
+        if (Boot.isDebug() && player instanceof AbstractPlayer)
+            System.out.println(((AbstractPlayer) player).getViewer());
     }
 
     @Override

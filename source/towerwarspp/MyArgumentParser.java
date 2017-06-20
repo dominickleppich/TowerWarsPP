@@ -21,12 +21,20 @@ public class MyArgumentParser extends ArgumentParser {
 
     // ------------------------------------------------------------
 
+    public boolean isHelp() throws ArgumentParserException {
+        return getFlag("help");
+    }
+
     public boolean isAnalyze() throws ArgumentParserException {
         return getFlag("analyze");
     }
 
     public String getHost() throws ArgumentParserException {
         return (String) getSetting("host");
+    }
+
+    public int getPort() throws ArgumentParserException {
+        return Integer.parseInt((String) getSetting("port"));
     }
 
     public PlayerType getOffer() throws ArgumentParserException {
