@@ -112,6 +112,7 @@ public class Boot {
             System.exit(1);
         } catch (Exception e) {
             System.err.println("Failed to init or start match! " + e.getMessage());
+            e.printStackTrace();
             System.exit(2);
         }
     }

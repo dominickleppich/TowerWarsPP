@@ -1,5 +1,6 @@
 package towerwarspp.net;
 
+import towerwarspp.Boot;
 import towerwarspp.preset.Player;
 
 import java.rmi.NotBoundException;
@@ -33,6 +34,8 @@ public class RMIHandler {
     }
 
     public RMIHandler(String host, int port) {
+        if (Boot.isDebug())
+            System.out.println("Creating rmi handler for host " + host + " on port " + port);
         try {
             if (host.equals("localhost"))
                 try {
