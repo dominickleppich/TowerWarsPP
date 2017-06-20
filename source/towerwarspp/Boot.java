@@ -27,6 +27,7 @@ import java.util.Set;
 public class Boot {
     private static int delay;
     private static boolean debug;
+    private static boolean aiDebug;
     private static boolean analyze;
     private static RMIHandler rmi;
 
@@ -62,6 +63,8 @@ public class Boot {
 
             // Debug?
             debug = ap.isDebug();
+            // Debug?
+            aiDebug = ap.isAiDebug();
             // Analyze?
             analyze = ap.isAnalyze();
 
@@ -135,6 +138,15 @@ public class Boot {
      */
     public static boolean isDebug() {
         return debug;
+    }
+
+    /**
+     * Is ai debug mode enabled?
+     *
+     * @return debug
+     */
+    public static boolean isAiDebug() {
+        return aiDebug;
     }
 
     /**

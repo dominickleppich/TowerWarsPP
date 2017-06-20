@@ -44,4 +44,8 @@ public class MyArgumentParser extends ArgumentParser {
     public String getName() throws ArgumentParserException {
         return (String) getSetting("name");
     }
+
+    public boolean isAiDebug() throws ArgumentParserException {
+        return getFlag("aidebug");
+    }
 }

@@ -32,7 +32,6 @@ public class DrawPanel extends JPanel implements MouseListener {
     private static final float STROKE = 2f;
     private static final Font LABEL_FONT = new Font(Font.SANS_SERIF, Font.BOLD, 10);
     private static final Font RATING_FONT = new Font(Font.SERIF, Font.ITALIC, 40);
-    private static final Font DEBUG_FONT = new Font(Font.MONOSPACED, Font.PLAIN, 20);
 
     // ------------------------------------------------------------
 
@@ -41,8 +40,6 @@ public class DrawPanel extends JPanel implements MouseListener {
     private Viewer viewer;
     private Move move;
     private Position tmpPos;
-
-    private String debugText;
 
     private HashMap<Position, Polygon> grid;
 
@@ -154,7 +151,7 @@ public class DrawPanel extends JPanel implements MouseListener {
                     int y = (int) (HEX_SIZE * 3.0 / 2 * n);
                     g.draw(hex(x, y, HEX_SIZE - 5));
 
-                    if (Boot.isDebug()) {
+                    if (Boot.isAiDebug()) {
                         g.setFont(RATING_FONT);
                         String str = Integer.toString(viewer.rateMove(new SimpleStrategy(), m));
                         int w = g.getFontMetrics().stringWidth(str);
@@ -167,11 +164,6 @@ public class DrawPanel extends JPanel implements MouseListener {
         g.setColor(Color.BLACK);
         for (Polygon p : grid.values())
             g.draw(p);
-
-        if (Boot.isDebug() && debugText != null) {
-            g.setFont(DEBUG_FONT);
-            g.setColor(Color.BLACK); g.drawString(debugText, 20, 20);
-        }
     }
 
     private int[] hexCorner(int xCenter, int yCenter, int size, int i) {
@@ -237,7 +229,6 @@ public class DrawPanel extends JPanel implements MouseListener {
                 break;
             }
         }
-        debugText = "Clicked " + p + (pos != null ? pos : "");
         repaint();
 
         if (pos == null)
@@ -252,7 +243,6 @@ public class DrawPanel extends JPanel implements MouseListener {
             if (viewer.getPossibleMoves().contains(move))
                 moveReady();
             else {
-                debugText = "Illegal move " + move;
                 repaint();
             }
         }
