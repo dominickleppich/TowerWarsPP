@@ -170,7 +170,7 @@ public class Match implements Runnable {
                 System.out.println("Analyze result for move " + m + ": " + analyzeResult);
 
             if (Boot.isDebug()) {
-                System.out.println("LOG Move No " + (moveCounter + 1) + ": " + m + " " + (success ?
+                System.out.println("Match move No " + (moveCounter + 1) + ": " + m + " " + (success ?
                                                                                                   "succeeded" : "failed"));
                 System.out.println(board);
             }
