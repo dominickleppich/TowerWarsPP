@@ -213,7 +213,7 @@ public class Match implements Runnable {
      *         Status
      */
     private synchronized void end(Status status) {
-        System.out.println("\n\nGame ended with status: " + status);
+        System.out.println("Game ended with status: " + status);
 
         notify();
     }

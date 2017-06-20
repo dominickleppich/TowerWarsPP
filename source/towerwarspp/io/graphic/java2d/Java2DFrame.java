@@ -3,7 +3,6 @@ package towerwarspp.io.graphic.java2d;
 
 import towerwarspp.io.InputOutputable;
 import towerwarspp.io.Viewer;
-import towerwarspp.player.ai.rating.RateStrategy;
 import towerwarspp.preset.Move;
 
 import javax.swing.*;
@@ -13,7 +12,7 @@ import javax.swing.*;
  *
  * @author Dominick Leppich
  */
-public class Java2DFrame extends JFrame implements InputOutputable{
+public class Java2DFrame extends JFrame implements InputOutputable {
     private DrawPanel panel;
     private JLabel statusLabel;
 
@@ -28,6 +27,8 @@ public class Java2DFrame extends JFrame implements InputOutputable{
         vBox.add(statusLabel);
 
         add(vBox);
+
+        pack();
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
@@ -46,7 +47,7 @@ public class Java2DFrame extends JFrame implements InputOutputable{
     @Override
     public void setViewer(Viewer viewer) {
         panel.setViewer(viewer);
-        pack();
+        //pack();
         setVisible(true);
         repaint();
     }
@@ -57,8 +58,7 @@ public class Java2DFrame extends JFrame implements InputOutputable{
     }
 
     @Override
-    public Move deliver() throws
-            Exception {
+    public Move deliver() throws Exception {
         return panel.request();
     }
 }
