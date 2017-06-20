@@ -10,7 +10,8 @@ Exceptions die beim Erzeugen von Positionen und Zügen aus Strings geworfen werd
 \lstinputlisting{files/preset/PositionFormatException.java}
 \lstinputlisting{files/preset/MoveFormatException.java} \newpage
 
-Enumeration für Spielerfarbe, Spielertyp und Status.
+Interface für den Spieler und Enumerations für Spielerfarbe, Spielertyp und Status.
+\lstinputlisting{files/preset/Player.java}
 \lstinputlisting{files/preset/PlayerColor.java}
 \lstinputlisting{files/preset/PlayerType.java}
 \lstinputlisting{files/preset/Status.java}
@@ -39,8 +40,6 @@ public class ArgumentParserTest {
         try {
             ArgumentParser ap = new ArgumentParser(args);
 
-            System.out.println("local: " + ap.isLocal());
-            System.out.println("network: " + ap.isNetwork());
             System.out.println("size: " + ap.getSize());
 
             switch (ap.getRed()) {

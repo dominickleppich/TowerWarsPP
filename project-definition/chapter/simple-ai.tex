@@ -8,21 +8,21 @@ Es ist eine gute Idee in Richtung der gegnerischen Basis zu ziehen und weniger g
 Weiterhin ist es klug gegnerische Einheiten zu schlagen. Berechne hierfür einen Bonus für das Schlagen von gegnerischen Einheiten \[b_\text{kick} = \begin{cases}
 0, & \text{wenn keine Einheit geschlagen wurde} \\
 1, & \text{wenn ein Stein geschlagen wurde} \\
-2, & \text{wenn ein Turm geschlagen wurde} \\
-1337, & \text{wenn die gegnerische Basis geschlagen wurde}
+2, & \text{wenn ein Turm geschlagen wurde} %%\\
+%%1337, & \text{wenn die gegnerische Basis geschlagen wurde}
 \end{cases}\]
 
 \underline{Gesamtwertung}
 
-Berechnen Sie daraus für jeden Zug eine Bewertung
+Berechne daraus für jeden Zug eine Bewertung
 \[score = r_\text{Basis} + b_\text{kick}\]
 
-und wählen Sie unter den Zügen mit Maximalbewertung zufällig einen aus.
+und wählen unter den Zügen mit Maximalbewertung zufällig einen aus.
 
 \bigskip
 
 Zusätzlich gelten die beiden folgenden Regeln.
 \begin{enumerate}[label=\alph*)]
 \item Gibt es einen Zug mit dem das Spiel gewonnen werden kann, dann wird dieser ausgeführt.
-\item Ein Zug, der zur Folge hätte, dass der Gegner im nächsten Zug gewinnen könnte, wird dieser nur ausgeführt, wenn es keine Alternative gibt.
+\item Ein Zug, der zur Folge hätte, dass der Gegner im nächsten Zug gewinnen könnte, wird nur ausgeführt, wenn es keine Alternative gibt.
 \end{enumerate}

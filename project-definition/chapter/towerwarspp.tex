@@ -31,10 +31,10 @@ Es ist Ziel des Spiels die gegnerische Basis zu zerstören und folglich auch die
 \subsubsection*{Steine}
 Jeder Spieler hat zu Beginn eine vordefinierte Menge an Steinen. 
 
-Ein Stein kann sich von seiner Position aus ein Feld in jede Richtung bewegen (außer auf die eigene Basis natürlich).
+Ein Stein kann sich von seiner Position aus ein Feld in jede Richtung bewegen (außer auf die eigene Basis).
 \examplegraphic{graphic/token-nobase.png}{0.25}{$B1$ kann nicht auf Basis $A1$ ziehen}
 
-Zieht ein Stein auf ein Feld mit einem gegnerischen Stein, ist dieser geschlagen und der eigene Stein nimmt dessen Platz ein.
+Zieht ein Stein auf ein Feld mit einem gegnerischen Stein ist dieser geschlagen und wird aus dem Spiel genommen, der eigene Stein nimmt den Platz des geschlagenen Steins ein.
 \examplegraphic{graphic/token-move-kick.png}{0.25}{$I7$ kann auf ein benachbartes leeres Feld ziehen oder den Stein $J6$ schlagen}
 
 Ein Stein kann nicht auf die eigene Basis ziehen, sehr wohl jedoch auf die gegnerische Basis (was zum Sieg führt).
@@ -44,12 +44,10 @@ Zieht ein Stein auf ein Feld mit einem eigenen Stein, so wird auf diesem Feld ei
 \subsubsection*{Türme}
 Zu Beginn hat ein Spieler keine Türme. Türme können durch Ziehen eigener Steine auf eigene Steine gebaut und durch Ziehen eigener Steine auf Türme erhöht werden. Es ist durchaus möglich ein Spiel ohne Bauen eines einzigen Turms zu spielen und zu gewinnen.
 
-Türme haben eine Höhe $h \le h_\text{max}$, wobei \[h_\text{max} = \left\lfloor \frac{n}{3}\right\rfloor\]
+Türme haben eine Höhe $h \le h_\text{max}$, wobei \[h_\text{max} = \left\lfloor \frac{n}{3}\right\rfloor\enspace .\]
 
 Zieht ein Stein auf ein Feld mit einem eigenen Stein, so wird auf diesem Feld ein Turm der Höhe $1$ gebaut.
-Zieht ein Stein auf ein Feld mit einem eigenen Turm, so wird dessen Höhe um $1$ erhöht.
-
-Beim Erhöhen eines Turms darf die Maximalhöhe nie überschritten werden.
+Zieht ein Stein auf ein Feld mit einem eigenen Turm, so wird dessen Höhe um $1$ erhöht, dieser Zug ist nur möglich, wenn dabei die Maximalhöhe $h_\text{max}$ des Turms nicht überschritten wird.
 
 \bigskip
 
@@ -59,19 +57,21 @@ Hat ein Stein einen benachbarten Turm, so erhöht sich die Reichweite des Steins
 
 Zieht ein Stein auf ein benachbartes Feld spricht man von einem \emph{Nahzug}, sonst von einem \emph{Fernzug}.
 
-\examplegraphic{graphic/move-ranged.png}{0.25}{$I7$ hat durch den Turm auf $J6$ die Reichweite $2$}
+\examplegraphic{graphic/move-ranged.png}{0.25}{$I7$ hat durch den Turm auf $J6$, mit Höhe 1, die Reichweite $2$}
 \newpage
-\examplegraphic{graphic/move-rangeddouble.png}{0.25}{$I7$ hat durch die Türme auf $J6$ und $H8$ die Reichweite $3$}
+\examplegraphic{graphic/move-rangeddouble.png}{0.25}{$I7$ hat durch die Türme auf $J6$ und $H8$, jeweils mit Höhe 1, die Reichweite $3$}
 
 \bigskip
 
-Auch Türme haben Zugmöglichkeiten. Es ist nicht möglich Türme in Ihrer Gesamtheit zu bewegen. 
+\textbf{Beim Ziehen können beliebig viele Felder unterschiedlicher Art übersprungen werden. Es zählt nur die Reichweite und das Einhalten der Regeln.} \marginpar{\textbf{|}}
 
-Allerdings kann ein Turm abgebaut werden, indem der oberste Stein vom Turm auf ein benachbartes Feld gezogen werden. Angrenzende Türme verleihen keinen Bonus auf die Reichweite beim Turmabbau. Es kann nur auf ein leeres oder eigenes Feld gezogen werden, ohne dabei die Maximalhöhe von Türmen zu überschreiten.
+Auch Türme haben Zugmöglichkeiten, allerdings ist es nicht möglich Türme in Ihrer Gesamtheit zu bewegen. 
 
-Beim Abbau des Turmes wird dessen Höhe natürlich um $1$ reduziert. Wird ein Turm der Höhe $1$ abgebaut, so bleibt dort ein normaler Stein zurück.
+Ein Turm kann abgebaut werden, indem der oberste Stein vom Turm auf ein benachbartes Feld gezogen werden. Angrenzende Türme verleihen keinen Bonus auf die Reichweite beim Turmabbau. Es kann nur auf ein leeres oder eigenes Feld gezogen werden, ohne dabei die Maximalhöhe von Türmen zu überschreiten.
 
-Bei diesem Abbau eines Turmes ist es nicht erlaubt zu schlagen. Daraus ergibt sich direkt, dass Türme nicht die gegnerische Basis schlagen können. Weiter ist es möglich, dass ein Turm hierdurch keine Handlungsmöglichkeit mehr hat, wenn er komplett von benachbarten gegnerischen Figuren umzingelt ist. 
+Beim Abbau des Turmes wird dessen Höhe um $1$ reduziert. Wird ein Turm der Höhe $1$ abgebaut, so bleibt dort ein normaler Stein zurück.
+
+Bei diesem Abbau eines Turmes ist es nicht erlaubt zu schlagen. Daraus ergibt sich direkt, dass ein Turm nicht die gegnerische Basis schlagen kann und dass ein Turm keine Handlungsmöglichkeit mehr hat, wenn er komplett von benachbarten gegnerischen Steinen umzingelt ist. 
 
 \examplegraphic{graphic/tower-move.png}{0.25}{
 \begin{itemize}
@@ -86,31 +86,32 @@ Bei diesem Abbau eines Turmes ist es nicht erlaubt zu schlagen. Daraus ergibt si
 \newpage 
 Gegnerische Türme können von Steinen geschlagen und \emph{blockiert} werden. 
 
-Zieht ein Stein auf ein Feld mit einem gegnerischen Turm entscheidet die Art des Zuges was passiert. Handelt es sich um einen Nahzug, wird der gesamte gegnerische Turm geschlagen. Im Falle eines Fernzuges wird der gegnerische Turm blockiert, indem der Stein auf den gegnerischen Turm gesetzt wird.
+Zieht ein Stein auf ein Feld mit einem gegnerischen Turm entscheidet die Art des Zuges was passiert. Ein Nahzug schlägt den gesamten gegnerische Turm. Ein Fernzug blockiert den gegnerische Turm, dazu wird der Stein oben auf den gegnerischen Turm gesetzt. Ein Turm kann nicht mehrfach blockiert werden, d.h. durch mehrere gegnerische Steine gleichzeitig. 
 
-\examplegraphic{graphic/token-kick-block-tower.png}{0.25}{$I6$ kann gegnerischen Turm $J6$ schlagen, \\$H7$ kann den gegnerischen Turm blockieren}
+\examplegraphic{graphic/token-kick-block-tower.png}{0.25}{$I6$ kann den gegnerischen Turm $J6$ schlagen, \\$H7$ kann den gegnerischen Turm $J6$ blockieren}
 
-Ist ein Turm blockiert, kann dieser weder abgebaut werden noch gibt er eigenen Steinen einen Bonus auf die Zugreichweite. Er steht nur noch blockiert auf dem Feld. 
+Ist ein Turm blockiert, kann dieser weder abgebaut werden noch gibt er eigenen Steinen einen Bonus auf die Zugreichweite. Er steht nur noch blockiert auf dem Feld. Allerdings kann auch ein blockierter Turm durch einen gegnerischen Nahzug geschlagen werden\textbf{, der gesamte Turm (mitsamt eigenem blockierenden Stein) kommen aus dem Spiel.} \marginpar{\textbf{|}}
 
 \examplegraphic{graphic/range-blockedbonus.png}{0.25}{$I7$ hat einen Bonus durch Turm $J6$ aber nicht durch blockierten Turm $I6$}
 
-Diese Blockade kann wieder aufgehoben werden, indem ein eigener Stein auf den blockierten Turm zieht und den blockierenden gegnerischen Stein schlägt, beide Steine kommen aus dem Spiel. Dies kann durch einen Nah- oder Fernzug oder durch Abbau eines angrenzenden Turms auf diesen Turm erfolgen.
+Die Blockade eines eigenen Turms kann durch das Opfern eines eigenen Steins
+gebrochen werden. Dazu wird, durch einen Nahzug, einen Fernzug oder durch Abbau eines angrenzenden Turms, ein eigener Stein auf den blockierten Turm gezogen,
+dieser Stein und der den Turm blockierende gegnerische Stein werden aus dem
+Spiel genommen, somit ist der Turm nicht mehr blockiert. 
 
-Ein blockierter Turm kann nicht mehrfach blockiert werden, d.h. durch mehrere gegnerische Steine. Allerdings ist es möglich einen blockierten Turm durch einen gegnerischen Nahzug zu schlagen. Beim Blockieren eines Turms wird die Höhe nicht verringert, beim Aufheben der Blockade nicht erhöht.
-
-\newpage
+Es gilt, beim Blockieren eines Turms wird die Höhe nicht verringert, beim Aufheben der Blockade nicht erhöht.
 
 \examplegraphic{graphic/tower-blocked.png}{0.25}{Turm $I7$ ist blockiert und kann nicht abgebaut werden}
 
 \examplegraphic{graphic/tower-unblock.png}{0.25}{Die Blockade von Turm $I7$ kann durch Abbauen des Turms $I6$\\ oder durch den Stein auf $J6$ aufgehoben werden}
 
 \subsection*{Ende des Spiels}
-Das Spiel ist gewonnen, wenn eine der folgenden Situationen eintritt:
+Das Spiel ist gewonnen, wenn eine der folgenden Situationen eintritt.
 \begin{itemize}
-\item Ein Spieler zieht einen Stein auf die gegnerische Basis
-\item Ein Spieler schlägt alle Steine des Gegenspielers
-\item Ein Spieler macht den anderen Spieler handlungsunfähig (der andere Spieler hat nur noch umzingelte und blockierte Türme)
-\item Der Gegenspieler gibt auf
+\item Ein Spieler zieht einen Stein auf die gegnerische Basis.
+\item Ein Spieler schlägt alle Steine des Gegenspielers.
+\item Ein Spieler macht den Gegenspielers handlungsunfähig (z.B. wenn der Gegenspieler nur noch umzingelte und/oder blockierte Türme hat).
+\item Der Gegenspieler gibt auf.
 \end{itemize}
 
 Da in jedem Zug ein Stein bewegt werden muss und im Falle von Handlungsunfähigkeit der Gegner gewinnt, kann das Spiel nicht unentschieden enden. Es ist jedoch sehr gut möglich, dass ein Spiel endlos andauert.

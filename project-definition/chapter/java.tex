@@ -76,7 +76,10 @@ Text-Eingabe- und Ausgabe-Klasse können in einer Klasse vereint werden.
 % Graphic
 \item Erstellen Sie eine grafische Ein-Ausgabe-Klasse. Diese Klasse implementiert die Schnittstellen \code{towerwarspp.preset.Requestable} und die von Ihnen geschriebene Ausgab-eSchnittstelle und benutzt ein Objekt einer Klasse, die die Schnittstelle \code{towerwarspp.preset.Viewer} implementiert, für eine einfache grafische Ausgabe.
 
-Sorgen Sie dafür, dass die Grafik mit ändernder Fenstergröße sinnvoll skaliert.
+\textbf{Sorgen Sie dafür, dass die Darstellung des Spielbretts der Größe des Fensters angepasst ist und beim Verändern der Fenstergröße mitskaliert.} \marginpar{\textbf{|}}
+
+% Gültige Züge sind nur im erweiterten Board enthalten. Hier könnte es ein Problem geben. Vielleicht müssen wir es dieses mal leider doch weglassen oder die gültigen Züge ins normale Board verschieben...
+\textbf{Sehen Sie eine Möglichkeit vor die gültigen Züge grafisch darstellen zu können.}\marginpar{\textbf{|}}
 
 \underline{Hinweis}
 
@@ -98,11 +101,10 @@ Daraus können sich Widersprüche zwischen dem Status des eigenen Spielbretts un
 
 Ein Spieler wird zu Spielbeginn mit einem Aufruf von \code{init} initialisiert und durchläuft danach die Methoden \code{request}, \code{confirm} und danach \code{update} bis das Spiel endet. Im Falle eines blauen Spielers beginnt der Spieler mit \code{update} statt \code{request}. Der Zeitpunkt des Spielbeginns und eines erneuten Spiels ist für den Spieler nicht ersichtlich, \code{init} kann zu einem beliebigen Zeitpunkt aufgerufen werden.
 
-
+\newpage
 \item Für ein problemloses Netzwerkspiel ist es nötig, dass die Spielerklassen nur \code{Exception}'s werfen und keine selbst erstellten Klassen, die von dieser erben. An jeder anderen Stelle im Spiel können eigene Exceptions frei erzeugt und geworfen werden.
 \end{itemize}
 
-\newpage
 Die Methoden dieser Schnittstelle sind wie folgt zu verstehen:
 
 % Description player methods
@@ -171,11 +173,26 @@ Beide Spieler benutzen dasselbe Objekt einer Klasse, die das \code{Requestable}-
 \item Von den Spieler-Referenzen werden abwechselnd Züge erfragt. Gültige Züge werden bestätigt und dem jeweils anderen Spieler mitgeteilt.
 \item Die gültigen Züge werden auf dem Spielbrett ausgeführt.
 \item Der aktuelle Stand des Spiels (und des Spielbretts) wird über die selbst geschriebene Ausgabe-Schnittstelle (textuell oder grafisch, je nach Konfiguration) ausgegeben.
+\item \textbf{Wenn der Schalter \code{----debug} gesetzt ist, wird außerdem nach jedem Zug der ausgeführte Zug, das Spielbrett nach diesem Zug sowie der Status dieses Zuges auf der Standardausgabe ausgegeben.}
+
+\underline{Hinweis}
+
+\textbf{Die Debugausgabe darf von Ihnen um weitere Ausgaben ergänzt werden.} \marginpar{\textbf{|}}
 \item Wenn ein Zug zum Spielende führt, macht die Ausgabe (textuell oder grafisch) eine Meldung darüber.
 \item Sorgen Sie dafür, dass man das Spiel Computer gegen Computer gut verfolgen kann, verwenden Sie hierfür den Kommandozeilenparameter \code{-delay}.
-\item Sehen Sie eine Möglichkeit vor über das Netzwerk zu spielen. Mit den Schaltern \code{----local} und \code{----network} soll gesteuert werden ob es sich um ein lokales oder ein Netzwerkspiel handelt. 
+\item Sehen Sie eine Möglichkeit vor über das Netzwerk zu spielen. \deleted{Mit den Schaltern \code{----local} und \code{----network} soll gesteuert werden ob es sich um ein lokales oder ein Netzwerkspiel handelt.} \marginpar{\textbf{|}}
 
-Sehen Sie im Falle eines Netzwerkspiels eine Möglichkeit vor, diese zu konfigurieren (Finden oder Anbieten eines Spielers, Art des Spielers der angeboten wird, Adresse:Port). Dies können Sie zum Beispiel mit Konfigurationsdateien oder weiteren Kommandozeilenparametern lösen.
+\deleted{Sehen Sie im Falle eines Netzwerkspiels eine Möglichkeit vor, diese zu konfigurieren (Finden oder Anbieten eines Spielers, Art des Spielers der angeboten wird, Adresse:Port). Dies können Sie zum Beispiel mit Konfigurationsdateien oder weiteren Kommandozeilenparametern lösen.} \marginpar{\textbf{|}}
+
+\textbf{Ein Netzwerkspiel findet statt, wenn mindestens einer der Spieler den Typ \code{REMOTE} hat (siehe \code{towerwarspp.preset.PlayerType}) oder wenn ein Spieler im Netzwerk angeboten wird.} \marginpar{\textbf{|}}
+
+\textbf{Das Hauptspiel behandelt einen Netzwerkspieler über die Schnittstelle \code{towerwarspp.preset.Player} wie jeden anderen Spieler auch.} \marginpar{\textbf{|}}
+
+\textbf{Sehen Sie im Falle eines \code{REMOTE}-Spielers eine Möglichkeit vor, diesen zu finden (Name, Host, Port). Dies können Sie zum Beispiel über weitere Kommandozeilenparameter steuern oder interaktiv abfragen.} \marginpar{\textbf{|}}
+
+\textbf{Wenn Sie einen Netzwerkspieler anbieten möchten, wählen Sie auch hier eine geeignete Methode den Spielertypen und den Namen einzustellen, unter dem der Spieler an der RMI Registry registriert werden soll.} \marginpar{\textbf{|}}
+
+\textbf{Beim Anbieten wird keine Farbe festgelegt, da der Spieler diese Information beim Aufruf von \code{init} mitgeteilt bekommt.} \marginpar{\textbf{|}}
 \end{itemize}
 
 % Ant
