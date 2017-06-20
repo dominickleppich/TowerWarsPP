@@ -44,7 +44,7 @@ public class RMIHandler {
                     registry = LocateRegistry.getRegistry(port);
                 }
             else
-                registry = LocateRegistry.getRegistry(port);
+                registry = LocateRegistry.getRegistry(host, port);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
