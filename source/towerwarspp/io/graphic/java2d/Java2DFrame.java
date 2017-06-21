@@ -13,14 +13,14 @@ import javax.swing.*;
  * @author Dominick Leppich
  */
 public class Java2DFrame extends JFrame implements InputOutputable {
-    private DrawPanel_old panel;
+    private DrawPanel panel;
     private JLabel statusLabel;
 
     // ------------------------------------------------------------
 
     public Java2DFrame() {
         Box vBox = Box.createVerticalBox();
-        panel = new DrawPanel_old();
+        panel = new DrawPanel();
         vBox.add(panel);
 
         statusLabel = new JLabel();
