@@ -1,7 +1,14 @@
 package towerwarspp.io.graphic.java2d;
 
+import towerwarspp.board.Base;
+import towerwarspp.board.Cell;
+import towerwarspp.board.Token;
+import towerwarspp.board.Tower;
 import towerwarspp.io.Viewer;
-import towerwarspp.io.graphic.java2d.render.*;
+import towerwarspp.io.graphic.java2d.render.Background;
+import towerwarspp.io.graphic.java2d.render.GComponent;
+import towerwarspp.io.graphic.java2d.render.Hex;
+import towerwarspp.io.graphic.java2d.render.HexGrid;
 import towerwarspp.preset.Move;
 import towerwarspp.preset.Position;
 
@@ -10,7 +17,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -20,10 +26,9 @@ import java.util.LinkedList;
  */
 public class DrawPanel extends JPanel {
     private static final Dimension DEFAULT_DIMENSION = new Dimension(1280, 720);
-    private static final int BOARD_SIZE = 10;
-    private static final int HEX_SIZE = 20;
-    private static final Point BOARD1_TRANSLATE = new Point(10, 10);
-    private static final Point BOARD2_TRANSLATE = new Point(500, 60);
+    private static final int BOARD_SIZE = 5;
+    private static final int HEX_SIZE = 50;
+    private static final Point BOARD_TRANSLATE = new Point(10, 10);
     private static final double BASE_SIZE = 0.8;
     private static final double TOKEN_SIZE = 0.7;
     private static final int TOWER_RING_DISTANCE = 4;
@@ -38,9 +43,9 @@ public class DrawPanel extends JPanel {
     private Viewer viewer;
     private Move move;
     private Position tmpPos;
-    private HashMap<Position, Polygon> grid;
 
     private Background background;
+    private HexGrid grid;
 
     // ------------------------------------------------------------
 
@@ -50,7 +55,11 @@ public class DrawPanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
-                super.mousePressed(mouseEvent);
+                System.out.println("Checking");
+                for (int x = 0; x < viewer.getSize(); x++)
+                    for (int y = 0; y < viewer.getSize(); y++)
+                        if (((Hex) grid.getEntry(x, y)).contains(mouseEvent.getX(), mouseEvent.getY()))
+                            System.out.println(((Hex) grid.getEntry(x, y)).getPosition());
             }
         });
 
@@ -61,23 +70,11 @@ public class DrawPanel extends JPanel {
         background = new Background(Color.WHITE);
         components.add(background);
 
-        Grid grid1 = new Grid(BOARD_SIZE, BOARD_SIZE, 0, 0);
+        grid = new HexGrid();
         AffineTransform gridTransform = new AffineTransform();
-        gridTransform.translate(BOARD1_TRANSLATE.getX(), BOARD1_TRANSLATE.getY());
-        grid1.setTransform(gridTransform);
-        for (int x = 0; x < BOARD_SIZE; x++)
-            for (int y = 0; y < BOARD_SIZE; y++)
-                grid1.setEntry(x, y, new Hex(HEX_SIZE));
-        components.add(grid1);
-
-        HexGrid grid2 = new HexGrid(BOARD_SIZE, BOARD_SIZE);
-        AffineTransform grid2Transform = new AffineTransform();
-        grid2Transform.translate(BOARD2_TRANSLATE.getX(), BOARD2_TRANSLATE.getY());
-        grid2.setTransform(grid2Transform);
-        for (int x = 0; x < BOARD_SIZE; x++)
-            for (int y = 0; y < BOARD_SIZE; y++)
-                grid2.setEntry(x, y, new Hex(HEX_SIZE));
-        components.add(grid2);
+        gridTransform.translate(BOARD_TRANSLATE.getX(), BOARD_TRANSLATE.getY());
+        grid.setTransform(gridTransform);
+        components.add(grid);
     }
 
     // ------------------------------------------------------------
@@ -89,6 +86,15 @@ public class DrawPanel extends JPanel {
 
     public void setViewer(Viewer viewer) {
         this.viewer = viewer;
+
+        if (viewer != null) {
+            grid.init(viewer.getSize(), viewer.getSize());
+            for (int x = 0; x < viewer.getSize(); x++)
+                for (int y = 0; y < viewer.getSize(); y++)
+                    grid.setEntry(x, y, new Hex(HEX_SIZE, new Position(x + 1, y + 1)));
+        }
+
+        update();
     }
 
     // ------------------------------------------------------------
@@ -99,6 +105,8 @@ public class DrawPanel extends JPanel {
         // Antialiasing
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+        g.setStroke(new BasicStroke(STROKE));
+
         // Render everything
         for (GComponent c : components)
             c.render(g);
@@ -106,5 +114,28 @@ public class DrawPanel extends JPanel {
 
     public Move request() {
         return null;
+    }
+
+    public void update() {
+        if (viewer != null) {
+            for (int x = 0; x < viewer.getSize(); x++) {
+                for (int y = 0; y < viewer.getSize(); y++) {
+                    Hex h = (Hex) grid.getEntry(x, y);
+                    Cell c = viewer.getCell(new Position(x + 1, y + 1));
+                    if (c instanceof Base)
+                        continue;
+                    else if (c instanceof Token) {
+                        h.setColor(c.getColor());
+                        h.setHeight(1);
+                        h.setBlocked(false);
+                    }
+                    else if (c instanceof Tower) {
+                        h.setColor(c.getColor());
+                        h.setHeight(((Tower) c).getHeight());
+                        h.setBlocked(((Tower) c).isBlocked());
+                    }
+                }
+            }
+        }
     }
 }

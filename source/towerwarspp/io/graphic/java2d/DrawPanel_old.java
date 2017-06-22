@@ -25,9 +25,9 @@ import java.util.Map;
  * @author Dominick Leppich
  */
 public class DrawPanel_old extends JPanel implements MouseListener {
-    private static final int HEX_SIZE = 50;
+    private static final int HEX_SIZE = 40;
     private static final double BASE_SIZE = 0.8;
-    private static final int TOKEN_SIZE = 45;
+    private static final int TOKEN_SIZE = 30;
     private static final int TOWER_RING_DISTANCE = 4;
     private static final float STROKE = 2f;
     private static final Font LABEL_FONT = new Font(Font.SANS_SERIF, Font.BOLD, 10);
@@ -47,6 +47,7 @@ public class DrawPanel_old extends JPanel implements MouseListener {
 
     public DrawPanel_old() {
         addMouseListener(this);
+        setPreferredSize(new Dimension(800, 600));
     }
 
     public synchronized void setViewer(Viewer viewer) {
