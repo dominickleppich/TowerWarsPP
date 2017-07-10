@@ -33,3 +33,5 @@ resource/
 *.log
 *.aux
 *.synctex.gz
+*.out
+*.pdf
