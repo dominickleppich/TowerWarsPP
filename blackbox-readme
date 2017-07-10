@@ -1,0 +1,36 @@
+Anleitung zur Verwendung der Blackbox:
+
+Starten Sie die Blackbox-Implementation mit "java -jar TowerWarsPP-blackbox.jar"
+
+Die Parameter sind wie in der Projektbeschreibung. Zusätzlich sind folgende Parameter verfügbar:
+
+--analyze				Analysiert jeden Spielzug und gibt Informationen über diesen aus (hilfreich bei der Fehlersuche)
+-offer <PLAYERTYPE>		Bieten einen Spielertypen im Netzwerk an (Parameter -name muss angegeben werden)
+-name <NAME>			Name des Spielers im Netzwerk
+-host <HOST>			Host der RMI Registry (Default: localhost)
+-port <PORT>			Port der RMI Registry (Default: 1099)
+
+Hinweis: Falls keine RMI Registry läuft, startet das Programm automatisch eine
+
+Zum Testen kann so ein Spiel Mensch gegen Computer gestartet werden:
+java -jar TowerWarsPP-blackbox.jar -red human -blue random -size 10 --graphic
+
+Ein Computerspieler mit der einfachen Strategie wird so auf der lokalen Registry angeboten:
+java -jar TowerWarsPP-blackbox.jar -offer simple -name EWieEinfach
+
+Ein Spiel mit einem menschlichen und einem Netzwerkspieler wird wie folgt gestartet:
+java -jar TowerWarsPP-blackbox.jar -red human -blue remote -size 8 --graphic
+
+Ist der Remote-Spieler eindeutig, startet das Spiel sofort. Ansonsten wird interaktiv nach dem richtigen Netzwerkspieler gefragt.
+
+
+Falls beim Testen Unstimmigkeiten zur Spielanleitung oder Fehler auffallen, bitte eine Mail an dominick.leppich@stud.uni-goettingen.de schicken.
+
+
+Bekannte "Fehler":
+- Die textuelle Ausgabe des Spielbretts zeigt keine blockierten Türme an
+- Die Grafik ist nicht skalierbar und für große Spielfelder nicht richtig nutzbar
+
+Hinweis:
+Sehen Sie diese Blackbox nicht als Musterlösung oder dergleichen, sondern vielmehr als Hilfestellung zum Verständnis des Spiels und zum Testen Ihrer eigenen Implementation. 
+Es wurde nicht viel Zeit in die Grafik investiert und das sollte auch nicht Sinn und Zweck dieser Blackbox sein...
