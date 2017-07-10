@@ -429,9 +429,8 @@ public class Board implements Viewable {
 
                 // Tower on tower increase its height, if size not exceeded
             else if (endCell instanceof Tower) {
-                if (!((Tower) endCell).isBlocked())
-                    return "Valid, Tower tried to unblock own " +
-                            "unblocked tower";
+                if (((Tower) endCell).isBlocked())
+                    return "Valid, Tower unblocked own tower";
                 else if (((Tower) endCell).getHeight() < maxTowerSize)
                     return "Valid, Tower moved on another own " +
                             "tower and increased its height";
@@ -773,9 +772,7 @@ public class Board implements Viewable {
 
                 // Towers can move on own tower, if max tower size is not
                 // exceeded
-            else if (cell instanceof Tower && ((Tower) cell)
-                    .getHeight() + 1 <=
-                    maxTowerSize)
+            else if (cell instanceof Tower && (((Tower) cell).isBlocked() || ((Tower) cell).getHeight() + 1 <= maxTowerSize))
                 moves.add(new Move(position, p));
         }
 
